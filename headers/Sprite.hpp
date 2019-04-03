@@ -5,5 +5,6 @@ class Sprite {
 			int xOffset;
 			int yOffset;
 			int animationSpeed; //Float instead maybe? IDK
+			int imageIndex; 
 
 }

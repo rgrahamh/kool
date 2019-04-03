@@ -3,6 +3,7 @@ class GameEngine {
 			std::vector<Scene *> sceneList;
 			void processScene();
 			void renderScene();
+			//SFML Window object kept here.
 	public:
 			GameEngine();
 			void startGame();

@@ -6,7 +6,7 @@ class Scene{
 	public:
 			Scene();
 			void process();
-			void render();
+			void render(); //render(SFML window)
 			int addObject(Object *object);
 			int addView(View *view);
 			int addSprite(Sprite *sprite);
