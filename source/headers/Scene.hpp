@@ -1,5 +1,6 @@
 #ifndef SCENE_H
 #define SCENE_H
+#include <SFML/Graphics.hpp>
 #include "Object.hpp"
 #include "View.hpp"
 
@@ -10,7 +11,7 @@ class Scene{
 	public:
 			Scene();
 			void process();
-			void render(); //render(SFML window)
+			void render(sf::RenderWindow *window); //render(SFML window)
 			int addObject(Object *object);
 			int addView(View *view);
 

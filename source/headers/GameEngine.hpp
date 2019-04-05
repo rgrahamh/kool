@@ -1,6 +1,7 @@
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
 #include <vector>
+#include <SFML/Graphics.hpp>
 #include "Scene.hpp"
 
 class GameEngine {
