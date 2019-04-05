@@ -10,7 +10,7 @@ class Scene{
 			std::vector<Object *> objectList;
 	public:
 			Scene();
-			void process();
+			void process(); //Should make call to Object _process functions and to View _process functions
 			void render(sf::RenderWindow *window); //render(SFML window)
 			int addObject(Object *object);
 			int addView(View *view);
