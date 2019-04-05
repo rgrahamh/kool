@@ -1,10 +1,11 @@
 #ifndef VIEW_H
 #define VIEW_H
+#include "Object.hpp"
 
 struct position{
 	int x;
 	int y;
-}
+};
 
 class View{
 	public:
@@ -15,7 +16,9 @@ class View{
 		int sceneX;
 		int sceneY;
 		Object *following;
-	
+		
+
+		View(int windowX,int windowY,int sceneX, int sceneY, int width, int height);
 		/*
 			Translate the supplied Scene coordinates into the window coordinates they correspond to
 			based on this view. 

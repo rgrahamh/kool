@@ -11,6 +11,7 @@ class Sprite {
 			int xOffset;
 			int yOffset;
 			
+			Sprite(std::string path);
 			/*
 				Returns 0 on success -1 on failure. Should declare a new image, load it from a file and place that image in our 
 				images vector

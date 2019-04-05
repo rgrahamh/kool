@@ -7,9 +7,12 @@
 class GameEngine {
 	private:
 			std::vector<Scene *> sceneList;
+			Scene *activeScene;
 			void processScene();
 			void renderScene();
 			//SFML Window object kept here.
+			sf::RenderWindow *window;
+			sf::Event event;
 	public:
 			GameEngine();
 			void startGame();
