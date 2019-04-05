@@ -25,6 +25,10 @@ class Object{
 			*/
 			int imageIndex; 
 			
+			int renderLayer;
+			int collisionLayer;
+			int collideWith[];
+
 			/*
 				Typically will be the same as in the Sprite instance, but it may be desired to be different for different objects so it is specified here as well.
 			*/
