@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include "Object.hpp"
 #include "View.hpp"
 

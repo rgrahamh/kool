@@ -4,6 +4,7 @@ Object::Object(int x, int y){
 	this->x = x;
 	this->y = y;
 	this->sprite = NULL;
+	this->imageIndex = -1;
 }
 
 struct drawData Object::_draw(){
@@ -31,4 +32,9 @@ void Object::onCollide(Object *other, int myBoxID, int otherBoxID){
 
 void Object::create(){
 	return;
+}
+
+void Object::setSprite(Sprite *sprite){
+	this->sprite = sprite;
+	this->imageIndex = 0;
 }

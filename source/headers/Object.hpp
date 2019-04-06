@@ -7,7 +7,7 @@
 struct drawData {
 	int x;
 	int y;
-	int imageIndex;
+	unsigned int imageIndex;
 	Sprite *sprite;
 
 };
@@ -29,7 +29,7 @@ class Object{
 			/*
 				Defined here instead of in Sprite object b/c same Sprite may be used for multiple object instances and will be at different points in animation
 			*/
-			int imageIndex; 
+			unsigned int imageIndex; 
 			bool dynamic;
 			
 			int renderLayer;
@@ -59,6 +59,7 @@ class Object{
 			virtual void process();
 			virtual void onCollide(Object *other,int myBoxID, int otherBoxID);
 			virtual void create();
+			void setSprite(Sprite *sprite);
 			
 			std::vector<HitBox *> getHitBoxes();
 
