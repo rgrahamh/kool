@@ -43,7 +43,7 @@ void GameEngine::endGame(){
 }
 
 int GameEngine::addScene(Scene *scene){
-	View *tmp = new View(0,0,0,0,winWidth,winHeight); //Hard coded values. Will be changeable later.
+	View *tmp = new View(0,0,0,0,winWidth,winHeight);
 	scene->addView(tmp);
 	this->sceneList.push_back(scene);
 	if(this->sceneList.size()<2){
