@@ -3,6 +3,7 @@
 #include <vector>
 #include "HitBox.hpp"
 #include "Sprite.hpp"
+#include "Input.hpp"
 
 struct drawData {
 	int x;
@@ -15,7 +16,8 @@ struct drawData {
 class Object{
 	private:
 			float delta;
-			
+			Input input;
+
 			int createHitBox(int offsetX,int offsetY,int width,int height,float ttl);
 
 			/*

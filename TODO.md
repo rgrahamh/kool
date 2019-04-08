@@ -1,7 +1,9 @@
 # To-do list:
 
-[ ] Calling GameEngine.startGame() Initiates scene rendering and processing
-[X] Calling Scene.render() Renders the scene
-[X] Calling Object._draw() successfully returns a struct instance with the information necessary to render that object
-[X] Calling View.translate() successfully translates Scene coordinates into the coordinates that entity should be drawn to on the window 
-[ ] Calling Sprite.addImage adds sf::Images to the instance
+[X] Calling GameEngine.startGame() Initiates scene processing
+[ ] GameEngine creates an instance of the Input class when created (Ryan H)
+[ ] Input class keeps track of keyboard input (Ryan Houck)
+[ ] Input class is passed to the scene (Ryan Houck)
+[ ] Input class is accessible to game objects (Ryan Houck)
+[ ] GameEngine.setActiveScene, nextScene, prevScene, delScene all implemented (Jeremiah)
+[ ] Create test Object child class for engine testing (Adam)

@@ -5,6 +5,7 @@ Object::Object(int x, int y){
 	this->y = y;
 	this->sprite = NULL;
 	this->imageIndex = -1;
+	create();
 }
 
 struct drawData Object::_draw(){
@@ -22,14 +23,30 @@ struct drawData Object::_draw(){
 	return data;
 }
 
+//Decrement hit box counters
+void Object::decHitBoxes(float delta){
+
+	return;
+}
+
+//Engine-defined process function
+void Object::_process(){
+
+	process();
+	decHitBoxes(1.0);
+}
+
+//Developer-defined virtual function
 void Object::process(){
 	return;
 }
 
+//Developer-defined virtual function
 void Object::onCollide(Object *other, int myBoxID, int otherBoxID){
 	return;
 }
 
+//Developer defined virtual function
 void Object::create(){
 	return;
 }

@@ -1,7 +1,11 @@
 #include "headers/GameEngine.hpp"
 
-GameEngine::GameEngine(){
-	this->window = new sf::RenderWindow(sf::VideoMode(800,600),"Kool Engine");
+using namespace std;
+
+GameEngine::GameEngine(int width, int height,string title){
+	this->window = new sf::RenderWindow(sf::VideoMode(width,height),title);
+	this->winWidth = width;
+	this->winHeight = height;
 	this->window->setFramerateLimit(60);
 }
 
@@ -9,7 +13,7 @@ void GameEngine::startGame(){
 	while(this->window->isOpen()){//Main game loop
 
 		//Render
-		this->activeScene->render(this->window);
+		renderScene();
 
 		//Process key presses and other window events
 		while(this->window->pollEvent(this->event)){
@@ -20,9 +24,18 @@ void GameEngine::startGame(){
 		}
 
 		//Process game objects
-		
+		processScene();	
 
 	}
+}
+
+void GameEngine::renderScene(){
+	//Render
+	this->activeScene->render(this->window);
+}
+
+void GameEngine::processScene(){
+	this->activeScene->process();
 }
 
 void GameEngine::endGame(){
@@ -30,6 +43,8 @@ void GameEngine::endGame(){
 }
 
 int GameEngine::addScene(Scene *scene){
+	View *tmp = new View(0,0,0,0,winWidth,winHeight); //Hard coded values. Will be changeable later.
+	scene->addView(tmp);
 	this->sceneList.push_back(scene);
 	if(this->sceneList.size()<2){
 		this->activeScene = scene;

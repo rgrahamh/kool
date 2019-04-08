@@ -6,7 +6,7 @@ using namespace std;
 int main(){
 
 	cout << "Hello World!" << endl;
-	GameEngine myEngine = *(new GameEngine());
+	GameEngine myEngine = *(new GameEngine(800,600,"Kool Engine"));
 
 	//Create Scene
 	Scene *firstScene = new Scene();

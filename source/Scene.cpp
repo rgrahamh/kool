@@ -6,8 +6,7 @@
 using namespace std;
 
 Scene::Scene(){
-	View *tmp = new View(0,0,0,0,800,600); //Hard coded values. Will be changeable later.
-	this->addView(tmp);
+
 }
 
 int Scene::addObject(Object *object){
@@ -18,6 +17,14 @@ int Scene::addObject(Object *object){
 int Scene::addView(View *view){
 	this->viewList.push_back(view);
 	return 0;
+}
+
+//process 1 frame of the scene
+void Scene::process(){
+	for(unsigned int i = 0; i < this->objectList.size(); i++){
+		this->objectList[i]->_process();
+	
+	}
 }
 
 //render 1 frame of the scene
@@ -53,12 +60,12 @@ void Scene::render(sf::RenderWindow *window){
 
 			if(objDraw.sprite!=NULL){
 				//Draw Sprite
+				//Retrieve the image with index imageIndex from the sprite pointed to by the
+				//object we are trying to draw
 				sprTexture = (objDraw.sprite->getImage(objDraw.imageIndex));
 				objSprite.setTexture(sprTexture);
 				objSprite.setPosition(objDraw.x,objDraw.y);
-				window->draw(objSprite);
-				
-			
+				window->draw(objSprite);			
 			}
 		}
 	}
