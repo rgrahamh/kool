@@ -1,4 +1,5 @@
 #include "headers/Object.hpp"
+#include "headers/Sprite.hpp"
 #include <iostream>
 
 using namespace std;

@@ -6,5 +6,6 @@
 [ ] Input class is passed to the scene (Ryan Houck)
 [ ] Input class is accessible to game objects (Ryan Houck)
 [ ] GameEngine.setActiveScene, nextScene, prevScene, delScene all implemented (Jeremiah)
-[ ] Create test Object child class for engine testing (Adam)
+[X] Create test Object child class for engine testing (Adam)
 [ ] Rework setActiveScene so that game objects are able to change the active scene
+[ ] Reorganize Hierarchy so that Sprites are more easily attached to Object subclasses prior to compilation. Currently Sprites are more closely associated with instances of Objects than Object classes.
