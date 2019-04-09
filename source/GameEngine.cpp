@@ -52,3 +52,28 @@ int GameEngine::addScene(Scene *scene){
 
 	return 0;
 }
+
+bool GameEngine::delScene(int sceneID){
+    this->sceneList.erase(sceneList.begin()+sceneID);
+    return true;
+}
+
+bool GameEngine::setActiveScene(int sceneID){
+    if(sceneID < this->sceneList.size() && sceneID > -1){
+        this->activeScene = this->sceneList[sceneID];
+        return true;
+   }
+    else{
+        return false;
+   }
+}
+
+
+int nextScene(){
+    this->activeScene = this->sceneList[sceneID+1];
+    return 0;
+}
+int prevScene(){
+    this->activeScene = this->sceneList[sceneID-1];
+    return 0; 
+}
