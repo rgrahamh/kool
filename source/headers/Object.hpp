@@ -14,7 +14,7 @@ struct drawData {
 };
 
 class Object{
-	private:
+	protected:
 			float delta;
 			Input input;
 

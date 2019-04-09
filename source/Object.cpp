@@ -1,11 +1,15 @@
 #include "headers/Object.hpp"
+#include "headers/Sprite.hpp"
+#include <iostream>
+
+using namespace std;
 
 Object::Object(int x, int y){
 	this->x = x;
 	this->y = y;
 	this->sprite = NULL;
 	this->imageIndex = -1;
-	create();
+	this->create();
 }
 
 struct drawData Object::_draw(){
@@ -31,8 +35,8 @@ void Object::decHitBoxes(float delta){
 
 //Engine-defined process function
 void Object::_process(){
-
-	process();
+	
+    	this->process();
 	decHitBoxes(1.0);
 }
 
