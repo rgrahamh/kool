@@ -46,7 +46,7 @@ void Object::_process(double delta){
 
 //Developer-defined virtual function
 void Object::process(double delta){
-	basicMove(&this->x,&this->y,7,delta);
+//	basicMove(&this->x,&this->y,7,delta);
 }
 
 //Developer-defined virtual function
