@@ -36,7 +36,6 @@ class Object{
 			
 			int renderLayer;
 			int collisionLayer;
-			int collideWith[];
 
 			/*
 				Typically will be the same as in the Sprite instance, but it may be desired to be different for different objects so it is specified here as well.
@@ -44,6 +43,9 @@ class Object{
 			int animationSpeed; 
 			Sprite *sprite;
 			std::vector<HitBox *> hitBoxes;
+
+            //This line was erroring out if I didn't put it at the end of the definitions
+			int collideWith[];
 
 			Object(int x, int y);
 			

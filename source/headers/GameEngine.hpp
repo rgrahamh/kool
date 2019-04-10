@@ -17,6 +17,7 @@ class GameEngine {
 			sf::Event event;
 			int winWidth;
 			int winHeight;
+            int sceneID;
 	public:
 			GameEngine(int width,int height,std::string title);
 			void startGame();
