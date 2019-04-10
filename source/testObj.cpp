@@ -25,6 +25,7 @@ class testObj: public Object {
 			xScale = (rand() % 6);
 			yScale = (rand() % 6);
 			direction = 1;
+			setSprite((unsigned int)0);
 		}
 
 		void process(){

@@ -5,6 +5,8 @@
 #include <SFML/Graphics/Sprite.hpp>
 #define SPRITE_H
 
+
+
 class Sprite {
 	private:
 			std::vector<std::string> imagePaths; //Store file paths to each image. We need a way to store images in memory for easy access

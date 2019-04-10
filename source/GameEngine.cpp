@@ -2,6 +2,8 @@
 
 using namespace std;
 
+
+
 GameEngine::GameEngine(int width, int height,string title){
 	this->window = new sf::RenderWindow(sf::VideoMode(width,height),title);
 	this->winWidth = width;

@@ -1,8 +1,10 @@
 #include "headers/Sprite.hpp"
 #include <string>
 #include <iostream>
+#include "headers/Globals.hpp"
 
 using namespace std;
+
 
 Sprite::Sprite(std::string path){
 	
@@ -10,6 +12,10 @@ Sprite::Sprite(std::string path){
 
 	this->xOffset = 0;
 	this->yOffset = 0;
+	
+	Sprite *tmp = this;
+
+	spriteIndex.push_back(tmp);
 }
 
 bool Sprite::addImage(std::string filePath){

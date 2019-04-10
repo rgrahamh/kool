@@ -64,6 +64,7 @@ class Object{
 			virtual void onCollide(Object *other,int myBoxID, int otherBoxID);
 			virtual void create();
 			void setSprite(Sprite *sprite);
+			void setSprite(unsigned int index);
 			
 			std::vector<HitBox *> getHitBoxes();
 

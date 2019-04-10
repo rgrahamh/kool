@@ -1,8 +1,11 @@
 #include "headers/Object.hpp"
+#include "headers/Globals.hpp"
 #include "headers/Sprite.hpp"
 #include <iostream>
 
 using namespace std;
+
+std::vector<Sprite *>spriteIndex = std::vector<Sprite *>();
 
 Object::Object(int x, int y){
 	this->x = x;
@@ -59,3 +62,11 @@ void Object::setSprite(Sprite *sprite){
 	this->sprite = sprite;
 	this->imageIndex = 0;
 }
+
+void Object::setSprite(unsigned int index){
+	if(index < spriteIndex.size()){
+		this->sprite = spriteIndex[index];
+		this->imageIndex = 0;
+	}
+}
+
