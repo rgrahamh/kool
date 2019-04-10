@@ -28,7 +28,7 @@ class testObj: public Object {
 			setSprite((unsigned int)0);
 		}
 
-		void process(){
+		void process(double delta){
 			xMove += xScale * (direction);
 			yMove -= yScale * (direction);
 			if(xMove > 10 || xMove < -10){

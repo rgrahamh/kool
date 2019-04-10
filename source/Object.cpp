@@ -58,8 +58,6 @@ void Object::process(double delta){
     if(Keys::isKeyPressed(Keys::S)){
         y += 5 * delta;
     }
-    printf("Delta: %fms\n", delta);
-	return;
 }
 
 //Developer-defined virtual function
