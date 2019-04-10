@@ -3,10 +3,13 @@
 #include <iostream>
 #include <string>
 
+//The number of clock cycles per millisecond
+#define CLOCKS_PER_MS ((float)(CLOCKS_PER_SEC/1000))
+
 using namespace std;
 
 Scene::Scene(){
-
+    this->thisFrame = clock();
 }
 
 int Scene::addObject(Object *object){
@@ -21,9 +24,15 @@ int Scene::addView(View *view){
 
 //process 1 frame of the scene
 void Scene::process(){
+    this->lastFrame = this->thisFrame;
+    thisFrame = clock();
+    if(thisFrame >= lastFrame){
+        delta = (thisFrame - lastFrame)/CLOCKS_PER_MS;
+    } else {
+        delta = thisFrame;
+    }
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
-		this->objectList[i]->_process();
-	
+		this->objectList[i]->_process(delta);
 	}
 }
 
