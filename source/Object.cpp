@@ -46,18 +46,7 @@ void Object::_process(double delta){
 
 //Developer-defined virtual function
 void Object::process(double delta){
-    if(Keys::isKeyPressed(Keys::D)){
-        x += 5 * delta;
-    }
-    if(Keys::isKeyPressed(Keys::A)){
-        x -= 5 * delta;
-    }
-    if(Keys::isKeyPressed(Keys::W)){
-        y -= 5 * delta;
-    }
-    if(Keys::isKeyPressed(Keys::S)){
-        y += 5 * delta;
-    }
+	basicMove(&this->x,&this->y,7,delta);
 }
 
 //Developer-defined virtual function

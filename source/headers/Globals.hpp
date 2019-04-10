@@ -4,4 +4,7 @@
 #include <vector>
 
 extern std::vector<Sprite *> spriteIndex;
+
+extern void basicMove(float *x, float *y, int speed, double delta);
+
 #endif
