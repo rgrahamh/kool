@@ -4,6 +4,8 @@
 #include "HitBox.hpp"
 #include "Sprite.hpp"
 
+#define Keys sf::Keyboard
+
 struct drawData {
 	int x;
 	int y;
@@ -43,7 +45,7 @@ class Object{
             //This line was erroring out if I didn't put it at the end of the definitions
 			int collideWith[];
 
-			Object(int x, int y);
+			Object(float x, float y);
 			
 			/*
 				Call decHitBoxes() if X milliseconds have passed since last call.

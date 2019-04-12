@@ -27,9 +27,11 @@ int main(){
 
 	//Assign Object to Scene
 	firstScene->addObject(firstObject);
-	firstScene->addObject(secondObject);
-	firstScene->addObject(thirdObject);
-	firstScene->addObject(base);
+
+	firstObject->xSwitch = 0;
+//	firstScene->addObject(secondObject);
+//	firstScene->addObject(thirdObject);
+//	firstScene->addObject(base);
 
 	//Assign Scene to Engine
 	myEngine.addScene(firstScene);

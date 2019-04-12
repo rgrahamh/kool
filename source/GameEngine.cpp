@@ -1,17 +1,24 @@
 #include "headers/GameEngine.hpp"
+#include "headers/Globals.hpp"
+#include <iostream>
 
 using namespace std;
 
-
+GameEngine *activeEngine = NULL;
 
 GameEngine::GameEngine(int width, int height,string title){
 	this->window = new sf::RenderWindow(sf::VideoMode(width,height),title);
 	this->winWidth = width;
 	this->winHeight = height;
 	this->window->setFramerateLimit(60);
+	this->activeScene = NULL;
+
 }
 
 void GameEngine::startGame(){
+	GameEngine *tmp = this;
+	activeEngine = tmp;
+
 	while(this->window->isOpen()){//Main game loop
 
 		//Render
@@ -33,7 +40,9 @@ void GameEngine::startGame(){
 
 void GameEngine::renderScene(){
 	//Render
-	this->activeScene->render(this->window);
+	if(this->activeScene!=NULL){
+		this->activeScene->render(this->window);
+	}
 }
 
 void GameEngine::processScene(){
@@ -79,3 +88,11 @@ int GameEngine::prevScene(){
     this->activeScene = this->sceneList[sceneID-1];
     return 0; 
 }
+
+void GameEngine::addObject(Object *obj){
+	if(this->activeScene!=NULL){
+		this->activeScene->addObject(obj);
+	}
+	return;
+}
+

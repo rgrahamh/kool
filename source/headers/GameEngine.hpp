@@ -22,6 +22,7 @@ class GameEngine {
 			GameEngine(int width,int height,std::string title);
 			void startGame();
 			void endGame();
+			void addObject(Object *obj);
 			int addScene(Scene *scene);
 			bool delScene(int sceneID);
 			bool setActiveScene(int sceneID);

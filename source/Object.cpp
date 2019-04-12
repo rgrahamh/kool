@@ -1,6 +1,6 @@
 #include "headers/Object.hpp"
-#include "headers/Globals.hpp"
 #include "headers/Sprite.hpp"
+#include "headers/Globals.hpp"
 #include <iostream>
 
 #define Keys sf::Keyboard
@@ -9,9 +9,9 @@ using namespace std;
 
 std::vector<Sprite *>spriteIndex = std::vector<Sprite *>();
 
-Object::Object(int x, int y){
-	this->x = (float)x;
-	this->y = (float)y;
+Object::Object(float x, float y){
+	this->x = x;
+	this->y = y;
 	this->sprite = NULL;
 	this->imageIndex = -1;
 	this->create();
@@ -40,13 +40,16 @@ void Object::decHitBoxes(double delta){
 
 //Engine-defined process function
 void Object::_process(double delta){
-    this->process(delta);
-	decHitBoxes(1.0);
+    cout << "---_process" << endl;
+    cout << "---Me: " << this << endl;
+    process(delta); //FIXME Able to call other functions from Object, but not process...
+    decHitBoxes(1.0);
 }
 
 //Developer-defined virtual function
 void Object::process(double delta){
 //	basicMove(&this->x,&this->y,7,delta);
+    	return; 
 }
 
 //Developer-defined virtual function
