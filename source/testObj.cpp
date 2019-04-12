@@ -32,7 +32,6 @@ class testObj: public Object {
 		}
 
 		void process(double delta){
-			cout << "---PROCESSING" << endl;
 			xMove += xScale * (direction);
 			yMove -= yScale * (direction);
 			if(xMove > 10 || xMove < -10){

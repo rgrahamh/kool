@@ -40,9 +40,7 @@ void Object::decHitBoxes(double delta){
 
 //Engine-defined process function
 void Object::_process(double delta){
-    cout << "---_process" << endl;
-    cout << "---Me: " << this << endl;
-    process(delta); //FIXME Able to call other functions from Object, but not process...
+    process(delta); 
     decHitBoxes(1.0);
 }
 

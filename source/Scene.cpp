@@ -24,7 +24,6 @@ int Scene::addView(View *view){
 
 //process 1 frame of the scene
 void Scene::process(){
-	cout << "===PROCESS START===" << endl;
     this->lastFrame = this->thisFrame;
     thisFrame = clock();
     if(thisFrame >= lastFrame){
@@ -33,10 +32,8 @@ void Scene::process(){
         delta = thisFrame;
     }
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
-		cout << "Processing Object: " << i << endl;
 		this->objectList[i]->_process(delta);
 	}
-	cout << "===PROCESS DONE===" << endl;
 }
 
 //render 1 frame of the scene
