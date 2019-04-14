@@ -11,6 +11,7 @@ struct drawData {
 	int y;
 	unsigned int imageIndex;
 	Sprite *sprite;
+	bool drawHitBoxes;
 };
 
 class Object{
@@ -22,6 +23,7 @@ class Object{
 				Call HitBox.decTime and destroy hit box if ttl=0
 			*/
 			void decHitBoxes(double delta); 
+			void addHitBox(int offsetX, int offsetY, int width, int height, double ttl=-1);
 	public:
 			float x;
 			float y;
@@ -52,6 +54,9 @@ class Object{
 			*/
 			void _process(double delta); 
 			void _destroy();
+
+			//Debug toggle to do things like draw hitboxes
+			bool debug;
 
 			/*
 				Calculate what imageIndex should be displayed, package all necessary rendering information into a drawData struct

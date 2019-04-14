@@ -50,6 +50,11 @@ void Scene::render(sf::RenderWindow *window){
 	sf::Sprite objSprite;
 	//Texture
 	sf::Texture sprTexture;
+	//HitBox list
+	std::vector<HitBox *> hBoxes;
+	//Debug box
+	sf::RectangleShape rectangle;
+	
 
 	//Iterate through views
 	for(unsigned int i = 0; i < this->viewList.size();i++){
@@ -73,7 +78,20 @@ void Scene::render(sf::RenderWindow *window){
 				sprTexture = (objDraw.sprite->getImage(objDraw.imageIndex));
 				objSprite.setTexture(sprTexture);
 				objSprite.setPosition(objDraw.x,objDraw.y);
-				window->draw(objSprite);			
+				//Debug: Draw HitBoxes
+				if(objDraw.drawHitBoxes==true){
+					hBoxes = objectList[j]->getHitBoxes();
+					for(unsigned int k = 0; k < hBoxes.size(); k++){
+						rectangle.setSize(sf::Vector2f(hBoxes[k]->width,hBoxes[k]->height));
+						rectangle.setOutlineColor(sf::Color::Red);
+						rectangle.setFillColor(sf::Color::Transparent);
+						rectangle.setOutlineThickness(2);
+						rectangle.setPosition(objectList[j]->x+hBoxes[k]->offsetX,objectList[j]->y+hBoxes[k]->offsetY);
+
+						window->draw(rectangle);
+					}
+				}
+				window->draw(objSprite);
 			}
 		}
 	}

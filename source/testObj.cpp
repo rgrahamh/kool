@@ -11,7 +11,7 @@ class testObj: public Object {
     public:
 		int xScale;
 		int yScale;
-    	int xMove;
+	    	int xMove;
 		int yMove;
 		int direction;
 		int xSwitch;
@@ -29,6 +29,8 @@ class testObj: public Object {
 			direction = 1;
 			setSprite((unsigned int)0);
 			xSwitch = 1;
+			this->debug=true;
+			this->addHitBox(0,0,16,16);
 		}
 
 		void process(double delta){

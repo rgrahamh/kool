@@ -5,6 +5,7 @@
 #include <time.h>
 #include "Object.hpp"
 #include "View.hpp"
+#include "HitBox.hpp"
 
 class Scene{
 	private:
