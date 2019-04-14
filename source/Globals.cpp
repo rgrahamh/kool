@@ -23,3 +23,8 @@ void createObject(Object *obj){
 	}
 	return;
 }
+
+bool setActiveScene(int sceneID){
+
+	return activeEngine->setActiveScene(sceneID);
+}

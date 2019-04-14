@@ -32,6 +32,7 @@ class testObj: public Object {
 		}
 
 		void process(double delta){
+			/*
 			xMove += xScale * (direction);
 			yMove -= yScale * (direction);
 			if(xMove > 10 || xMove < -10){
@@ -39,13 +40,20 @@ class testObj: public Object {
 			}
 			this->x += xMove;
 			this->y += yMove;
+			*/
+			basicMove(&this->x,&this->y,6,delta);
 
 			if(Keys::isKeyPressed(Keys::X) && xSwitch==0){
 				testObj *tmp = new testObj(600,200);
 				xSwitch = 1;
 				createObject(tmp);
 			}
-		
+			if(Keys::isKeyPressed(Keys::N)){
+				setActiveScene(1);
+			}
+			if(Keys::isKeyPressed(Keys::P)){
+				setActiveScene(0);
+			}
 		}
 
 

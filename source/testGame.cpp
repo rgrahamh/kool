@@ -11,22 +11,26 @@ int main(){
 
 	//Create Scene
 	Scene *firstScene = new Scene();
+	Scene *secondScene = new Scene();
 
 	//Create Sprite
-	Sprite *firstSprite = new Sprite("resources/pirate.png");
-	Sprite *dolphin = new Sprite("resources/dolphin.png");
+	Sprite *firstSprite = new Sprite("resources/bill.png");
 
 	//Create Object
 	testObj *firstObject = new testObj(50,50);
-	testObj *secondObject = new testObj(300,300);
-	testObj *thirdObject = new testObj(700,400);
-	Object *base = new Object(700,100);
 
-	//Assign Sprite to Object
-	base->setSprite(dolphin);
+	testObj *secondObject = new testObj(500,500);
+	testObj *thirdObject = new testObj(400,500);
+	testObj *fourthObject = new testObj(300,500);
+	testObj *fifthObject = new testObj(200,500);
 
 	//Assign Object to Scene
 	firstScene->addObject(firstObject);
+
+	secondScene->addObject(secondObject);
+	secondScene->addObject(thirdObject);
+	secondScene->addObject(fourthObject);
+	secondScene->addObject(fifthObject);
 
 	firstObject->xSwitch = 0;
 //	firstScene->addObject(secondObject);
@@ -35,6 +39,7 @@ int main(){
 
 	//Assign Scene to Engine
 	myEngine.addScene(firstScene);
+	myEngine.addScene(secondScene);
 
 
 	myEngine.startGame();
