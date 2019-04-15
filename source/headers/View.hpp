@@ -15,6 +15,10 @@ class View{
 		int height;
 		int sceneX;
 		int sceneY;
+		int followWidth;
+		int followHeight;
+		int followX;
+		int followY;
 		Object *following;
 		
 

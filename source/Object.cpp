@@ -16,6 +16,7 @@ Object::Object(float x, float y){
 	this->imageIndex = -1;
 	this->create();
 	this->debug = false;
+	this->collisionLayer = 0;
 }
 
 struct drawData Object::_draw(){
@@ -38,8 +39,9 @@ struct drawData Object::_draw(){
 }
 
 //Decrement hit box counters
-void Object::decHitBoxes(double delta){
+void Object::decHitBoxes(double delta){ //FIXME
 
+	//If after decrementing a hitBox's time it is negative and not infinite, we need to destroy that HitBox here.
 	return;
 }
 
@@ -59,6 +61,7 @@ std::vector<HitBox *> Object::getHitBoxes(){
 void Object::_process(double delta){
     process(delta); 
     decHitBoxes(1.0);
+	//Calculate how long the current image has been shown, increment imageIndex if necessary
 }
 
 //Developer-defined virtual function

@@ -27,6 +27,12 @@ class Object{
 	public:
 			float x;
 			float y;
+
+			/*
+				When collisionLayer is 0, collide with everything. When collisionLayer is negative, doesn't collide with anything. Nonzero positive collisionLayer only collide with that layer
+				Negative takes priority over zero. Meaning that should an object with cL = 0 collide with one with cL = -1, no collision processing should occur.
+			*/
+			int collisionLayer;
 			
 			/*
 				Defined here instead of in Sprite object b/c same Sprite may be used for multiple object instances and will be at different points in animation
@@ -35,12 +41,11 @@ class Object{
 			bool dynamic;
 			
 			int renderLayer;
-			int collisionLayer;
 
 			/*
 				Typically will be the same as in the Sprite instance, but it may be desired to be different for different objects so it is specified here as well.
 			*/
-			int animationSpeed; 
+			double animationSpeed; //Measured in milliseconds per image
 			Sprite *sprite;
 			std::vector<HitBox *> hitBoxes;
 

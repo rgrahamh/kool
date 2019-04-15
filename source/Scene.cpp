@@ -24,6 +24,7 @@ int Scene::addView(View *view){
 
 //process 1 frame of the scene
 void Scene::process(){
+    //Object behavior processing
     this->lastFrame = this->thisFrame;
     thisFrame = clock();
     if(thisFrame >= lastFrame){
@@ -33,6 +34,11 @@ void Scene::process(){
     }
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
 		this->objectList[i]->_process(delta);
+	}
+	//Object collision processing
+	for(unsigned int i = 0; i < this->objectList.size(); i++){
+		//Check each hitbox for each object
+		//Process collisions by calling this->objectList[i]->onCollide()
 	}
 }
 
