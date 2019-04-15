@@ -76,7 +76,7 @@ void Scene::render(sf::RenderWindow *window){
 				//Retrieve the image with index imageIndex from the sprite pointed to by the
 				//object we are trying to draw
 				sprTexture = (objDraw.sprite->getImage(objDraw.imageIndex));
-				objSprite.setTexture(sprTexture);
+				objSprite.setTexture(sprTexture,true);
 				objSprite.setPosition(objDraw.x,objDraw.y);
 				//Debug: Draw HitBoxes
 				if(objDraw.drawHitBoxes==true){
@@ -91,6 +91,7 @@ void Scene::render(sf::RenderWindow *window){
 						window->draw(rectangle);
 					}
 				}
+				//Make sure the object sprite is the last thing we draw, so that it is at the foreground.
 				window->draw(objSprite);
 			}
 		}

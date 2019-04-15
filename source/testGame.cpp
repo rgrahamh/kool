@@ -15,8 +15,9 @@ int main(){
 
 	//Create Sprite
 	Sprite *firstSprite = new Sprite("resources/bill.png");
+	Sprite *bg = new Sprite("resources/background.png");
 
-	//Create Object
+	//Create Objects
 	testObj *firstObject = new testObj(50,50);
 
 	testObj *secondObject = new testObj(500,500);
@@ -24,9 +25,14 @@ int main(){
 	testObj *fourthObject = new testObj(300,500);
 	testObj *fifthObject = new testObj(200,500);
 
+	Object *background = new Object(0,0);
+	background->setSprite(bg);
+
 	//Assign Object to Scene
+	firstScene->addObject(background);
 	firstScene->addObject(firstObject);
 
+	secondScene->addObject(background);
 	secondScene->addObject(secondObject);
 	secondScene->addObject(thirdObject);
 	secondScene->addObject(fourthObject);
