@@ -1,6 +1,6 @@
 # To-do list:
 
-[ ] Collision Detection/Layering (Ryan)
+[X] Collision Detection/Layering (Ryan)
 [X] Views: A view can loosely follow an object through a large room (Adam)
 [ ] Easier level creation (R2)
 [ ] Animated Sprites (Jeremiah)

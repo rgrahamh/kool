@@ -1,9 +1,9 @@
 #include "headers/HitBox.hpp"
 
 
-HitBox::HitBox(int offsetX, int offsetY, int width, int height, double ttl){
+HitBox::HitBox(float offsetX, float offsetY, int width, int height, double ttl){
 	
-    	this->offsetX = offsetX;
+    this->offsetX = offsetX;
 	this->offsetY = offsetY;
 	
 	this->width = width;
@@ -18,7 +18,8 @@ HitBox::HitBox(int offsetX, int offsetY, int width, int height, double ttl){
 
 }
 
-double HitBox::decTime(double delta){ //FIXME Pretty sure I'm not decremening the ttl correctly.
+//Decrements the TTL on the hitbox
+double HitBox::decTime(double delta){
 	if(this->infinite == false){
 		this->ttl -= delta;
 	}
