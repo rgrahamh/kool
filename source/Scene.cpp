@@ -8,8 +8,11 @@
 
 using namespace std;
 
-Scene::Scene(){
+Scene::Scene(int width, int height){
     this->thisFrame = clock();
+    this->width = width;
+    this->height = height;
+	this->id = 0;
 }
 
 int Scene::addObject(Object *object){
@@ -18,8 +21,22 @@ int Scene::addObject(Object *object){
 }
 
 int Scene::addView(View *view){
+	view->setSceneID(this->id);
 	this->viewList.push_back(view);
 	return 0;
+}
+
+View *Scene::getView(unsigned int index){
+	if(index < this->viewList.size()){
+		return viewList[index];
+	}else{
+		return NULL;
+	}
+}
+
+void Scene::setID(int id){
+	this->id = id;
+	return;
 }
 
 //process 1 frame of the scene
@@ -39,6 +56,10 @@ void Scene::process(){
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
 		//Check each hitbox for each object
 		//Process collisions by calling this->objectList[i]->onCollide()
+	}
+	//View processing
+	for(unsigned int i = 0; i < this->viewList.size(); i++){
+		this->viewList[i]->_process(delta);
 	}
 }
 

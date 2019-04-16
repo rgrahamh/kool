@@ -10,8 +10,9 @@ int main(){
 	GameEngine myEngine = *(new GameEngine(1080,720,"Kool Engine"));
 
 	//Create Scene
-	Scene *firstScene = new Scene();
-	Scene *secondScene = new Scene();
+	Scene *firstScene = new Scene(1000,700);
+
+	Scene *secondScene = new Scene(1000,700);
 
 	//Create Sprite
 	Sprite *firstSprite = new Sprite("resources/bill.png");
@@ -26,10 +27,16 @@ int main(){
 	testObj *fifthObject = new testObj(200,500);
 
 	Object *background = new Object(0,0);
+	Object *background2 = new Object(1080,0);
+	Object *background3 = new Object(0,720);
 	background->setSprite(bg);
+	background2->setSprite(bg);
+	background3->setSprite(bg);
 
 	//Assign Object to Scene
 	firstScene->addObject(background);
+	firstScene->addObject(background2);
+	firstScene->addObject(background3);
 	firstScene->addObject(firstObject);
 
 	secondScene->addObject(background);
@@ -46,6 +53,9 @@ int main(){
 	//Assign Scene to Engine
 	myEngine.addScene(firstScene);
 	myEngine.addScene(secondScene);
+
+	//Edit Views
+	firstScene->getView(0)->setFollowing(firstObject,400,400);
 
 
 	myEngine.startGame();

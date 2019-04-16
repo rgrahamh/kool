@@ -15,11 +15,16 @@ class Scene{
 			std::vector<View *> viewList;
 			std::vector<Object *> objectList;
 	public:
-			Scene();
+			int width;
+			int height;
+			int id; //Where in the GameEngine list does this scene appear
+			Scene(int width, int height);
 			void process(); //Should make call to Object _process functions and to View _process functions
 			void render(sf::RenderWindow *window); //render(SFML window)
+			View *getView(unsigned int index);
 			int addObject(Object *object);
 			int addView(View *view);
+			void setID(int id);
 
 };
 #endif

@@ -9,7 +9,7 @@ int main(){
 	GameEngine myEngine = *(new GameEngine(800,600,"Kool Engine"));
 
 	//Create Scene
-	Scene *firstScene = new Scene();
+	Scene *firstScene = new Scene(800,600);
 
 	//Create Object
 	Object *firstObject = new Object(50,50);

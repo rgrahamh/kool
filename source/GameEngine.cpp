@@ -56,6 +56,7 @@ void GameEngine::endGame(){
 int GameEngine::addScene(Scene *scene){
 	View *tmp = new View(0,0,0,0,winWidth,winHeight);
 	scene->addView(tmp);
+	scene->setID(sceneList.size());
 	this->sceneList.push_back(scene);
 	if(this->sceneList.size()<2){
 		this->activeScene = scene;
@@ -79,6 +80,13 @@ bool GameEngine::setActiveScene(int sceneID){
    }
 }
 
+Scene *GameEngine::getScene(int sceneID){
+	if((long unsigned int) sceneID < this->sceneList.size()){
+		return sceneList[sceneID];
+	}else{
+		return NULL;
+	}
+}
 
 int GameEngine::nextScene(){
     this->activeScene = this->sceneList[sceneID+1];

@@ -12,4 +12,8 @@ extern void createObject(Object *obj);
 
 extern bool setActiveScene(int sceneID);
 
+extern int getSceneWidth(int sceneID);
+
+extern int getSceneHeight(int sceneID);
+
 #endif
