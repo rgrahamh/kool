@@ -22,12 +22,12 @@ int main(){
 	//Create Objects
 	testObj *firstObject = new testObj(50.0,50.0);
 
-	testObj *secondObject = new testObj(500,500);
-	testObj *thirdObject = new testObj(400,500);
-	testObj *fourthObject = new testObj(300,500);
-	testObj *fifthObject = new testObj(200,500);
+	testObj *secondObject = new testObj(500.0,500.0);
+	testObj *thirdObject = new testObj(400.0,500.0);
+	testObj *fourthObject = new testObj(300.0,500.0);
+	testObj *fifthObject = new testObj(200.0,500.0);
 
-    testObj2 *sixthObject = new testObj2(500, 80);
+    testObj2 *sixthObject = new testObj2(500.0, 80.0);
 
 	Object *background = new Object(0,0);
 	Object *background2 = new Object(1080,0);
@@ -41,7 +41,7 @@ int main(){
 	firstScene->addObject(background2);
 	firstScene->addObject(background3);
 	firstScene->addObject(firstObject);
-	firstScene->addObject(firstObject);
+	firstScene->addObject(secondObject);
 	firstScene->addObject(thirdObject);
 	firstScene->addObject(fourthObject);
 	firstScene->addObject(fifthObject);

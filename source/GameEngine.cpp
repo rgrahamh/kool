@@ -88,6 +88,10 @@ Scene *GameEngine::getScene(int sceneID){
 	}
 }
 
+Scene *GameEngine::getActiveScene(){
+	return this->activeScene;
+}
+
 int GameEngine::nextScene(){
     this->activeScene = this->sceneList[sceneID+1];
     return 0;

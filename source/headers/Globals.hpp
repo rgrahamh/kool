@@ -10,6 +10,8 @@ extern void basicMove(float *x, float *y, int speed, double delta);
 
 extern void createObject(Object *obj);
 
+extern void destroyObject(Object *obj);
+
 extern bool setActiveScene(int sceneID);
 
 extern int getSceneWidth(int sceneID);

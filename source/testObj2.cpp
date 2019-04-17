@@ -29,7 +29,7 @@ class testObj2: public Object {
 			direction = 1;
 			setSprite((unsigned int)0);
 			xSwitch = 1;
-			//this->debug=true;
+			this->debug=true;
 			this->addHitBox(0,0,16,16);
 		}
 
@@ -61,5 +61,6 @@ class testObj2: public Object {
 
         void onCollide(Object *other, int myBoxID, int otherBoxID){
             printf("Colliding!\n");
+	    destroyObject(this);
         }
 };

@@ -52,6 +52,7 @@ class Object{
 
 			Object(float x, float y);
             Object(float x, float y, Sprite *sprite, bool hasInitialHitbox);
+			~Object();
 			
 			/*
 				Call decHitBoxes() if X milliseconds have passed since last call.

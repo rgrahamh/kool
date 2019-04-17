@@ -25,6 +25,8 @@ class Scene{
 			int addObject(Object *object);
 			int addView(View *view);
 			void setID(int id);
+			std::vector<Object *> getObjectList();
+			void destroyObject(Object *obj);
 
 };
 #endif

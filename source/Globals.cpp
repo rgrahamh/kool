@@ -4,7 +4,7 @@
 #define Keys sf::Keyboard
 void basicMove(float *x, float *y, int speed, double delta){
 
-	delta = delta / 100.0;
+	delta = delta / 10.0;
 
 	if(Keys::isKeyPressed(Keys::D)){
         *x += speed * delta;
@@ -24,6 +24,11 @@ void createObject(Object *obj){
 	if(activeEngine!=NULL){
 		activeEngine->addObject(obj);
 	}
+	return;
+}
+
+void destroyObject(Object *obj){
+	activeEngine->getActiveScene()->destroyObject(obj);
 	return;
 }
 

@@ -104,4 +104,8 @@ void Object::setSprite(unsigned int index){
 		this->imageIndex = 0;
 	}
 }
-
+Object::~Object(){
+	for(unsigned int i = 0; i < hitBoxes.size(); i++){
+		delete hitBoxes[i];
+	}
+}
