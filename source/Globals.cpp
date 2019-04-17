@@ -4,7 +4,7 @@
 #define Keys sf::Keyboard
 void basicMove(float *x, float *y, int speed, double delta){
 
-	delta = delta / 10;
+	delta = delta / 100.0;
 
 	if(Keys::isKeyPressed(Keys::D)){
         *x += speed * delta;

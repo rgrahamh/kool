@@ -49,12 +49,45 @@ void Scene::process(){
     } else {
         delta = thisFrame;
     }
+    printf("%f\r", delta);
+    std::fflush(stdout);
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
 		this->objectList[i]->_process(delta);
 	}
 	//Object collision processing
+
+    //The objects being checked (for readability and limiting memory access in-code)
+    Object* obj1;
+    Object* obj2;
+
+    //Checking each Object
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
+        obj1 = this->objectList[i];
 		//Check each hitbox for each object
+        if(obj1->collisionLayer >= 0){
+            for(unsigned int j = i + 1; j < this->objectList.size(); j++){
+                //Don't check against yourself
+                obj2 = this->objectList[j];
+                if(obj2->collisionLayer >= 0){
+                    for(unsigned int k = 0; k < obj1->hitBoxes.size(); k++){
+                        float x1 = obj1->hitBoxes[k]->offsetX + obj1->x;
+                        float y1 = obj1->hitBoxes[k]->offsetY + obj1->y;
+                        for(unsigned int l = 0; l < obj2->hitBoxes.size(); l++){
+                            float x2 = obj2->hitBoxes[l]->offsetX + obj2->x;
+                            float y2 = obj2->hitBoxes[l]->offsetY + obj2->y;
+                            if(x1 + obj1->hitBoxes[k]->width > x2
+                               && x1 < x2 + obj2->hitBoxes[l]->width
+                               && y1 + obj1->hitBoxes[k]->height > y2
+                               && y1 < y2 + obj2->hitBoxes[l]->height){
+                                //Handle Collision
+                                obj1->onCollide(obj2, k, l);
+                                obj2->onCollide(obj1, k, l);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 		//Process collisions by calling this->objectList[i]->onCollide()
 	}
 	//View processing

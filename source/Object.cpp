@@ -19,6 +19,19 @@ Object::Object(float x, float y){
 	this->collisionLayer = 0;
 }
 
+Object::Object(float x, float y, Sprite *sprite, bool hasInitialHitbox=true){
+	this->x = x;
+	this->y = y;
+	this->sprite = sprite;
+	this->imageIndex = -1;
+	this->create();
+	this->debug = false;
+	this->collisionLayer = 0;
+    if(hasInitialHitbox){
+        this->addHitBox(0, 0, sprite->getImage(0).getSize().x, sprite->getImage(0).getSize().y, -1);
+    }
+}
+
 struct drawData Object::_draw(){
 	struct drawData data;
 

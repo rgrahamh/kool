@@ -49,10 +49,9 @@ class Object{
 			Sprite *sprite;
 			std::vector<HitBox *> hitBoxes;
 
-            //This line was erroring out if I didn't put it at the end of the definitions
-			int collideWith[];
 
 			Object(float x, float y);
+            Object(float x, float y, Sprite *sprite, bool hasInitialHitbox);
 			
 			/*
 				Call decHitBoxes() if X milliseconds have passed since last call.
@@ -76,5 +75,7 @@ class Object{
 			
 			std::vector<HitBox *> getHitBoxes();
 
+            //This line was erroring out if I didn't put it at the end of the definitions
+			//int collideWith[];
 };
 #endif

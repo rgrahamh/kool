@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class testObj: public Object {
+class testObj2: public Object {
 
     public:
 		int xScale;
@@ -17,15 +17,15 @@ class testObj: public Object {
 		int xSwitch;
 
 		//This code has to be present in all child objects of Object
-		testObj(float x, float y):Object(x,y){
+		testObj2(float x, float y):Object(x,y){
 			create();
 		}
 
 		void create(){
 			xMove = 0;
 			yMove = 0;
-			xScale = (rand() % 6);
-			yScale = (rand() % 6);
+			xScale = 18;
+			yScale = 18;
 			direction = 1;
 			setSprite((unsigned int)0);
 			xSwitch = 1;
@@ -43,20 +43,23 @@ class testObj: public Object {
 			this->x += xMove;
 			this->y += yMove;
 			*/
-			basicMove(&this->x,&this->y,6,delta);
+            delta = delta / 10.0;
 
-			if(Keys::isKeyPressed(Keys::X) && xSwitch==0){
-				testObj *tmp = new testObj(600,200);
-				xSwitch = 1;
-				createObject(tmp);
-			}
-			if(Keys::isKeyPressed(Keys::N)){
-				setActiveScene(1);
-			}
-			if(Keys::isKeyPressed(Keys::P)){
-				setActiveScene(0);
-			}
+            if(Keys::isKeyPressed(Keys::Right)){
+                x += delta;
+            }
+            if(Keys::isKeyPressed(Keys::Left)){
+                x -= delta;
+            }
+            if(Keys::isKeyPressed(Keys::Up)){
+                y -= delta;
+            }
+            if(Keys::isKeyPressed(Keys::Down)){
+                y += delta;
+            }
 		}
 
-
+        void onCollide(Object *other, int myBoxID, int otherBoxID){
+            printf("Colliding!\n");
+        }
 };
