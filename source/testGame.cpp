@@ -10,9 +10,9 @@ int main(){
 	GameEngine myEngine = *(new GameEngine(1080,720,"Kool Engine"));
 
 	//Create Scene
-	Scene *firstScene = new Scene(1000,700);
+	Scene *firstScene = new Scene(1080,700);
 
-	Scene *secondScene = new Scene(1000,700);
+	Scene *secondScene = new Scene(1080,700);
 
 	//Create Sprite
 	Sprite *firstSprite = new Sprite("resources/bill.png");
