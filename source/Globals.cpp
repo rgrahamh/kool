@@ -31,3 +31,11 @@ bool setActiveScene(int sceneID){
 
 	return activeEngine->setActiveScene(sceneID);
 }
+
+void playSound(char *filename, irrklang::ISoundEngine *engine, bool loop=false) {
+    engine->play2D(filename, loop);
+}
+
+void stopAllSounds(irrklang::ISoundEngine *engine) {
+    engine->stopAllSounds();
+}
