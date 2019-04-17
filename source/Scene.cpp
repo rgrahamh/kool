@@ -8,8 +8,11 @@
 
 using namespace std;
 
-Scene::Scene(){
+Scene::Scene(int width, int height){
     this->thisFrame = clock();
+    this->width = width;
+    this->height = height;
+	this->id = 0;
 }
 
 int Scene::addObject(Object *object){
@@ -18,12 +21,27 @@ int Scene::addObject(Object *object){
 }
 
 int Scene::addView(View *view){
+	view->setSceneID(this->id);
 	this->viewList.push_back(view);
 	return 0;
 }
 
+View *Scene::getView(unsigned int index){
+	if(index < this->viewList.size()){
+		return viewList[index];
+	}else{
+		return NULL;
+	}
+}
+
+void Scene::setID(int id){
+	this->id = id;
+	return;
+}
+
 //process 1 frame of the scene
 void Scene::process(){
+    //Object behavior processing
     this->lastFrame = this->thisFrame;
     thisFrame = clock();
     if(thisFrame >= lastFrame){
@@ -31,8 +49,56 @@ void Scene::process(){
     } else {
         delta = thisFrame;
     }
+    printf("%f\r", delta);
+    std::fflush(stdout);
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
 		this->objectList[i]->_process(delta);
+	}
+	//Object collision processing
+
+    //The objects being checked (for readability and limiting memory access in-code)
+    Object* obj1;
+    Object* obj2;
+
+    //Checking each Object
+	for(unsigned int i = 0; i < this->objectList.size(); i++){
+        obj1 = this->objectList[i];
+		//Check each hitbox for each object
+        if(i < this->objectList.size() && this->objectList[i] == obj1 && obj1->collisionLayer >= 0){
+            for(unsigned int j = i + 1; j < this->objectList.size(); j++){
+                //Don't check against yourself
+                obj2 = this->objectList[j];
+                if(j < this->objectList.size() && this->objectList[j] == obj2 && obj2->collisionLayer >= 0){
+                    for(unsigned int k = 0; k < obj1->hitBoxes.size(); k++){
+                        float x1 = obj1->hitBoxes[k]->offsetX + obj1->x;
+                        float y1 = obj1->hitBoxes[k]->offsetY + obj1->y;
+                        for(unsigned int l = 0; l < obj2->hitBoxes.size(); l++){
+                            float x2 = obj2->hitBoxes[l]->offsetX + obj2->x;
+                            float y2 = obj2->hitBoxes[l]->offsetY + obj2->y;
+                            if(x1 + obj1->hitBoxes[k]->width > x2
+                               && x1 < x2 + obj2->hitBoxes[l]->width
+                               && y1 + obj1->hitBoxes[k]->height > y2
+                               && y1 < y2 + obj2->hitBoxes[l]->height){
+                                //Handle Collision
+                                obj1->onCollide(obj2, k, l);
+                                obj2->onCollide(obj1, k, l);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+		//Process collisions by calling this->objectList[i]->onCollide()
+	//Cleanup Object List
+	for(unsigned int i = 0; i < this->objectList.size(); i++){
+		if(this->objectList[i]==NULL){
+			objectList.erase(objectList.begin()+i);
+		}
+	}
+	}
+	//View processing
+	for(unsigned int i = 0; i < this->viewList.size(); i++){
+		this->viewList[i]->_process(delta);
 	}
 }
 
@@ -99,4 +165,17 @@ void Scene::render(sf::RenderWindow *window){
 	window->display();
 
 	return;
+}
+
+std::vector<Object *> Scene::getObjectList(){
+	return this->objectList;
+}
+
+void Scene::destroyObject(Object *obj){
+	for(unsigned int i = 0; i < this->objectList.size(); i++){
+		if(this->objectList[i]==obj){
+			objectList[i]=NULL;
+			delete obj;
+		}
+	}
 }

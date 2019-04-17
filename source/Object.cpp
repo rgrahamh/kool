@@ -16,6 +16,20 @@ Object::Object(float x, float y){
 	this->imageIndex = -1;
 	this->create();
 	this->debug = false;
+	this->collisionLayer = 0;
+}
+
+Object::Object(float x, float y, Sprite *sprite, bool hasInitialHitbox=true){
+	this->x = x;
+	this->y = y;
+	this->sprite = sprite;
+	this->imageIndex = -1;
+	this->create();
+	this->debug = false;
+	this->collisionLayer = 0;
+    if(hasInitialHitbox){
+        this->addHitBox(0, 0, sprite->getImage(0).getSize().x, sprite->getImage(0).getSize().y, -1);
+    }
 }
 
 struct drawData Object::_draw(){
@@ -38,8 +52,9 @@ struct drawData Object::_draw(){
 }
 
 //Decrement hit box counters
-void Object::decHitBoxes(double delta){
+void Object::decHitBoxes(double delta){ //FIXME
 
+	//If after decrementing a hitBox's time it is negative and not infinite, we need to destroy that HitBox here.
 	return;
 }
 
@@ -59,6 +74,7 @@ std::vector<HitBox *> Object::getHitBoxes(){
 void Object::_process(double delta){
     process(delta); 
     decHitBoxes(1.0);
+	//Calculate how long the current image has been shown, increment imageIndex if necessary
 }
 
 //Developer-defined virtual function
@@ -88,4 +104,8 @@ void Object::setSprite(unsigned int index){
 		this->imageIndex = 0;
 	}
 }
-
+Object::~Object(){
+	for(unsigned int i = 0; i < hitBoxes.size(); i++){
+		delete hitBoxes[i];
+	}
+}

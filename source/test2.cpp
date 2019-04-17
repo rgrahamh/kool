@@ -1,6 +1,7 @@
 #include <iostream>
 #include "headers/GameEngine.hpp"
 #include "testObj.cpp"
+#include "testObj2.cpp"
 
 using namespace std;
 
@@ -10,21 +11,23 @@ int main(){
 	GameEngine myEngine = *(new GameEngine(1080,720,"Kool Engine"));
 
 	//Create Scene
-	Scene *firstScene = new Scene(1080,700);
+	Scene *firstScene = new Scene(1000,700);
 
-	Scene *secondScene = new Scene(1080,700);
+	Scene *secondScene = new Scene(1000,700);
 
 	//Create Sprite
 	Sprite *firstSprite = new Sprite("resources/bill.png");
 	Sprite *bg = new Sprite("resources/background.png");
 
 	//Create Objects
-	testObj *firstObject = new testObj(50,50);
+	testObj *firstObject = new testObj(50.0,50.0);
 
-	testObj *secondObject = new testObj(500,500);
-	testObj *thirdObject = new testObj(400,500);
-	testObj *fourthObject = new testObj(300,500);
-	testObj *fifthObject = new testObj(200,500);
+	testObj *secondObject = new testObj(500.0,500.0);
+	testObj *thirdObject = new testObj(400.0,500.0);
+	testObj *fourthObject = new testObj(300.0,500.0);
+	testObj *fifthObject = new testObj(200.0,500.0);
+
+    testObj2 *sixthObject = new testObj2(500.0, 80.0);
 
 	Object *background = new Object(0,0);
 	Object *background2 = new Object(1080,0);
@@ -38,12 +41,11 @@ int main(){
 	firstScene->addObject(background2);
 	firstScene->addObject(background3);
 	firstScene->addObject(firstObject);
-
-	secondScene->addObject(background);
-	secondScene->addObject(secondObject);
-	secondScene->addObject(thirdObject);
-	secondScene->addObject(fourthObject);
-	secondScene->addObject(fifthObject);
+	firstScene->addObject(secondObject);
+	firstScene->addObject(thirdObject);
+	firstScene->addObject(fourthObject);
+	firstScene->addObject(fifthObject);
+    firstScene->addObject(sixthObject);
 
 	firstObject->xSwitch = 0;
 //	firstScene->addObject(secondObject);

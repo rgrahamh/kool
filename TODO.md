@@ -1,5 +1,6 @@
 # To-do list:
-
-[ ] Collision Detection :D
-[ ] Audio Engine Implementation
-[ ] Views: A view can loosely follow an object through a large room
+[ ] Easier level creation (R2)
+[ ] Animated Sprites (Jeremiah)
+[ ] Sprite Tiling (Adam)
+[ ] Implementing Vx, Vy, gravity, and "friction" (Ryan)
+[ ] Audio Engine Implementation (R2)

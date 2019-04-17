@@ -26,6 +26,8 @@ class GameEngine {
 			int addScene(Scene *scene);
 			bool delScene(int sceneID);
 			bool setActiveScene(int sceneID);
+			Scene *getActiveScene();
+			Scene *getScene(int id);
 			int nextScene();
 			int prevScene();
 

@@ -15,6 +15,13 @@ class View{
 		int height;
 		int sceneX;
 		int sceneY;
+		int sceneID;
+		int sceneWidth;
+		int sceneHeight;
+		int followWidth;
+		int followHeight;
+		int followX;
+		int followY;
 		Object *following;
 		
 
@@ -24,7 +31,10 @@ class View{
 			based on this view. 
 		*/
 		struct position translate(int x, int y); 
-		void _process();
+		void _process(double delta);
+		void setFollowing(Object *follow,int followWidth, int followHeight);
+		void setFollowMiddle(int winX, int winY);
+		void setSceneID(int id);
 		void follow(); //Adjust position based on the object we are following.
 
 
