@@ -30,11 +30,12 @@ class Sprite {
 			*/
 			int removeImage(int index); 
 
-			sf::Texture getImage(unsigned int index);
+			sf::Texture getImage(int index);
 
-			std::string getImagePath(unsigned int index);
+			std::string getImagePath(int index);
 			void setRepeated(bool repeat);
 			void setSize(int width, int height);
+			unsigned int getImageNum();
 
 };
 #endif

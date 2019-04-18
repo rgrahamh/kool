@@ -18,6 +18,9 @@ int main(){
 	Sprite *firstSprite = new Sprite("resources/bill.png");
 //	firstSprite->setRepeated(true);
 //	firstSprite->setSize(32,16);
+	Sprite *ground = new Sprite("resources/ground.png");
+	ground->setRepeated(true);
+	ground->setSize(2000,32);
 
 	Sprite *bg = new Sprite("resources/background.png");
 
@@ -32,14 +35,18 @@ int main(){
 	Object *background = new Object(0,0);
 	Object *background2 = new Object(1080,0);
 	Object *background3 = new Object(0,720);
+	Object *floor = new Object(0.0,700.0,ground,true);
+//	Object *floor = new Object(0.0,700.0);
 	background->setSprite(bg);
 	background2->setSprite(bg);
 	background3->setSprite(bg);
+//	floor->setSprite(ground);
 
 	//Assign Object to Scene
 	firstScene->addObject(background);
 	firstScene->addObject(background2);
 	firstScene->addObject(background3);
+	firstScene->addObject(floor);
 	firstScene->addObject(firstObject);
 
 	secondScene->addObject(background);

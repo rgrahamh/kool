@@ -32,15 +32,18 @@ bool Sprite::addImage(std::string filePath){
 
 }
 
-sf::Texture Sprite::getImage(unsigned int index){
-	if(index >= this->images.size()){
+sf::Texture Sprite::getImage(int index){
+	if(index >= (int)this->images.size()){
+		cout << "Error in Sprite::getImage: index too large" << endl << "index: " << index
+		    << endl << "size: " << this->images.size() << endl;
 		throw "Error in Sprite::getImage: index too large";
 	}
 	return this->images[index];
 }
 
-std::string Sprite::getImagePath(unsigned int index){
-	if(index >= this->imagePaths.size()){
+std::string Sprite::getImagePath(int index){
+	if(index >= (int)this->imagePaths.size()){
+		cout << "Error in Sprite::getImagePath: index too large" << endl;
 		throw "Error in Sprite::getImagePath: index too large";
 	}
 	return this->imagePaths[index];
@@ -52,4 +55,7 @@ void Sprite::setRepeated(bool repeat){
 void Sprite::setSize(int width, int height){
 	this->width = width;
 	this->height = height;
+}
+unsigned int Sprite::getImageNum(){
+	return this->images.size();
 }
