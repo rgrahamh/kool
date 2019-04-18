@@ -142,7 +142,10 @@ void Scene::render(sf::RenderWindow *window){
 				//Retrieve the image with index imageIndex from the sprite pointed to by the
 				//object we are trying to draw
 				sprTexture = (objDraw.sprite->getImage(objDraw.imageIndex));
+				sprTexture.setRepeated(objDraw.repeated);
 				objSprite.setTexture(sprTexture,true);
+				sf::IntRect r(0,0,objDraw.width,objDraw.height);
+				objSprite.setTextureRect(r);
 				objSprite.setPosition(objDraw.x,objDraw.y);
 				//Debug: Draw HitBoxes
 				if(objDraw.drawHitBoxes==true){

@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/System/Vector2.hpp>
 #define SPRITE_H
 
 
@@ -14,6 +15,9 @@ class Sprite {
 	public:
 			int xOffset;
 			int yOffset;
+			int width;
+			int height;
+			bool repeated;
 			
 			Sprite(std::string path);
 			/*
@@ -29,6 +33,8 @@ class Sprite {
 			sf::Texture getImage(unsigned int index);
 
 			std::string getImagePath(unsigned int index);
+			void setRepeated(bool repeat);
+			void setSize(int width, int height);
 
 };
 #endif

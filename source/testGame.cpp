@@ -15,7 +15,14 @@ int main(){
 	Scene *secondScene = new Scene(1080,700);
 
 	//Create Sprite
-	Sprite *firstSprite = new Sprite("resources/dreadnaught.png");
+<<<<<<< HEAD
+	Sprite *firstSprite = new Sprite("resources/bill.png");
+=======
+	Sprite *firstSprite = new Sprite("resources/bill.png");
+//	firstSprite->setRepeated(true);
+//	firstSprite->setSize(32,16);
+
+>>>>>>> a483739e02893f5ffcad8ba53b80a229faa7cd85
 	Sprite *bg = new Sprite("resources/background.png");
 
 	//Create Objects

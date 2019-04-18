@@ -48,6 +48,10 @@ struct drawData Object::_draw(){
 	}else{
 		data.drawHitBoxes = false;
 	}
+	data.repeated = this->sprite->repeated;
+	data.width = this->sprite->width;
+	data.height = this->sprite->height;
+
 	return data;
 }
 
