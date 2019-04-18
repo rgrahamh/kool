@@ -12,6 +12,9 @@ struct drawData {
 	unsigned int imageIndex;
 	Sprite *sprite;
 	bool drawHitBoxes;
+	int width;
+	int height;
+	bool repeated;
 };
 
 class Object{

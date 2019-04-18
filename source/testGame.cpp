@@ -16,6 +16,9 @@ int main(){
 
 	//Create Sprite
 	Sprite *firstSprite = new Sprite("resources/bill.png");
+//	firstSprite->setRepeated(true);
+//	firstSprite->setSize(32,16);
+
 	Sprite *bg = new Sprite("resources/background.png");
 
 	//Create Objects

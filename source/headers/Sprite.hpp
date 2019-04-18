@@ -34,6 +34,7 @@ class Sprite {
 
 			std::string getImagePath(unsigned int index);
 			void setRepeated(bool repeat);
+			void setSize(int width, int height);
 
 };
 #endif

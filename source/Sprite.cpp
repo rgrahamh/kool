@@ -26,6 +26,7 @@ bool Sprite::addImage(std::string filePath){
 		this->imagePaths.push_back(filePath);
 	}
 	sf::Vector2u tmp = img.getSize();
+	setSize(tmp.x,tmp.y);
 
 	return result;
 
@@ -47,4 +48,8 @@ std::string Sprite::getImagePath(unsigned int index){
 
 void Sprite::setRepeated(bool repeat){
 	this->repeated = repeat;
+}
+void Sprite::setSize(int width, int height){
+	this->width = width;
+	this->height = height;
 }
