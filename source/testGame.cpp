@@ -15,7 +15,7 @@ int main(){
 	Scene *secondScene = new Scene(1080,700);
 
 	//Create Sprite
-	Sprite *firstSprite = new Sprite("resources/bill.png");
+	Sprite *firstSprite = new Sprite("resources/dreadnaught.png");
 	Sprite *bg = new Sprite("resources/background.png");
 
 	//Create Objects
