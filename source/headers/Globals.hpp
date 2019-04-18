@@ -1,7 +1,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 #include "GameEngine.hpp"
-#include "../../../irrKlang-64bit-1.6.0/include/irrKlang.h"
+#include "../irrKlang-64bit-1.6.0/include/irrKlang.h"
 #include <vector>
 
 extern std::vector<Sprite *> spriteIndex;
