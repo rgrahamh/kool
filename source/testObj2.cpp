@@ -17,7 +17,7 @@ class testObj2: public Object {
 		int xSwitch;
 
 		//This code has to be present in all child objects of Object
-		testObj2(float x, float y):Object(x,y){
+		testObj2(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false):Object(x,y,collisionLayer,collisionFlags,grav){
 			create();
 		}
 

@@ -27,11 +27,11 @@ int main(){
 	testObj *fourthObject = new testObj(300.0,500.0);
 	testObj *fifthObject = new testObj(200.0,500.0);
 
-    testObj2 *sixthObject = new testObj2(500.0, 80.0);
+    testObj2 *sixthObject = new testObj2(500.0, 80.0, 0, 0, true);
 
-	Object *background = new Object(0,0);
-	Object *background2 = new Object(1080,0);
-	Object *background3 = new Object(0,720);
+	Object *background = new Object(0.0,0.0);
+	Object *background2 = new Object(1080.0,0.0);
+	Object *background3 = new Object(0.0,720.0);
 	background->setSprite(bg);
 	background2->setSprite(bg);
 	background3->setSprite(bg);

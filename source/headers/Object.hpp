@@ -17,6 +17,15 @@ struct drawData {
 	bool repeated;
 };
 
+//Developer can add to collisionFlags if they need additional functionality
+enum collisionFlags {
+    PLAYER = 0x1,
+    ENEMY = 0x2,
+    GROUND = 0x4,
+    WALL = 0x8,
+    PROJECTILE = 0x10
+};
+
 class Object{
 	protected:
 
@@ -27,9 +36,22 @@ class Object{
 			*/
 			void decHitBoxes(double delta); 
 			void addHitBox(int offsetX, int offsetY, int width, int height, double ttl=-1);
+            void _processPhysics(float grav, float termVel);
 	public:
+            //Position
 			float x;
 			float y;
+            //Velocity
+            float xV;
+            float yV;
+            //Acceleration
+            float xA;
+            float yA;
+
+            //If the object should be affected by gravity
+            bool gravity;
+
+            unsigned int collisionFlags;
 
 			/*
 				When collisionLayer is 0, collide with everything. When collisionLayer is negative, doesn't collide with anything. Nonzero positive collisionLayer only collide with that layer
@@ -53,14 +75,13 @@ class Object{
 			std::vector<HitBox *> hitBoxes;
 
 
-			Object(float x, float y);
-            Object(float x, float y, Sprite *sprite, bool hasInitialHitbox);
+			Object(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 			~Object();
 			
 			/*
 				Call decHitBoxes() if X milliseconds have passed since last call.
 			*/
-			void _process(double delta); 
+			void _process(double delta, float gravity, float termVel); 
 			void _destroy();
 
 			//Debug toggle to do things like draw hitboxes
@@ -78,8 +99,5 @@ class Object{
 			void setSprite(unsigned int index);
 			
 			std::vector<HitBox *> getHitBoxes();
-
-            //This line was erroring out if I didn't put it at the end of the definitions
-			int collideWith[];
 };
 #endif

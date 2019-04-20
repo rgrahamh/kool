@@ -8,7 +8,9 @@ extern std::vector<Sprite *> spriteIndex;
 extern GameEngine *activeEngine;
 extern irrklang::ISoundEngine *soundEngine;
 
-extern void basicMove(float *x, float *y, int speed, double delta);
+extern void basicMove(float *xA, float *yA, float speed, double delta);
+
+extern void directMove(float *x, float *y, float speed, double delta);
 
 extern void createObject(Object *obj);
 

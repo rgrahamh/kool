@@ -2,9 +2,27 @@
 #include <iostream>
 
 #define Keys sf::Keyboard
-void basicMove(float *x, float *y, int speed, double delta){
+void basicMove(float *xA, float *yA, float speed, double delta){
 
-	delta = delta / 10.0;
+	delta = delta / 100.0;
+
+	if(Keys::isKeyPressed(Keys::D)){
+        *xA += speed * delta;
+    }
+    if(Keys::isKeyPressed(Keys::A)){
+        *xA -= speed * delta;
+    }
+    if(Keys::isKeyPressed(Keys::W)){
+        *yA -= speed * delta;
+    }
+    if(Keys::isKeyPressed(Keys::S)){
+        *yA += speed * delta;
+    }
+}
+
+void directMove(float *x, float *y, float speed, double delta){
+
+	delta = delta / 100.0;
 
 	if(Keys::isKeyPressed(Keys::D)){
         *x += speed * delta;

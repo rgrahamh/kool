@@ -19,6 +19,9 @@ class Scene{
 			int width;
 			int height;
 			int id; //Where in the GameEngine list does this scene appear
+            float gravity;
+            float cof;
+            float termVel;
 			Scene(int width, int height);
 			void process(); //Should make call to Object _process functions and to View _process functions
 			void render(sf::RenderWindow *window); //render(SFML window)
@@ -28,6 +31,5 @@ class Scene{
 			void setID(int id);
 			std::vector<Object *> getObjectList();
 			void destroyObject(Object *obj);
-
 };
 #endif

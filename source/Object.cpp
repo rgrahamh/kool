@@ -9,27 +9,26 @@ using namespace std;
 
 std::vector<Sprite *>spriteIndex = std::vector<Sprite *>();
 
-Object::Object(float x, float y){
+Object::Object(float x, float y, int collisionlayer, unsigned int collisionFlags, bool grav){
 	this->x = x;
 	this->y = y;
+	this->xV = 0;
+	this->yV = 0;
+    this->xA = 0;
+    this->yA = 0;
 	this->sprite = NULL;
 	this->imageIndex = -1;
 	this->create();
 	this->debug = false;
-	this->collisionLayer = 0;
+    this->collisionFlags = collisionFlags;
+	this->collisionLayer = collisionLayer;
+    this->gravity = grav;
 }
 
-Object::Object(float x, float y, Sprite *sprite, bool hasInitialHitbox=true){
-	this->x = x;
-	this->y = y;
-	this->sprite = sprite;
-	this->imageIndex = 0;
-	this->create();
-	this->debug = false;
-	this->collisionLayer = 0;
-    if(hasInitialHitbox){
-        this->addHitBox(0, 0, this->sprite->getImage(0).getSize().x, this->sprite->getImage(0).getSize().y, -1);
-    }
+Object::~Object(){
+	for(unsigned int i = 0; i < hitBoxes.size(); i++){
+		delete hitBoxes[i];
+	}
 }
 
 struct drawData Object::_draw(){
@@ -75,16 +74,17 @@ std::vector<HitBox *> Object::getHitBoxes(){
 }
 
 //Engine-defined process function
-void Object::_process(double delta){
+void Object::_process(double delta, float grav, float termVel){
     process(delta); 
-    decHitBoxes(1.0);
+    _processPhysics(grav, termVel);
+    decHitBoxes(delta);
 	//Calculate how long the current image has been shown, increment imageIndex if necessary
 }
 
 //Developer-defined virtual function
 void Object::process(double delta){
-//	basicMove(&this->x,&this->y,7,delta);
-    	return; 
+//	basicMove(&this->xA,&this->yA,7,delta);
+    return; 
 }
 
 //Developer-defined virtual function
@@ -108,8 +108,40 @@ void Object::setSprite(unsigned int index){
 		this->imageIndex = 0;
 	}
 }
-Object::~Object(){
-	for(unsigned int i = 0; i < hitBoxes.size(); i++){
-		delete hitBoxes[i];
-	}
+
+void Object::_processPhysics(float grav, float termVel){
+    //Adding horizontal acceleration to the horizontal velocity
+    xV += xA;
+    xA = 0;
+
+    //Capping the horizontal velocity at +/- maxSpeed
+    if(xV > termVel){
+        xV = termVel;
+    }
+    else if(xV < (termVel * -1)){
+        xV = termVel * -1;
+    }
+
+    //Change x position based on horizontal velocity
+    x += xV;
+
+    //Adding gravity to vertical acceleration (implies that gravity is always up or down)
+    if(this->gravity){
+        yA =+ grav;
+    }
+
+    //Adding vertical acceleration to the vertical velocity
+    yV += yA;
+    yA = 0;
+
+    //Capping the vertical velocity at +/- terminal velocity
+    if(yV > termVel){
+        yV = termVel;
+    }
+    else if(yV < (termVel * -1)){
+        yV = termVel * -1;
+    }
+
+    //Change y position based on vertical velocity
+    y += yV;
 }

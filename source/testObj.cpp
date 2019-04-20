@@ -17,7 +17,7 @@ class testObj: public Object {
 		int xSwitch;
 
 		//This code has to be present in all child objects of Object
-		testObj(float x, float y):Object(x,y){
+		testObj(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false):Object(x,y,collisionLayer,collisionFlags,grav){
 			create();
 		}
 
@@ -43,7 +43,7 @@ class testObj: public Object {
 			this->x += xMove;
 			this->y += yMove;
 			*/
-			basicMove(&this->x,&this->y,6,delta);
+            basicMove(&this->xA, &this->yA, 5, delta);
 
 			if(Keys::isKeyPressed(Keys::X) && xSwitch==0){
 				testObj *tmp = new testObj(600,200);

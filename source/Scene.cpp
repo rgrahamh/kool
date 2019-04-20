@@ -10,9 +10,12 @@ using namespace std;
 
 Scene::Scene(int width, int height){
     this->thisFrame = clock();
+    this->lastFrame = clock();
     this->width = width;
     this->height = height;
 	this->id = 0;
+    this->gravity = 9.8;
+    this->termVel = 195;
 }
 
 int Scene::addObject(Object *object){
@@ -42,7 +45,6 @@ void Scene::setID(int id){
 //process 1 frame of the scene
 void Scene::process(){
     //Object behavior processing
-    this->lastFrame = this->thisFrame;
     thisFrame = clock();
     if(thisFrame >= lastFrame){
         delta = (thisFrame - lastFrame)/CLOCKS_PER_MS;
@@ -52,7 +54,7 @@ void Scene::process(){
     printf("%f\r", delta);
     std::fflush(stdout);
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
-		this->objectList[i]->_process(delta);
+		this->objectList[i]->_process(delta, gravity, termVel);
 	}
 	//Object collision processing
 
@@ -61,7 +63,7 @@ void Scene::process(){
     Object* obj2;
 
     //Checking each Object
-	for(unsigned int i = 0; i < this->objectList.size(); i++){
+    for(unsigned int i = 0; i < this->objectList.size(); i++){
         obj1 = this->objectList[i];
 		//Check each hitbox for each object
         if(i < this->objectList.size() && this->objectList[i] == obj1 && obj1->collisionLayer >= 0){
@@ -88,23 +90,22 @@ void Scene::process(){
                 }
             }
         }
-		//Process collisions by calling this->objectList[i]->onCollide()
-	//Cleanup Object List
-	for(unsigned int i = 0; i < this->objectList.size(); i++){
-		if(this->objectList[i]==NULL){
-			objectList.erase(objectList.begin()+i);
-		}
-	}
+        //Cleanup Object List
+        for(unsigned int i = 0; i < this->objectList.size(); i++){
+            if(this->objectList[i]==NULL){
+                objectList.erase(objectList.begin()+i);
+            }
+        }
 	}
 	//View processing
 	for(unsigned int i = 0; i < this->viewList.size(); i++){
 		this->viewList[i]->_process(delta);
 	}
+    this->lastFrame = this->thisFrame;
 }
 
 //render 1 frame of the scene
 void Scene::render(sf::RenderWindow *window){
-
 	//Clear the window with the black color
 	window->clear(sf::Color::Black);
 
