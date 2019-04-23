@@ -14,7 +14,8 @@ Scene::Scene(int width, int height){
     this->width = width;
     this->height = height;
 	this->id = 0;
-    this->gravity = 9.8;
+    //this->gravity = 9.8;
+	this->gravity = 0.5;
     this->termVel = 195;
 }
 
@@ -148,7 +149,23 @@ void Scene::render(sf::RenderWindow *window){
 				sf::IntRect r(0,0,objDraw.width,objDraw.height);
 				objSprite.setTextureRect(r);
 				objSprite.setPosition(objDraw.x,objDraw.y);
-				//Debug: Draw HitBoxes
+				//Make sure the object sprite is the last thing we draw, so that it is at the foreground.
+				window->draw(objSprite);
+			}
+		}
+		//Debug drawing
+		for(unsigned int j = 0; j < this->objectList.size();j++){
+
+			//Get data needed to render the object
+			objDraw = objectList[j]->_draw();
+
+			//Process View translation
+			translation = this->viewList[i]->translate(objDraw.x,objDraw.y);
+
+			objDraw.x = translation.x;
+			objDraw.y = translation.y;
+
+			if(objDraw.sprite!=NULL){
 				if(objDraw.drawHitBoxes==true){
 					hBoxes = objectList[j]->getHitBoxes();
 					for(unsigned int k = 0; k < hBoxes.size(); k++){
@@ -156,7 +173,7 @@ void Scene::render(sf::RenderWindow *window){
 						rectangle.setOutlineColor(sf::Color::Red);
 						rectangle.setFillColor(sf::Color::Transparent);
 						rectangle.setOutlineThickness(2);
-						rectangle.setPosition(objectList[j]->x+hBoxes[k]->offsetX,objectList[j]->y+hBoxes[k]->offsetY);
+						rectangle.setPosition(objDraw.x+hBoxes[k]->offsetX,objDraw.y+hBoxes[k]->offsetY);
 
 						window->draw(rectangle);
 					}
