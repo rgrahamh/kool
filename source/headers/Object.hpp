@@ -49,6 +49,8 @@ class Object{
             //Acceleration
             float xA;
             float yA;
+			//Friction: Decimal between 0 and 1
+			float friction;
 
             //If the object should be affected by gravity
             bool gravity;

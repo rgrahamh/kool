@@ -18,6 +18,7 @@ Object::Object(float x, float y, int collisionlayer, unsigned int collisionFlags
 	this->yV = 0;
     this->xA = 0;
     this->yA = 0;
+	this->friction = 0.0;
 	this->sprite = NULL;
 	this->imageIndex = -1;
 	this->create();
@@ -114,6 +115,12 @@ void Object::setSprite(unsigned int index){
 }
 
 void Object::_processPhysics(float grav, float termVel){
+	
+	//Change x acceleration/velocity based on friction
+	if(xV != 0.0){
+		xV = xV * (1.0-friction);
+	}
+
     //Adding horizontal acceleration to the horizontal velocity
     xV += xA;
     xA = 0;

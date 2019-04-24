@@ -24,7 +24,8 @@ class background: public Object {
 
 class player: public Object {
 	public:
-		
+		float acceleration;
+
 		player(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false):Object(x,y,collisionLayer,collisionFlags,grav){
 			create();
 		}
@@ -34,6 +35,8 @@ class player: public Object {
 			this->debug = true;
 			setSprite((unsigned int)0);
 			this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+			this->friction = 0.3;
+			this->acceleration = 1.0;
 		}
 
 		
@@ -56,7 +59,16 @@ class player: public Object {
 			}
 			if(Keys::isKeyPressed(Keys::D)){
 				if(this->xV < 5.0){
-					this->xA = 0.5;
+					this->xA = this->acceleration;
+				}else{
+					this->xA = 0.0;
+				}
+			}
+			else if(Keys::isKeyPressed(Keys::A)){
+				if(this->xV > -5.0){
+					this->xA = -this->acceleration;
+				}else{
+					this->xA = 0.0;
 				}
 			}
 		}

@@ -52,8 +52,8 @@ void Scene::process(){
     } else {
         delta = thisFrame;
     }
-    printf("%f\r", delta);
-    std::fflush(stdout);
+    //printf("%f\r", delta);
+    //std::fflush(stdout);
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
 		this->objectList[i]->_process(delta, gravity, termVel);
 	}
