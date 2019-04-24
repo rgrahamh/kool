@@ -23,6 +23,8 @@ Object::Object(float x, float y, int collisionlayer, unsigned int collisionFlags
 	this->imageIndex = -1;
 	this->create();
 	this->debug = false;
+	this->animationTime = 0;
+	this->animationDelay = 50; //Default to 50 MS animation
     this->collisionFlags = collisionFlags;
 	this->collisionLayer = collisionLayer;
     this->gravity = grav;
@@ -83,7 +85,22 @@ void Object::_process(double delta, float grav, float termVel){
     decHitBoxes(delta);
 	this->xPrev = x;
 	this->yPrev = y;
+	_animate(delta);
+
 	//Calculate how long the current image has been shown, increment imageIndex if necessary
+}
+
+//Engine-defined animation calculations
+void Object::_animate(double delta){
+	animationTime += delta;
+	if(animationTime >= animationDelay){//Time to switch
+		if(this->imageIndex < (this->sprite->getImageNum()-1)){
+			this->imageIndex += 1;
+		}else{
+			this->imageIndex = 0;
+		}
+		animationTime = 0.0;
+	}
 }
 
 //Developer-defined virtual function

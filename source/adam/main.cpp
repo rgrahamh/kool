@@ -15,6 +15,7 @@ int main(){
 
 	//index 0
 	Sprite *mario = new Sprite("resources/adam/m_standing_right.png");
+	mario->addImage("resources/bill.png");
 
 	//index 1
 	Sprite *background_sprite = new Sprite("resources/adam/background.jpg");

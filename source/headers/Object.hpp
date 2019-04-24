@@ -74,7 +74,8 @@ class Object{
 			/*
 				Typically will be the same as in the Sprite instance, but it may be desired to be different for different objects so it is specified here as well.
 			*/
-			double animationSpeed; //Measured in milliseconds per image
+			float animationDelay; //Measured in milliseconds per image
+			float animationTime;
 			Sprite *sprite;
 			std::vector<HitBox *> hitBoxes;
 
@@ -86,6 +87,7 @@ class Object{
 				Call decHitBoxes() if X milliseconds have passed since last call.
 			*/
 			void _process(double delta, float gravity, float termVel); 
+			void _animate(double delta);
 			void _destroy();
 
 			//Debug toggle to do things like draw hitboxes

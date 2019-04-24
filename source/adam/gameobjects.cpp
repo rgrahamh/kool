@@ -37,6 +37,7 @@ class player: public Object {
 			this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 			this->friction = 0.3;
 			this->acceleration = 1.0;
+			this->animationDelay = 1000.0;
 		}
 
 		
