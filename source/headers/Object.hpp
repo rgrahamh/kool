@@ -41,6 +41,8 @@ class Object{
             //Position
 			float x;
 			float y;
+			float xPrev;
+			float yPrev;
             //Velocity
             float xV;
             float yV;

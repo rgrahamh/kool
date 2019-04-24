@@ -54,6 +54,11 @@ class player: public Object {
 				this->yV = -8;
 				this->gravity = true;
 			}
+			if(Keys::isKeyPressed(Keys::D)){
+				if(this->xV < 5.0){
+					this->xA = 0.5;
+				}
+			}
 		}
 		
 

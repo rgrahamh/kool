@@ -12,6 +12,8 @@ std::vector<Sprite *>spriteIndex = std::vector<Sprite *>();
 Object::Object(float x, float y, int collisionlayer, unsigned int collisionFlags, bool grav){
 	this->x = x;
 	this->y = y;
+	this->xPrev = x;
+	this->yPrev = y;
 	this->xV = 0;
 	this->yV = 0;
     this->xA = 0;
@@ -78,6 +80,8 @@ void Object::_process(double delta, float grav, float termVel){
     process(delta); 
     _processPhysics(grav, termVel);
     decHitBoxes(delta);
+	this->xPrev = x;
+	this->yPrev = y;
 	//Calculate how long the current image has been shown, increment imageIndex if necessary
 }
 
