@@ -38,7 +38,7 @@ class player: public Object {
 			this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 			this->friction = 0.3;
 			this->acceleration = 1.0;
-			this->animationDelay = 100.0;
+			this->animationDelay = 60.0;
 		}
 
 		
@@ -73,9 +73,12 @@ class player: public Object {
 				}else{
 					this->xA = 0.0;
 				}
+				setSprite((unsigned int)5);
 			}else{
 				if(this->xV > 0.0){
 					setSprite((unsigned int)0);
+				}else{
+					setSprite((unsigned int)4);
 				}
 			}
 		}

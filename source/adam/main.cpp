@@ -31,6 +31,14 @@ int main(){
 	mario_running_right->addImage("resources/adam/m_running_right2.png");
 	mario_running_right->addImage("resources/adam/m_running_right3.png");
 
+	//index 4
+	Sprite *mario_standing_left = new Sprite("resources/adam/m_standing_left.png");
+	
+	//index 5
+	Sprite *mario_running_left = new Sprite("resources/adam/m_running_left1.png");
+	mario_running_left->addImage("resources/adam/m_running_left2.png");
+	mario_running_left->addImage("resources/adam/m_running_left3.png");
+
 	//Create objects
 	background *bg = new background(0,0);
 
