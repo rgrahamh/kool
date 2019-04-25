@@ -66,8 +66,8 @@ int main(){
 	
 	//Blocks
 	Block *blockTmp;
-	float blocks[3][2] = {{200,480},{214,480},{228,466}};
-	for(unsigned int i = 0; i < 3; i++){
+	float blocks[4][2] = {{200,480},{214,480},{228,466},{260,454}};
+	for(unsigned int i = 0; i < 4; i++){
 		blockTmp = new Block(blocks[i][0],blocks[i][1],0,GROUND,false);
 		gameScene->addObject(blockTmp);
 	}

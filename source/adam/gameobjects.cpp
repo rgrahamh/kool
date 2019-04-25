@@ -70,7 +70,7 @@ class player: public Object {
 				else if((this->x-xV) > (otherBoxX + otherBoxWidth)){
 					direction = RIGHT;
 				}
-				else if(this->y < otherBoxY && gravity==true){
+				else if(this->y-yV < otherBoxY && gravity==true){
 					direction = ABOVE;
 				}else{
 					direction = BELOW;
@@ -91,6 +91,10 @@ class player: public Object {
 					this->x-=this->xV;
 					this->xV = 0.0;
 					this->xA = 0.0;
+				}
+				if(direction == BELOW){
+					this->yV = 0.0;
+					this->yA = 0.0;
 				}
 			}
 		}
