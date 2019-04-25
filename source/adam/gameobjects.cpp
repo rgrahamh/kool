@@ -75,7 +75,7 @@ class player: public Object {
 				}
 				setSprite((unsigned int)5);
 			}else{
-				if(this->xV > 0.0){
+				if(this->xV >= 0.0){
 					setSprite((unsigned int)0);
 				}else{
 					setSprite((unsigned int)4);

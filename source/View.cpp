@@ -75,9 +75,9 @@ void View::follow(){ //FIXME
 		int minY = this->followY - (followHeight/2);
 		//Move view's position on scene based on object's position on screen
 		if(objWinX > maxX){
-			if(objWinX - maxX > 2 && ((sceneX + ((objWinX - maxX)/2)) < sceneWidth)){
+			if(objWinX - maxX > 2 && (( (sceneX+width) + ((objWinX - maxX)/2)) < sceneWidth)){
 				this->sceneX += (objWinX - maxX) / 2;
-			}else if(sceneX + 2 < sceneWidth){
+			}else if((sceneX+width) + 2 < sceneWidth){
 				this->sceneX += 2;
 			}
 		}

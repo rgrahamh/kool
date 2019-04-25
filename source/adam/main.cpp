@@ -55,7 +55,10 @@ int main(){
 	//Add Scenes to the Engine
 	myEngine.addScene(gameScene);
 
-	//Create Objects
+	//Edit views
+	gameScene->getView(0)->setFollowing(p1,500,600);
+
+	//Start Game
 	myEngine.startGame();
 
 
