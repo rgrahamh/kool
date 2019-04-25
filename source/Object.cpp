@@ -20,6 +20,7 @@ Object::Object(float x, float y, int collisionlayer, unsigned int collisionFlags
     this->yA = 0;
 	this->friction = 0.0;
 	this->sprite = NULL;
+	this->sprite_index = NULL;
 	this->imageIndex = -1;
 	this->create();
 	this->debug = false;
@@ -125,9 +126,10 @@ void Object::setSprite(Sprite *sprite){
 }
 
 void Object::setSprite(unsigned int index){
-	if(index < spriteIndex.size()){
+	if(index < spriteIndex.size() && (this->sprite_index == NULL || this->sprite_index != index)){
 		this->sprite = spriteIndex[index];
 		this->imageIndex = 0;
+		this->sprite_index = index;
 	}
 }
 

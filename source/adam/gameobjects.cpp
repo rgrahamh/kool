@@ -34,10 +34,11 @@ class player: public Object {
 			this->collisionLayer = 0;
 			this->debug = true;
 			setSprite((unsigned int)0);
+			sprite_index = 0;
 			this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 			this->friction = 0.3;
 			this->acceleration = 1.0;
-			this->animationDelay = 1000.0;
+			this->animationDelay = 100.0;
 		}
 
 		
@@ -64,12 +65,17 @@ class player: public Object {
 				}else{
 					this->xA = 0.0;
 				}
+				setSprite((unsigned int)3);
 			}
 			else if(Keys::isKeyPressed(Keys::A)){
 				if(this->xV > -5.0){
 					this->xA = -this->acceleration;
 				}else{
 					this->xA = 0.0;
+				}
+			}else{
+				if(this->xV > 0.0){
+					setSprite((unsigned int)0);
 				}
 			}
 		}

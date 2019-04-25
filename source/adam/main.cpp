@@ -14,8 +14,7 @@ int main(){
 	//Create Sprites and format them
 
 	//index 0
-	Sprite *mario = new Sprite("resources/adam/m_standing_right.png");
-	mario->addImage("resources/bill.png");
+	Sprite *mario_standing_right = new Sprite("resources/adam/m_standing_right.png");
 
 	//index 1
 	Sprite *background_sprite = new Sprite("resources/adam/background.jpg");
@@ -26,6 +25,11 @@ int main(){
 	Sprite *ground_sprite = new Sprite("resources/adam/ground.png");
 	ground_sprite->setRepeated(true);
 	ground_sprite->setSize(2000,180);
+
+	//index 3
+	Sprite *mario_running_right = new Sprite("resources/adam/m_running_right1.png");
+	mario_running_right->addImage("resources/adam/m_running_right2.png");
+	mario_running_right->addImage("resources/adam/m_running_right3.png");
 
 	//Create objects
 	background *bg = new background(0,0);
@@ -39,6 +43,8 @@ int main(){
 	gameScene->addObject(ground_object);
 	gameScene->addObject(p1);
 
+
+	//Add Scenes to the Engine
 	myEngine.addScene(gameScene);
 
 	//Create Objects

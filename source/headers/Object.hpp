@@ -67,6 +67,8 @@ class Object{
 				Defined here instead of in Sprite object b/c same Sprite may be used for multiple object instances and will be at different points in animation
 			*/
 			unsigned int imageIndex; 
+			//Keeps track of what sprite we have when using setSprite by index
+			unsigned int sprite_index;
 			bool dynamic;
 			
 			int renderLayer;
