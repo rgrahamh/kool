@@ -56,13 +56,12 @@ class player: public Object {
 
 		
 		void onCollide(Object *other, int myBoxID, int otherBoxID){
-			if(other->collisionFlags==GROUND){
-				//Determine what direction we are hitting the ground at
+				
+			//Determine what direction we are hitting the ground at
 				enum collideDirection direction;
 				float otherBoxX = other->x+other->hitBoxes[otherBoxID]->offsetX;
 				float otherBoxY = other->y+other->hitBoxes[otherBoxID]->offsetY;
 				int otherBoxWidth = other->hitBoxes[otherBoxID]->width;
-//				int otherBoxHeight = other->hitBoxes[otherBoxID]->height;
 
 				if((this->x+sprite->width-xV) < otherBoxX){
 					direction = LEFT;
@@ -75,6 +74,8 @@ class player: public Object {
 				}else{
 					direction = BELOW;
 				}
+
+			if(other->collisionFlags==GROUND){
 				if(direction == ABOVE){
 					this->gravity = false;
 					this->rightGravBound = otherBoxX;
@@ -155,7 +156,7 @@ class player: public Object {
 			}
 
 			//Process if we are falling off our current floor
-			if((x+sprite->width) < rightGravBound || x > leftGravBound && rightGravBound >= 0){
+			if((x+sprite->width) < rightGravBound || (x > leftGravBound && rightGravBound >= 0)){
 				this->gravity = true;
 			}
 		}
