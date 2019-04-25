@@ -76,6 +76,21 @@ int getSceneWidth(int sceneID){
 		return -1;
 	}
 }
+int getSceneWidth(){
+	if(activeEngine!=NULL){
+		int width;
+		Scene *scene = activeEngine->getActiveScene();
+		if(scene!=NULL){
+			width = scene->width;
+		}else{
+			width = -1;
+		}
+		return width;
+	}else{
+		return -1;
+	}
+}
+
 int getSceneHeight(int sceneID){
     if(activeEngine!=NULL){
 	    int height;

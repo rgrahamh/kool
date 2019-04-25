@@ -24,6 +24,8 @@ extern void stopAllSounds(irrklang::ISoundEngine *engine);
 
 extern int getSceneWidth(int sceneID);
 
+extern int getSceneWidth();
+
 extern int getSceneHeight(int sceneID);
 
 #endif
