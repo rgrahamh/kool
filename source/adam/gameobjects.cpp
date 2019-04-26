@@ -106,13 +106,13 @@ class player: public Object {
 					yV = -4.0;
 				}else{
 					//We DIE
-					yV = -9.0;
+					yV = -12.0;
 					gravity = true;
 					this->collisionLayer = -1;
 					if(direction == LEFT || direction == BELOW){
-						xV = -5.0;
+						xV = -10.0;
 					}else{
-						xV = 5.0;
+						xV = 10.0;
 					}
 					dead = true;
 					setSprite((unsigned int)11);
@@ -265,6 +265,7 @@ class gomba: public Object {
 					this->leftGravBound = otherBoxX + otherBoxWidth;
 					this->yA = 0.0;
 					this->yV = 0.0;
+					this->xV = 1.0;
 
 					//Calculate correct y value
 					float offsetY = other->hitBoxes[otherBoxID]->offsetY;
@@ -273,17 +274,19 @@ class gomba: public Object {
 				}
 				if(direction == LEFT || direction == RIGHT){
 					this->x-=this->xV;
-					this->xV = 0.0;
+					this->xV = -xV;
 					this->xA = 0.0;
 				}
 				if(direction == BELOW){
 					this->yV = 0.0;
 					this->yA = 0.0;
+					this->xV = -xV;
 				}
 			}
 			if(other->collisionFlags==PLAYER && dead==false){
 				if(direction == BELOW && other->sprite_index!=11){
 					this->dead = true;
+					this->xV = 0.0;
 					setSprite((unsigned int)10);
 				}
 			}
