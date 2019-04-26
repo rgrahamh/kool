@@ -5,11 +5,15 @@
 using namespace std;
 
 GameEngine *activeEngine = NULL;
+int windowWidth = 0;
+int windowHeight = 0;
 
 GameEngine::GameEngine(int width, int height,string title){
 	this->window = new sf::RenderWindow(sf::VideoMode(width,height),title);
 	this->winWidth = width;
 	this->winHeight = height;
+	windowWidth = width;
+	windowHeight = height;
 	this->window->setFramerateLimit(60);
 	this->activeScene = NULL;
 
@@ -54,8 +58,6 @@ void GameEngine::endGame(){
 }
 
 int GameEngine::addScene(Scene *scene){
-	View *tmp = new View(0,0,0,0,winWidth,winHeight);
-	scene->addView(tmp);
 	scene->setID(sceneList.size());
 	this->sceneList.push_back(scene);
 	if(this->sceneList.size()<2){
@@ -108,3 +110,15 @@ void GameEngine::addObject(Object *obj){
 	return;
 }
 
+int GameEngine::resetScene(Scene* (*buildFunction)(),int sceneID){
+	Scene *newScene = buildFunction();
+//	delete getScene(sceneID);
+	bool setActive = false;
+	if(getScene(sceneID)==this->activeScene){
+		setActive = true;
+	}
+	this->sceneList[sceneID] = newScene;
+	if(setActive==true){
+		setActiveScene(sceneID);
+	}
+}

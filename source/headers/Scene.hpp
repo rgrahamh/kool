@@ -15,9 +15,11 @@ class Scene{
 
 			std::vector<View *> viewList;
 			std::vector<Object *> objectList;
+			std::vector<Object *> originalObjectList;
 	public:
 			int width;
 			int height;
+			bool destroyed;
 			int id; //Where in the GameEngine list does this scene appear
             float gravity;
             float cof;

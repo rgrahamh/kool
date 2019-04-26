@@ -1,4 +1,5 @@
 #include "headers/Scene.hpp"
+#include "headers/Globals.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
@@ -14,9 +15,12 @@ Scene::Scene(int width, int height){
     this->width = width;
     this->height = height;
 	this->id = 0;
+	this->destroyed = false;
     //this->gravity = 9.8;
 	this->gravity = 0.5;
     this->termVel = 195;
+	View *tmp = new View(0,0,0,0,getWindowWidth(),getWindowHeight());
+	this->addView(tmp);
 }
 
 int Scene::addObject(Object *object){
@@ -103,6 +107,10 @@ void Scene::process(){
 		this->viewList[i]->_process(delta);
 	}
     this->lastFrame = this->thisFrame;
+    //Process if this scene has been destroyed
+    if(destroyed==true){
+	delete this;
+    }
 }
 
 //render 1 frame of the scene

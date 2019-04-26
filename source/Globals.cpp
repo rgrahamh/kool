@@ -105,3 +105,16 @@ int getSceneHeight(int sceneID){
 		return -1;
 	}
 }
+int getWindowWidth(){
+	return windowWidth;
+}
+int getWindowHeight(){
+	return windowHeight;
+}
+int resetScene(Scene* (*buildFunction)(),int sceneID){
+	if(activeEngine!=NULL){
+		activeEngine->resetScene(buildFunction,sceneID);
+		return 0;
+	}
+	return -1;
+}

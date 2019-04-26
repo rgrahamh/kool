@@ -28,4 +28,14 @@ extern int getSceneWidth();
 
 extern int getSceneHeight(int sceneID);
 
+extern int windowWidth;
+
+extern int windowHeight;
+
+extern int getWindowWidth();
+
+extern int getWindowHeight();
+
+extern int resetScene(Scene* (*buildFunction)(),int sceneID);
+
 #endif

@@ -24,6 +24,7 @@ class GameEngine {
 			void endGame();
 			void addObject(Object *obj);
 			int addScene(Scene *scene);
+			int resetScene(Scene* (*buildFunction)(),int sceneID);
 			bool delScene(int sceneID);
 			bool setActiveScene(int sceneID);
 			Scene *getActiveScene();
