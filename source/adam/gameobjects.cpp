@@ -106,7 +106,7 @@ class player: public Object {
 					yV = -4.0;
 				}else{
 					//We DIE
-					yV = -12.0;
+					yV = -16.0;
 					gravity = true;
 					this->collisionLayer = -1;
 					if(direction == LEFT || direction == BELOW){
