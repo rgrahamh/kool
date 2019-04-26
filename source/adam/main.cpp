@@ -6,10 +6,10 @@ using namespace std;
 
 int main(){
 
-	GameEngine myEngine = *(new GameEngine(800,600,"Super Mario Bros"));
+	GameEngine myEngine = *(new GameEngine(600,525,"Super Mario Bros"));
 
 	//Create Scene
-	Scene *gameScene = new Scene(2000,600);
+	Scene *gameScene = new Scene(2000,525);
 
 	//Create Sprites and format them
 
@@ -48,6 +48,16 @@ int main(){
 	//index 8
 	Sprite *block = new Sprite("resources/adam/block.png");
 
+	//index 9
+	Sprite *gomba_sprite = new Sprite("resources/adam/gomba1.png");
+	gomba_sprite->addImage("resources/adam/gomba2.png");
+
+	//index 10
+	Sprite *gomba_dead = new Sprite("resources/adam/gomba_dead.png");
+
+	//index 11
+	Sprite *mario_dead = new Sprite("resources/adam/mario_dead.png");
+
 	//Create objects
 
 	//Background
@@ -70,6 +80,14 @@ int main(){
 	for(unsigned int i = 0; i < 4; i++){
 		blockTmp = new Block(blocks[i][0],blocks[i][1],0,GROUND,false);
 		gameScene->addObject(blockTmp);
+	}
+
+	//Gombas
+	gomba *gombaTmp;
+	float gombas[2][2] = {{300,200},{325,250}};
+	for(unsigned int i = 0; i < (sizeof(gombas)/sizeof(gombas[0]));i++){
+		gombaTmp = new gomba(gombas[i][0],gombas[i][1],0,ENEMY,true);
+		gameScene->addObject(gombaTmp);
 	}
 	
 

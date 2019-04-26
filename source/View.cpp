@@ -89,9 +89,9 @@ void View::follow(){ //FIXME
 			}
 		}
 		if(objWinY > maxY){
-			if(objWinY - maxY > 2 && ((sceneY + (objWinY - maxY)/2) < sceneHeight)){
+			if(objWinY - maxY > 2 && (( (sceneY+height) + ((objWinY - maxY)/2)) < sceneHeight)){
 				this->sceneY += (objWinY - maxY) / 2;
-			}else if(sceneY + 2 < sceneHeight){
+			}else if( (sceneY+height) + 2 < sceneHeight){
 				this->sceneY += 2;
 			}
 		}
