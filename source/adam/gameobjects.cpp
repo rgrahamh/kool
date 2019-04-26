@@ -29,7 +29,7 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 		this->rightGravBound = -1.0;
 		this->leftGravBound = -1.0;
 		this->deathTime = 0.0;
-		this->deathMax = 500.0;
+		this->deathMax = 2000.0;
 		dead = false;
 	}
 
