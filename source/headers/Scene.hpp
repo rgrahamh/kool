@@ -25,6 +25,7 @@ class Scene{
             float cof;
             float termVel;
 			Scene(int width, int height);
+			~Scene();
 			void process(); //Should make call to Object _process functions and to View _process functions
 			void render(sf::RenderWindow *window); //render(SFML window)
 			View *getView(unsigned int index);

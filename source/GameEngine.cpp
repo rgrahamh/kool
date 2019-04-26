@@ -114,6 +114,7 @@ int GameEngine::resetScene(Scene* (*buildFunction)(),int sceneID){
 	Scene *newScene = buildFunction();
 //	delete getScene(sceneID);
 	bool setActive = false;
+	getScene(sceneID)->destroyed = true;
 	if(getScene(sceneID)==this->activeScene){
 		setActive = true;
 	}

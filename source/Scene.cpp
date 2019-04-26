@@ -208,3 +208,10 @@ void Scene::destroyObject(Object *obj){
 		}
 	}
 }
+Scene::~Scene(){
+	for(unsigned int i = 0; i < this->objectList.size(); i++){
+		if(this->objectList[i]!=NULL){
+			delete objectList[i];
+		}
+	}
+}
