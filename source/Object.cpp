@@ -52,6 +52,9 @@ struct drawData Object::_draw(){
 	data.y = this->y;
 	if(this->sprite!=NULL){
 		data.imageIndex = this->imageIndex; 	
+		data.repeated = this->sprite->repeated;
+		data.width = this->sprite->width;
+		data.height = this->sprite->height;
 	}else{
 		data.imageIndex = -1;
 	}
@@ -61,9 +64,6 @@ struct drawData Object::_draw(){
 	}else{
 		data.drawHitBoxes = false;
 	}
-	data.repeated = this->sprite->repeated;
-	data.width = this->sprite->width;
-	data.height = this->sprite->height;
 
 	//Build text stuff
 	data.hasText = this->hasText;
@@ -110,14 +110,16 @@ void Object::_process(double delta, float grav, float termVel){
 
 //Engine-defined animation calculations
 void Object::_animate(double delta){
-	animationTime += delta;
-	if(animationTime >= animationDelay){//Time to switch
-		if(this->imageIndex < (this->sprite->getImageNum()-1)){
-			this->imageIndex += 1;
-		}else{
-			this->imageIndex = 0;
+	if(this->sprite!=NULL){
+		animationTime += delta;
+		if(animationTime >= animationDelay){//Time to switch
+			if(this->imageIndex < (this->sprite->getImageNum()-1)){
+				this->imageIndex += 1;
+			}else{
+				this->imageIndex = 0;
+			}
+			animationTime = 0.0;
 		}
-		animationTime = 0.0;
 	}
 }
 

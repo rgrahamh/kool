@@ -79,4 +79,11 @@ class gomba: public Object {
 		void process(double delta);
 		
 };
+
+class genericText: public Object {
+	public:
+		genericText(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+
+		void create();
+};
 #endif

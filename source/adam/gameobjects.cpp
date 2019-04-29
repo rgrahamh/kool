@@ -279,3 +279,11 @@ void gomba::process(double delta){
 		}
 	}
 }
+
+genericText::genericText(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
+	this->create();
+}
+
+void genericText::create(){
+	return;
+}

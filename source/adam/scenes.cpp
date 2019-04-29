@@ -42,3 +42,26 @@ Scene *createGameScene(){
 	return gameScene;
 
 }
+
+Scene *createMenuScene(){
+
+	Scene *menuScene = new Scene(600,525);
+
+	//Create Objects
+	background *bg = new background(0,0);
+
+	//Ground
+	ground *ground_object = new ground(0,342,0,GROUND,false);
+
+	//Menu Text
+	genericText *titleText = new genericText(0,0,-1,PLAYER,false);
+	titleText->setText(200,200,24,false,"resources/arial.ttf","Super Mario Bros.");
+
+	//Add objects to the scenes
+	menuScene->addObject(bg);
+	menuScene->addObject(ground_object);
+	menuScene->addObject(titleText);
+
+	return menuScene;
+
+}
