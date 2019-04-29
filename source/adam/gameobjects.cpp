@@ -31,6 +31,7 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 		this->deathTime = 0.0;
 		this->deathMax = 2000.0;
 		dead = false;
+		this->setText(50,50,12,false,"resources/arial.ttf","Mario");
 	}
 
 		

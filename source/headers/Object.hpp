@@ -3,10 +3,12 @@
 #include <vector>
 #include "HitBox.hpp"
 #include "Sprite.hpp"
+#include <SFML/Graphics.hpp>
 
 #define Keys sf::Keyboard
 
 struct drawData {
+	//For the Object itself
 	int x;
 	int y;
 	unsigned int imageIndex;
@@ -15,6 +17,16 @@ struct drawData {
 	int width;
 	int height;
 	bool repeated;
+
+	//For text :)
+	bool hasText;
+	int textX;
+	int textY;
+	bool relativeToObject;
+	unsigned int fontSize;
+	sf::Font textFont;
+	sf::String textString;
+
 };
 
 //Developer can add to collisionFlags if they need additional functionality
@@ -38,6 +50,18 @@ class Object{
 			void addHitBox(int offsetX, int offsetY, int width, int height, double ttl=-1);
             void _processPhysics(float grav, float termVel);
 	public:
+			//Drawing text information
+			bool hasText;
+			int textX;
+			int textY;
+			unsigned int fontSize;
+			bool relativeToObject;
+			sf::Font textFont;
+			sf::String textString;
+			void setText(int textX, int textY, unsigned int fontSize, bool relative, std::string fontFile, std::string textString);
+			void setFontSize(unsigned int fontSize);
+			void hideText();
+
             //Position
 			float x;
 			float y;
