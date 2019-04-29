@@ -104,6 +104,7 @@ void player::process(double delta){
 		if(Keys::isKeyPressed(Keys::W) && this->gravity==false){
 			this->yV = -8;
 			this->gravity = true;
+			playSound("./resources/boing.wav");
 		}
 
 		//Horizontal Movement

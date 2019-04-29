@@ -55,13 +55,14 @@ bool setActiveScene(int sceneID){
 	return activeEngine->setActiveScene(sceneID);
 }
 
-void playSound(char *filename, irrklang::ISoundEngine *engine, bool loop=false) {
-    engine->play2D(filename, loop);
+void playSound(char *filename, bool loop) {
+	activeEngine->playSound(filename, loop);
 }
 
-void stopAllSounds(irrklang::ISoundEngine *engine) {
-    engine->stopAllSounds();
+void stopAllSounds() {
+    activeEngine->stopAllSounds();
 }
+
 int getSceneWidth(int sceneID){
     if(activeEngine!=NULL){
 	    int width;
