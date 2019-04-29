@@ -2,13 +2,16 @@
 #include "headers/Globals.hpp"
 #include <iostream>
 
+using namespace irrklang;
 using namespace std;
 
 GameEngine *activeEngine = NULL;
+ISoundEngine *audioEngine = createIrrKlangDevice();
 int windowWidth = 0;
 int windowHeight = 0;
 
 GameEngine::GameEngine(int width, int height,string title){
+	if(!audioEngine) printf("Could not start engine\n");
 	this->window = new sf::RenderWindow(sf::VideoMode(width,height),title);
 	this->winWidth = width;
 	this->winHeight = height;
@@ -38,8 +41,8 @@ void GameEngine::startGame(){
 
 		//Process game objects
 		processScene();	
-
 	}
+	audioEngine->drop();
 }
 
 void GameEngine::renderScene(){
@@ -55,6 +58,14 @@ void GameEngine::processScene(){
 
 void GameEngine::endGame(){
 	this->window->close();
+}
+
+void GameEngine::playSound(char *filename, bool loop) {
+	audioEngine->play2D(filename, loop);
+}
+
+void GameEngine::stopAllSounds() {
+	audioEngine->stopAllSounds();
 }
 
 int GameEngine::addScene(Scene *scene){

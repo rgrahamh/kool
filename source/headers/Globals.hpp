@@ -1,12 +1,10 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 #include "GameEngine.hpp"
-#include "../irrKlang-64bit-1.6.0/include/irrKlang.h"
 #include <vector>
 
 extern std::vector<Sprite *> spriteIndex;
 extern GameEngine *activeEngine;
-extern irrklang::ISoundEngine *soundEngine;
 
 extern void basicMove(float *xA, float *yA, float speed, double delta);
 
@@ -18,9 +16,9 @@ extern void destroyObject(Object *obj);
 
 extern bool setActiveScene(int sceneID);
 
-extern void playSound(char *filename, irrklang::ISoundEngine *engine, bool loop);
+extern void playSound(char *filename, bool loop=false);
 
-extern void stopAllSounds(irrklang::ISoundEngine *engine);
+extern void stopAllSounds();
 
 extern int getSceneWidth(int sceneID);
 

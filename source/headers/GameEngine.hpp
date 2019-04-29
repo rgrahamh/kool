@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <SFML/Graphics.hpp>
+#include "../irrKlang-64bit-1.6.0/include/irrKlang.h"
 #include "Scene.hpp"
 #include "View.hpp"
 
@@ -22,6 +23,8 @@ class GameEngine {
 			GameEngine(int width,int height,std::string title);
 			void startGame();
 			void endGame();
+			void playSound(char *filename, bool loop=false);
+			void stopAllSounds();
 			void addObject(Object *obj);
 			int addScene(Scene *scene);
 			int resetScene(Scene* (*buildFunction)(),int sceneID);
