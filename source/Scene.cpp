@@ -124,6 +124,8 @@ void Scene::render(sf::RenderWindow *window){
 	struct position translation;
 	//Sprite to hold object to draw
 	sf::Sprite objSprite;
+	//Text
+	sf::Text objText;
 	//Texture
 	sf::Texture sprTexture;
 	//HitBox list
@@ -159,6 +161,19 @@ void Scene::render(sf::RenderWindow *window){
 				objSprite.setPosition(objDraw.x,objDraw.y);
 				//Make sure the object sprite is the last thing we draw, so that it is at the foreground.
 				window->draw(objSprite);
+			}
+			//Draw text
+			if(objDraw.hasText == true){
+			    //Create text object
+				objText = sf::Text(objDraw.textString,objDraw.textFont);	
+				//Set font size
+				objText.setCharacterSize(objDraw.fontSize);
+				if(objDraw.relativeToObject == true){
+					objText.setPosition(objDraw.x+objDraw.textX,objDraw.y+objDraw.textY);
+				}else{
+					objText.setPosition(objDraw.textX,objDraw.textY);	
+				}
+				window->draw(objText);
 			}
 		}
 		//Debug drawing

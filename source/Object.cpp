@@ -29,6 +29,14 @@ Object::Object(float x, float y, int collisionlayer, unsigned int collisionFlags
     this->collisionFlags = collisionFlags;
 	this->collisionLayer = collisionLayer;
     this->gravity = grav;
+	//Text stuff
+	this->hasText = false;
+	this->textX = 0;
+	this->textY = 0;
+	this->fontSize = 16;
+	this->relativeToObject = false;
+	this->textFont = sf::Font();
+	this->textString = "";
 }
 
 Object::~Object(){
@@ -56,6 +64,15 @@ struct drawData Object::_draw(){
 	data.repeated = this->sprite->repeated;
 	data.width = this->sprite->width;
 	data.height = this->sprite->height;
+
+	//Build text stuff
+	data.hasText = this->hasText;
+	data.textX = this->textX;
+	data.textY = this->textY;
+	data.fontSize = this->fontSize;
+	data.relativeToObject = this->relativeToObject;
+	data.textFont = this->textFont;
+	data.textString = this->textString;
 
 	return data;
 }
@@ -174,4 +191,24 @@ void Object::_processPhysics(float grav, float termVel){
 
     //Change y position based on vertical velocity
     y += yV;
+}
+void Object::setText(int textX, int textY, unsigned int fontSize, bool relative, std::string fontFile, std::string textString){
+	this->textX = textX;
+	this->textY = textY;
+	this->fontSize = fontSize;
+	this->relativeToObject = relative;
+	this->textFont.loadFromFile(fontFile);
+	this->textString = sf::String(textString);
+	this->hasText = true;
+
+	return;
+}
+
+void Object::hideText(){
+	this->hasText = false;
+	return;
+}
+
+void Object::setFontSize(unsigned int fontSize){
+	this->fontSize = fontSize;
 }
