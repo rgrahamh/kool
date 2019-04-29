@@ -1,6 +1,8 @@
 #include "scenes.hpp"
+#include "globalvars.hpp"
+#include <string>
 
-Scene *createGameScene(){
+Scene *level1(){
 
 	Scene *gameScene = new Scene(2000,525);
 	
@@ -54,14 +56,47 @@ Scene *createMenuScene(){
 	ground *ground_object = new ground(0,342,0,GROUND,false);
 
 	//Menu Text
-	genericText *titleText = new genericText(0,0,-1,PLAYER,false);
-	titleText->setText(200,200,24,false,"resources/arial.ttf","Super Mario Bros.");
+	genericText *titleText = new genericText(0,0,-1,0,false);
+	titleText->setText(100,150,24,false,"resources/arial.ttf","Super Zelski Bros");
+
+	//Start Prompt
+	genericText *promptText = new genericText(0,0,-1,0,false);
+	promptText->setText(150,300,18,false,"resources/arial.ttf","Press X to Start");
+
+	//gameTrigger
+	gameTrigger *trigger = new gameTrigger(0,0,-1,0,false);
 
 	//Add objects to the scenes
 	menuScene->addObject(bg);
 	menuScene->addObject(ground_object);
 	menuScene->addObject(titleText);
+	menuScene->addObject(promptText);
+	menuScene->addObject(trigger);
 
 	return menuScene;
+
+}
+
+Scene *createLevelScene(){
+	Scene *levelScene = new Scene(600,525);
+
+	//Create Objects
+	genericText *lifeText = new genericText(0,0,-1,0,false);
+	std::string lifeString;
+	if(activePlayer==1){
+		lifeString = "Gracin: " + std::to_string(p1Lives); + " lives left.";
+	}
+	else{
+		lifeString = "Owen: " + std::to_string(p2Lives); + " lives left.";
+	}
+	lifeText->setText(150,150,18,false,"resources/arial.ttf",lifeString);
+
+	//timeTrigger
+
+	//Add objects to the scenes
+	levelScene->addObject(lifeText);
+
+
+	return levelScene;
 
 }

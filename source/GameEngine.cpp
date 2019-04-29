@@ -121,7 +121,7 @@ void GameEngine::addObject(Object *obj){
 	return;
 }
 
-int GameEngine::resetScene(Scene* (*buildFunction)(),int sceneID){
+int GameEngine::resetScene(std::function<Scene *()> buildFunction,int sceneID){
 	Scene *newScene = buildFunction();
 //	delete getScene(sceneID);
 	bool setActive = false;

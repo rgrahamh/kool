@@ -6,6 +6,7 @@
 #include "../irrKlang-64bit-1.6.0/include/irrKlang.h"
 #include "Scene.hpp"
 #include "View.hpp"
+#include <functional>
 
 class GameEngine {
 	private:
@@ -27,7 +28,7 @@ class GameEngine {
 			void stopAllSounds();
 			void addObject(Object *obj);
 			int addScene(Scene *scene);
-			int resetScene(Scene* (*buildFunction)(),int sceneID);
+			int resetScene(std::function<Scene *()> buildFunction,int sceneID);
 			bool delScene(int sceneID);
 			bool setActiveScene(int sceneID);
 			Scene *getActiveScene();

@@ -2,6 +2,13 @@
 #include "../headers/GameEngine.hpp"
 #include "scenes.hpp"
 #include "gameobjects.hpp"
+#include "globalvars.hpp"
+
+int p1Lives = 3;
+int p2Lives = 3;
+int activePlayer = 1;
+int currentLevel = 1;
+std::function<Scene *()> levelFunc = level1;
 
 using namespace std;
 
@@ -60,7 +67,7 @@ int main(){
 
 	//Add Scenes to the Engine
 	myEngine.addScene(createMenuScene());
-	myEngine.addScene(createGameScene()); //gameScene has sceneID=0
+	myEngine.addScene(level1()); //gameScene has sceneID=0
 
 	//Start Game
 	myEngine.startGame();

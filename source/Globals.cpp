@@ -112,7 +112,7 @@ int getWindowWidth(){
 int getWindowHeight(){
 	return windowHeight;
 }
-int resetScene(Scene* (*buildFunction)(),int sceneID){
+int resetScene(std::function<Scene *()> buildFunction,int sceneID){
 	if(activeEngine!=NULL){
 		activeEngine->resetScene(buildFunction,sceneID);
 		return 0;

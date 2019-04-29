@@ -86,4 +86,25 @@ class genericText: public Object {
 
 		void create();
 };
+
+class gameTrigger: public Object {
+	public:
+		gameTrigger(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+
+		void create();
+
+		void process(double delta);
+};
+
+class timeTrigger: public Object {
+	public:
+		timeTrigger(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+
+		void create();
+
+		void process(double delta);
+
+		void setTimer(double ms);
+
+};
 #endif

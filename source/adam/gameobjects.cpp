@@ -1,6 +1,9 @@
 #include "gameobjects.hpp"
+#include "globalvars.hpp"
 
 using namespace std;
+
+//Background Class
 
 background::background(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
 		create();
@@ -11,28 +14,33 @@ void background::create(){
 		setSprite((unsigned int)1);
 	}
 
+//Player Class
 
 player::player(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
 			create();
 		}
 
-	void player::create(){
-		this->collisionLayer = 0;
-		this->debug = false;
-		setSprite((unsigned int)0);
-		sprite_index = 0;
-		this->addHitBox(0,0,this->sprite->width,this->sprite->height);
-		this->friction = 0.3;
-		this->acceleration = 1.0;
-		this->maxVelocity = 6.5;
-		this->animationDelay = 40.0;
-		this->rightGravBound = -1.0;
-		this->leftGravBound = -1.0;
-		this->deathTime = 0.0;
-		this->deathMax = 2000.0;
-		dead = false;
-		this->setText(50,50,12,false,"resources/arial.ttf","Mario");
+void player::create(){
+	this->collisionLayer = 0;
+	this->debug = false;
+	setSprite((unsigned int)0);
+	sprite_index = 0;
+	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+	this->friction = 0.3;
+	this->acceleration = 1.0;
+	this->maxVelocity = 6.5;
+	this->animationDelay = 40.0;
+	this->rightGravBound = -1.0;
+	this->leftGravBound = -1.0;
+	this->deathTime = 0.0;
+	this->deathMax = 2000.0;
+	dead = false;
+	if(activePlayer==1){
+		this->setText(10,10,12,false,"resources/arial.ttf","Gracin");
+	}else{
+		this->setText(10,10,12,false,"resources/arial.ttf","Owen");
 	}
+}
 
 		
 void player::onCollide(Object *other, int myBoxID, int otherBoxID){
@@ -93,6 +101,13 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 				xV = 10.0;
 			}
 			dead = true;
+			if(activePlayer==1){
+				p1Lives -= 1;
+				activePlayer = 2;
+			}else{
+				p2Lives -= 1;
+				activePlayer = 1;
+			}
 			setSprite((unsigned int)11);
 		}
 	}
@@ -161,10 +176,12 @@ void player::process(double delta){
 	}else{
 		deathTime += delta;
 		if(deathTime > deathMax){
-			resetScene(createGameScene,0);
+			resetScene(levelFunc,1);
 		}
 	}
 }
+
+//Block class
 
 Block::Block(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
 	create();
@@ -176,6 +193,8 @@ void Block::create(){
 	setSprite((unsigned int)8);
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 }
+
+//ground class
 
 ground::ground(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
 	create();
@@ -189,6 +208,7 @@ void ground::create(){
 
 }
 
+//Gomba class
 
 gomba::gomba(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
 	create();
@@ -281,10 +301,27 @@ void gomba::process(double delta){
 	}
 }
 
+//genericText class
+
 genericText::genericText(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
 	this->create();
 }
 
 void genericText::create(){
 	return;
+}
+
+//gameTrigger class
+gameTrigger::gameTrigger(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
+	this->create();
+}
+
+void gameTrigger::create(){
+	return; 
+}
+
+void gameTrigger::process(double delta){
+	if(Keys::isKeyPressed(Keys::X)){
+		setActiveScene(1);	
+	}
 }

@@ -2,6 +2,7 @@
 #define GLOBALS_H
 #include "GameEngine.hpp"
 #include <vector>
+#include <functional>
 
 extern std::vector<Sprite *> spriteIndex;
 extern GameEngine *activeEngine;
@@ -34,6 +35,6 @@ extern int getWindowWidth();
 
 extern int getWindowHeight();
 
-extern int resetScene(Scene* (*buildFunction)(),int sceneID);
+extern int resetScene(std::function<Scene *()>,int sceneID);
 
 #endif
