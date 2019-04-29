@@ -1,3 +1,4 @@
+#include "../headers/Globals.hpp"
 #include "scenes.hpp"
 #include "globalvars.hpp"
 #include <string>
@@ -77,26 +78,61 @@ Scene *createMenuScene(){
 
 }
 
-Scene *createLevelScene(){
-	Scene *levelScene = new Scene(600,525);
+Scene *createPreviewScene(){
+	Scene *previewScene = new Scene(600,525);
 
 	//Create Objects
+	genericText *turnText = new genericText(0,0,-1,0,false);
+	std::string turnString;
+
 	genericText *lifeText = new genericText(0,0,-1,0,false);
 	std::string lifeString;
 	if(activePlayer==1){
-		lifeString = "Gracin: " + std::to_string(p1Lives); + " lives left.";
+	    	
+	    	turnString = "Gracins Turn";
+		lifeString = "Gracin has " + std::to_string(p1Lives) + " lives left";
 	}
 	else{
-		lifeString = "Owen: " + std::to_string(p2Lives); + " lives left.";
+	    	turnString = "Owens Turn";
+		lifeString = "Owen has " + std::to_string(p2Lives) + " lives left";
 	}
+	turnText->setText(150,50,18,false,"resources/arial.ttf",turnString);
 	lifeText->setText(150,150,18,false,"resources/arial.ttf",lifeString);
 
 	//timeTrigger
+	timeTrigger *switchTrigger = new timeTrigger(0,0,-1,0,false);
+	switchTrigger->setTimer(500.0);
+	switchTrigger->setSceneFunc(levelFunc);
+	switchTrigger->setSceneID(1);
 
 	//Add objects to the scenes
-	levelScene->addObject(lifeText);
+	previewScene->addObject(lifeText);
+	previewScene->addObject(turnText);
+	previewScene->addObject(switchTrigger);
 
 
-	return levelScene;
+	return previewScene;
 
+}
+
+Scene *gameoverScene(){
+	Scene *gameoverScene = new Scene(600,525);
+
+	//Create Objects
+	genericText *gameoverText = new genericText(0,0,-1,0,false);
+	
+	timeTrigger *switchTrigger = new timeTrigger(0,0,-1,0,false);
+	switchTrigger->setTimer(1000.0);
+	switchTrigger->setSceneFunc(createMenuScene);
+	switchTrigger->setSceneID(0);
+
+	//Set text
+	gameoverText->setText(150,50,24,false,"resources/arial.ttf","Game Over");
+
+	//Add objects to the scene
+	gameoverScene->addObject(gameoverText);
+	gameoverScene->addObject(switchTrigger);
+	
+
+	return gameoverScene;
 }

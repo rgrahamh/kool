@@ -66,8 +66,10 @@ int main(){
 	Sprite *mario_dead = new Sprite("resources/adam/mario_dead.png");
 
 	//Add Scenes to the Engine
-	myEngine.addScene(createMenuScene());
-	myEngine.addScene(level1()); //gameScene has sceneID=0
+	myEngine.addScene(createMenuScene()); //scene ID = 0
+	myEngine.addScene(level1()); //gameScene has sceneID=1
+	myEngine.addScene(createPreviewScene()); //sceneID=2
+	myEngine.addScene(gameoverScene()); //sceneID=3
 
 	//Start Game
 	myEngine.startGame();

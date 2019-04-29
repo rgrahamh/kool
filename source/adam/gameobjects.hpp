@@ -98,6 +98,11 @@ class gameTrigger: public Object {
 
 class timeTrigger: public Object {
 	public:
+		double maxTime; 
+		double totalTime;
+		std::function<Scene *()> jumpScene;
+		unsigned int sceneID;
+
 		timeTrigger(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 
 		void create();
@@ -105,6 +110,10 @@ class timeTrigger: public Object {
 		void process(double delta);
 
 		void setTimer(double ms);
+
+		void setSceneFunc(std::function<Scene *()> jumpScene);
+
+		void setSceneID(unsigned int sID);
 
 };
 #endif

@@ -22,6 +22,9 @@ class GameEngine {
             int sceneID;
 	public:
 			GameEngine(int width,int height,std::string title);
+			clock_t thisFrame;
+			clock_t lastFrame;
+			double delta;
 			void startGame();
 			void endGame();
 			void playSound(char *filename, bool loop=false);

@@ -89,6 +89,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 	if(other->collisionFlags==ENEMY && other->sprite_index!=10){
 		if(direction == ABOVE){
 			//We squashed them
+			playSound("./resources/adam/sounds/stomp.wav");
 			yV = -4.0;
 		}else{
 			//We DIE
@@ -108,6 +109,8 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 				p2Lives -= 1;
 				activePlayer = 1;
 			}
+			playSound("./resources/adam/sounds/die.wav");
+			resetScene(createPreviewScene,2);
 			setSprite((unsigned int)11);
 		}
 	}
@@ -119,7 +122,7 @@ void player::process(double delta){
 		if(Keys::isKeyPressed(Keys::W) && this->gravity==false){
 			this->yV = -8;
 			this->gravity = true;
-			playSound("./resources/boing.wav");
+			playSound("./resources/adam/sounds/jump.wav");
 		}
 
 		//Horizontal Movement
@@ -176,7 +179,12 @@ void player::process(double delta){
 	}else{
 		deathTime += delta;
 		if(deathTime > deathMax){
-			resetScene(levelFunc,1);
+			if(p1Lives < 1 && p2Lives < 1){
+				setActiveScene(3);
+				playSound("./resources/adam/sounds/gameover.wav");
+			}else{
+				setActiveScene(2);
+			}
 		}
 	}
 }
@@ -322,6 +330,44 @@ void gameTrigger::create(){
 
 void gameTrigger::process(double delta){
 	if(Keys::isKeyPressed(Keys::X)){
+		levelFunc = level1;
+		p1Lives = 3;
+		p2Lives = 3;
+		resetScene(gameoverScene,3);
+		resetScene(levelFunc,1);
 		setActiveScene(1);	
 	}
+}
+
+//timeTrigger class
+timeTrigger::timeTrigger(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
+	this->create();
+}
+
+void timeTrigger::create(){
+	this->maxTime = -1.0;
+	this->totalTime = 0.0;
+}
+
+void timeTrigger::process(double delta){
+	if(this->maxTime > 0.0){
+		this->totalTime += delta;
+		if(this->totalTime >= maxTime){
+			resetScene(this->jumpScene,this->sceneID);
+			setActiveScene(this->sceneID);
+		}
+	}
+}
+
+void timeTrigger::setTimer(double ms){
+	this->maxTime = ms;
+	this->totalTime = 0.0;
+}
+
+void timeTrigger::setSceneID(unsigned int sID){
+	this->sceneID = sID;
+}
+
+void timeTrigger::setSceneFunc(std::function<Scene *()>jumpScene){
+	this->jumpScene = jumpScene;
 }

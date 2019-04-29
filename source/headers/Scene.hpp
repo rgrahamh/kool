@@ -10,9 +10,6 @@
 
 class Scene{
 	private:
-			double delta;
-            clock_t lastFrame, thisFrame;
-
 			std::vector<View *> viewList;
 			std::vector<Object *> objectList;
 			std::vector<Object *> originalObjectList;
@@ -26,7 +23,7 @@ class Scene{
             float termVel;
 			Scene(int width, int height);
 			~Scene();
-			void process(); //Should make call to Object _process functions and to View _process functions
+			void process(double delta); //Should make call to Object _process functions and to View _process functions
 			void render(sf::RenderWindow *window); //render(SFML window)
 			View *getView(unsigned int index);
 			int addObject(Object *object);

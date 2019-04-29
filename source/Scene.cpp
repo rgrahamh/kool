@@ -10,8 +10,6 @@
 using namespace std;
 
 Scene::Scene(int width, int height){
-    this->thisFrame = clock();
-    this->lastFrame = clock();
     this->width = width;
     this->height = height;
 	this->id = 0;
@@ -48,14 +46,7 @@ void Scene::setID(int id){
 }
 
 //process 1 frame of the scene
-void Scene::process(){
-    //Object behavior processing
-    thisFrame = clock();
-    if(thisFrame >= lastFrame){
-        delta = (thisFrame - lastFrame)/CLOCKS_PER_MS;
-    } else {
-        delta = thisFrame;
-    }
+void Scene::process(double delta){
     //printf("%f\r", delta);
     //std::fflush(stdout);
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
@@ -106,7 +97,6 @@ void Scene::process(){
 	for(unsigned int i = 0; i < this->viewList.size(); i++){
 		this->viewList[i]->_process(delta);
 	}
-    this->lastFrame = this->thisFrame;
     //Process if this scene has been destroyed
     if(destroyed==true){
 	delete this;

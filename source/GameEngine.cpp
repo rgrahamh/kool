@@ -5,10 +5,15 @@
 using namespace irrklang;
 using namespace std;
 
+//The number of clock cycles per millisecond
+#define CLOCKS_PER_MS ((float)(CLOCKS_PER_SEC/1000))
+
+
 GameEngine *activeEngine = NULL;
 ISoundEngine *audioEngine = createIrrKlangDevice();
 int windowWidth = 0;
 int windowHeight = 0;
+double averageDelta = 50.0;
 
 GameEngine::GameEngine(int width, int height,string title){
 	if(!audioEngine) printf("Could not start engine\n");
@@ -19,6 +24,8 @@ GameEngine::GameEngine(int width, int height,string title){
 	windowHeight = height;
 	this->window->setFramerateLimit(60);
 	this->activeScene = NULL;
+	this->thisFrame = clock();
+	this->lastFrame = clock();
 
 }
 
@@ -53,7 +60,14 @@ void GameEngine::renderScene(){
 }
 
 void GameEngine::processScene(){
-	this->activeScene->process();
+	thisFrame = clock();
+	if(thisFrame >= lastFrame){
+	    delta = (thisFrame - lastFrame)/CLOCKS_PER_MS;
+	} else {
+	    delta = thisFrame;
+	}
+	this->activeScene->process(delta);
+	lastFrame = thisFrame;
 }
 
 void GameEngine::endGame(){

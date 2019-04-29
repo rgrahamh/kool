@@ -4,4 +4,6 @@
 #define SCENES_H
 Scene *level1();
 Scene *createMenuScene();
+Scene *createPreviewScene();
+Scene *gameoverScene();
 #endif

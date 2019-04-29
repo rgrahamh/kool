@@ -37,4 +37,6 @@ extern int getWindowHeight();
 
 extern int resetScene(std::function<Scene *()>,int sceneID);
 
+extern double averageDelta;
+
 #endif
