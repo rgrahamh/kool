@@ -4,11 +4,17 @@
 #include "gameobjects.hpp"
 #include "globalvars.hpp"
 
-int p1Lives = 3;
-int p2Lives = 3;
-int activePlayer = 1;
+int activePlayer = 0;
 int currentLevel = 1;
 std::function<Scene *()> levelFunc = level1;
+
+//Setup Players
+struct playerData gracin = {3,true,"Gracin"};
+struct playerData owen = {3,true,"Owen"};
+struct playerData madison = {3,false,"Madison"};
+
+struct playerData players[3] = {gracin,owen,madison};
+int playerNum = 3;
 
 using namespace std;
 

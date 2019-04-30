@@ -87,15 +87,10 @@ Scene *createPreviewScene(){
 
 	genericText *lifeText = new genericText(0,0,-1,0,false);
 	std::string lifeString;
-	if(activePlayer==1){
-	    	
-	    	turnString = "Gracins Turn";
-		lifeString = "Gracin has " + std::to_string(p1Lives) + " lives left";
-	}
-	else{
-	    	turnString = "Owens Turn";
-		lifeString = "Owen has " + std::to_string(p2Lives) + " lives left";
-	}
+	turnString = players[activePlayer].name; 
+	turnString += "s Turn";
+	lifeString = players[activePlayer].name;
+	lifeString += " has " + std::to_string(players[activePlayer].lives) + " lives left";
 	turnText->setText(150,50,18,false,"resources/arial.ttf",turnString);
 	lifeText->setText(150,150,18,false,"resources/arial.ttf",lifeString);
 
@@ -122,7 +117,7 @@ Scene *gameoverScene(){
 	genericText *gameoverText = new genericText(0,0,-1,0,false);
 	
 	timeTrigger *switchTrigger = new timeTrigger(0,0,-1,0,false);
-	switchTrigger->setTimer(1000.0);
+	switchTrigger->setTimer(700.0);
 	switchTrigger->setSceneFunc(createMenuScene);
 	switchTrigger->setSceneID(0);
 

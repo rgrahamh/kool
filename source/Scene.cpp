@@ -42,6 +42,9 @@ View *Scene::getView(unsigned int index){
 
 void Scene::setID(int id){
 	this->id = id;
+	for(unsigned int i = 0; i < viewList.size(); i++){
+		viewList[i]->setSceneID(this->id);
+	}
 	return;
 }
 

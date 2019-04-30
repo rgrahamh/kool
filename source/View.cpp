@@ -80,6 +80,8 @@ void View::follow(){ //FIXME
 			}else if((sceneX+width) + 2 < sceneWidth){
 				this->sceneX += 2;
 			}
+	//		std::cout << "SceneX = " << this->sceneX  << endl;
+	//		std::cout << "sceneWidth: " << sceneWidth << endl;
 		}
 		else if(objWinX < minX){
 			if(minX - objWinX > 2 && ((sceneX - (minX - objWinX)/2) > 0)){

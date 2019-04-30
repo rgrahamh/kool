@@ -35,11 +35,7 @@ void player::create(){
 	this->deathTime = 0.0;
 	this->deathMax = 2000.0;
 	dead = false;
-	if(activePlayer==1){
-		this->setText(10,10,12,false,"resources/arial.ttf","Gracin");
-	}else{
-		this->setText(10,10,12,false,"resources/arial.ttf","Owen");
-	}
+	this->setText(10,10,12,false,"resources/arial.ttf",players[activePlayer].name);
 }
 
 		
@@ -102,13 +98,22 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 				xV = 10.0;
 			}
 			dead = true;
-			if(activePlayer==1){
-				p1Lives -= 1;
-				activePlayer = 2;
+			
+			players[activePlayer].lives -= 1;
+
+			if(activePlayer+1 < playerNum){
+				activePlayer+=1;
 			}else{
-				p2Lives -= 1;
-				activePlayer = 1;
+				activePlayer = 0;
 			}
+			while(players[activePlayer].isPlaying==false){
+				if(activePlayer+1 < playerNum){
+					activePlayer+=1;
+				}else{
+					activePlayer = 0;
+				}
+			}
+
 			playSound("./resources/adam/sounds/die.wav");
 			resetScene(createPreviewScene,2);
 			setSprite((unsigned int)11);
@@ -177,9 +182,15 @@ void player::process(double delta){
 			this->gravity = true;
 		}
 	}else{
+		bool allDead = true;
 		deathTime += delta;
 		if(deathTime > deathMax){
-			if(p1Lives < 1 && p2Lives < 1){
+			for(int i = 0; i < playerNum; i++){
+				if(players[i].lives>0 && players[i].isPlaying==true){
+					allDead = false;
+				}
+			}
+			if(allDead == true){
 				setActiveScene(3);
 				playSound("./resources/adam/sounds/gameover.wav");
 			}else{
@@ -331,8 +342,9 @@ void gameTrigger::create(){
 void gameTrigger::process(double delta){
 	if(Keys::isKeyPressed(Keys::X)){
 		levelFunc = level1;
-		p1Lives = 3;
-		p2Lives = 3;
+		for(int i = 0; i < playerNum; i++){
+			players[i].lives = 3;
+		}
 		resetScene(gameoverScene,3);
 		resetScene(levelFunc,1);
 		setActiveScene(1);	
