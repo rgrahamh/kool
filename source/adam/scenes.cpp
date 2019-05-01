@@ -30,6 +30,13 @@ Scene *level1(){
 		blockTmp = new Block(blocks[i][0],blocks[i][1],0,GROUND,false);
 		gameScene->addObject(blockTmp);
 	}
+	//Mystery Boxes
+	MysteryBox *mysteryTmp;
+	float mysteryBoxes[1][2] = {{450,450}};
+	for(unsigned int i = 0; i < (sizeof(mysteryBoxes)/sizeof(mysteryBoxes[0])); i++){
+		mysteryTmp = new MysteryBox(mysteryBoxes[i][0],mysteryBoxes[i][1],0,GROUND,false);
+		gameScene->addObject(mysteryTmp);
+	}
 
 	//Gombas
 	gomba *gombaTmp;

@@ -26,6 +26,7 @@ struct drawData {
 	unsigned int fontSize;
 	sf::Font textFont;
 	sf::String textString;
+	sf::Color textColor;
 
 };
 
@@ -58,8 +59,10 @@ class Object{
 			bool relativeToObject;
 			sf::Font textFont;
 			sf::String textString;
+			sf::Color textColor;
 			void setText(int textX, int textY, unsigned int fontSize, bool relative, std::string fontFile, std::string textString);
 			void setFontSize(unsigned int fontSize);
+			void setTextColor(sf::Color textColor=sf::Color::White);
 			void hideText();
 
             //Position

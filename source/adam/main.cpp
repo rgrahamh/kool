@@ -71,6 +71,15 @@ int main(){
 	//index 11
 	Sprite *mario_dead = new Sprite("resources/adam/mario_dead.png");
 
+	//index 12
+	Sprite *mystery_box = new Sprite("resources/adam/mystery_box/box1.png");
+	mystery_box->addImage("resources/adam/mystery_box/box2.png");
+	mystery_box->addImage("resources/adam/mystery_box/box3.png");
+	mystery_box->addImage("resources/adam/mystery_box/box2.png");
+
+	//index 13
+	Sprite *mystery_box_hit = new Sprite("resources/adam/mystery_box/boxHit.png");
+
 	//Add Scenes to the Engine
 	myEngine.addScene(createMenuScene()); //scene ID = 0
 	myEngine.addScene(level1()); //gameScene has sceneID=1

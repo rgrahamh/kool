@@ -36,6 +36,7 @@ void player::create(){
 	this->deathMax = 2000.0;
 	dead = false;
 	this->setText(10,10,12,false,"resources/arial.ttf",players[activePlayer].name);
+	setTextColor(sf::Color::Red);
 }
 
 		
@@ -92,15 +93,12 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			yV = -16.0;
 			gravity = true;
 			this->collisionLayer = -1;
-			if(direction == LEFT || direction == BELOW){
-				xV = -10.0;
-			}else{
-				xV = 10.0;
-			}
 			dead = true;
-			
+		
+			//Decrement how many lives we have
 			players[activePlayer].lives -= 1;
 
+			//Change whose turn it is
 			if(activePlayer+1 < playerNum){
 				activePlayer+=1;
 			}else{
@@ -113,9 +111,10 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 					activePlayer = 0;
 				}
 			}
-
+			//Play dieing sound
+			stopAllSounds();
 			playSound("./resources/adam/sounds/die.wav");
-			resetScene(createPreviewScene,2);
+			//Show dieing sprite
 			setSprite((unsigned int)11);
 		}
 	}
@@ -182,6 +181,7 @@ void player::process(double delta){
 			this->gravity = true;
 		}
 	}else{
+		//Determine whether to go to preview scene or gameover scene
 		bool allDead = true;
 		deathTime += delta;
 		if(deathTime > deathMax){
@@ -192,8 +192,11 @@ void player::process(double delta){
 			}
 			if(allDead == true){
 				setActiveScene(3);
+				stopAllSounds();
 				playSound("./resources/adam/sounds/gameover.wav");
 			}else{
+				//Setup preview scene
+				resetScene(createPreviewScene,2);
 				setActiveScene(2);
 			}
 		}
@@ -347,7 +350,8 @@ void gameTrigger::process(double delta){
 		}
 		resetScene(gameoverScene,3);
 		resetScene(levelFunc,1);
-		setActiveScene(1);	
+		resetScene(createPreviewScene,2);
+		setActiveScene(2);	
 	}
 }
 
@@ -382,4 +386,42 @@ void timeTrigger::setSceneID(unsigned int sID){
 
 void timeTrigger::setSceneFunc(std::function<Scene *()>jumpScene){
 	this->jumpScene = jumpScene;
+}
+
+//MysteryBox class
+MysteryBox::MysteryBox(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
+	this->create();
+}
+
+void MysteryBox::create(){
+	this->beenHit = false;
+	this->collisionFlags = GROUND;
+	setSprite((unsigned int)12);
+	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+	this->animationDelay = 70.0;
+}
+
+void MysteryBox::onCollide(Object *other, int myBoxID, int otherBoxID){
+
+	//Determine the direction of the collision
+	enum collideDirection direction;
+	float otherBoxX = other->x+other->hitBoxes[otherBoxID]->offsetX;
+	float otherBoxY = other->y+other->hitBoxes[otherBoxID]->offsetY;
+	int otherBoxWidth = other->hitBoxes[otherBoxID]->width;
+	if((this->x+sprite->width-xV) < otherBoxX){
+		direction = LEFT;
+	}
+	else if((this->x-xV) > (otherBoxX + otherBoxWidth)){
+		direction = RIGHT;
+	}
+	else if(this->y < (otherBoxY-other->yV)){
+		direction = ABOVE;
+	}else{
+		direction = BELOW;
+	}
+	if(other->collisionFlags==PLAYER && direction==ABOVE){
+		beenHit = true;
+		setSprite((unsigned int)13);
+		//Spawn mushroom here
+	}	
 }

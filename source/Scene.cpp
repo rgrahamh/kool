@@ -161,6 +161,9 @@ void Scene::render(sf::RenderWindow *window){
 				objText = sf::Text(objDraw.textString,objDraw.textFont);	
 				//Set font size
 				objText.setCharacterSize(objDraw.fontSize);
+				//Set text color
+				objText.setColor(objDraw.textColor);
+				//objText.setOutlineColor(objDraw.textOutlineColor);
 				if(objDraw.relativeToObject == true){
 					objText.setPosition(objDraw.x+objDraw.textX,objDraw.y+objDraw.textY);
 				}else{
