@@ -4,6 +4,7 @@
 #include <vector>
 #include <functional>
 
+
 extern std::vector<Sprite *> spriteIndex;
 extern GameEngine *activeEngine;
 

@@ -36,7 +36,9 @@ void player::create(){
 	this->deathMax = 2000.0;
 	dead = false;
 	this->setText(10,10,12,false,"resources/arial.ttf",players[activePlayer].name);
-	setTextColor(sf::Color::Red);
+	setTextColor(players[activePlayer].pColor);
+	this->poweredUp=false;
+	this->spriteSet = p1Small;
 }
 
 		
@@ -88,7 +90,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			//We squashed them
 			playSound("./resources/adam/sounds/stomp.wav");
 			yV = -4.0;
-		}else{
+		}else if(this->poweredUp==false){
 			//We DIE
 			yV = -16.0;
 			gravity = true;
@@ -115,7 +117,10 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			stopAllSounds();
 			playSound("./resources/adam/sounds/die.wav");
 			//Show dieing sprite
-			setSprite((unsigned int)11);
+			setSprite(spriteSet[6]);
+		}else{
+			this->poweredUp = false;
+			//We're gonna need a way to make sure we don't double-collide with an enemy.
 		}
 	}
 }
@@ -137,9 +142,9 @@ void player::process(double delta){
 				this->xA = 0.0;
 			}
 			if(this->gravity==false){
-				setSprite((unsigned int)3);
+				setSprite(spriteSet[2]);
 			}else{
-				setSprite((unsigned int)6);
+				setSprite(spriteSet[4]);
 			}
 		}
 		else if(Keys::isKeyPressed(Keys::A)){
@@ -149,22 +154,22 @@ void player::process(double delta){
 				this->xA = 0.0;
 			}
 			if(this->gravity==false){
-				setSprite((unsigned int)5);
+				setSprite(spriteSet[3]);
 			}else{
-				setSprite((unsigned int)7);
+				setSprite(spriteSet[5]);
 			}
 		}else{
 			if(this->gravity==false){
 				if(this->xV >= 0.0 && this->sprite_index!=6){
-					setSprite((unsigned int)0);
+					setSprite(spriteSet[0]);
 				}else{
-					setSprite((unsigned int)4);
+					setSprite(spriteSet[1]);
 				}
 			}else{
 				if(this->xV >= 0.0){
-					setSprite((unsigned int)6);
+					setSprite(spriteSet[4]);
 				}else{
-					setSprite((unsigned int)7);
+					setSprite(spriteSet[5]);
 				}
 			}
 		}

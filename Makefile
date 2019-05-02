@@ -17,7 +17,7 @@ testGame: ./source/testGame.cpp ./source/testObj.cpp
 test2: ./source/test2.cpp ./source/testObj2.cpp 
 	$(CC) $(CFLAGS) -o testGame2 $(GAMEFILES2) $(INCLUDE_SFML)
 
-adam: ./source/adam/main.cpp ./source/adam/gameobjects.cpp
+adam: ./source/adam/main.cpp ./source/adam/gameobjects.cpp ./source/adam/scenes.cpp
 	$(CC) $(CFLAGS) -o adam $(ADAMGAMEFILES) $(INCLUDE_SFML) $(OPTS)
 
 jeremiah: ./source/jeremiah/main.cpp ./source/jeremiah/game.cpp

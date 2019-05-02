@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 #include "../headers/Object.hpp"
 #include "../headers/Globals.hpp"
 #include "scenes.hpp"
@@ -20,28 +21,24 @@ class background: public Object {
 
 		//This code has to be present in all child objects of Object
 		background(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
-
 		void create();
 };
 
 class player: public Object {
 	public:
 		bool dead;
+		bool poweredUp;
 		float acceleration;
 		float maxVelocity;
 		float rightGravBound;
 		float leftGravBound;
 		double deathTime;
 		double deathMax;
-
+		//Keeps track of what character we are.
+		std::vector<unsigned int>spriteSet;
 		player(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
-
 		void create();
-
-		
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
-		
-
 		void process(double delta);
 		
 
@@ -50,7 +47,6 @@ class player: public Object {
 class Block: public Object {
 	public:
 		Block(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
-	
 		void create();
 };
 
@@ -65,8 +61,6 @@ class MysteryBox: public Object {
 class ground: public Object {
 	public:
 		ground(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
-		
-
 		void create();
 	
 };
@@ -78,11 +72,8 @@ class gomba: public Object {
 		float leftGravBound;
 		double deadTime;
 		double deadMax;
-
 		gomba(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
-
 		void create();
-	
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
 		void process(double delta);
 		
@@ -91,16 +82,13 @@ class gomba: public Object {
 class genericText: public Object {
 	public:
 		genericText(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
-
 		void create();
 };
 
 class gameTrigger: public Object {
 	public:
 		gameTrigger(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
-
 		void create();
-
 		void process(double delta);
 };
 
@@ -110,17 +98,11 @@ class timeTrigger: public Object {
 		double totalTime;
 		std::function<Scene *()> jumpScene;
 		unsigned int sceneID;
-
 		timeTrigger(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
-
 		void create();
-
 		void process(double delta);
-
 		void setTimer(double ms);
-
 		void setSceneFunc(std::function<Scene *()> jumpScene);
-
 		void setSceneID(unsigned int sID);
 
 };

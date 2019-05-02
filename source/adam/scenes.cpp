@@ -99,7 +99,7 @@ Scene *createPreviewScene(){
 	lifeString = players[activePlayer].name;
 	lifeString += " has " + std::to_string(players[activePlayer].lives) + " lives left";
 	turnText->setText(150,50,18,false,"resources/arial.ttf",turnString);
-	lifeText->setText(150,150,18,false,"resources/arial.ttf",lifeString);
+	lifeText->setText(100,150,18,false,"resources/arial.ttf",lifeString);
 
 	//timeTrigger
 	timeTrigger *switchTrigger = new timeTrigger(0,0,-1,0,false);
