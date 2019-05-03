@@ -17,6 +17,9 @@ struct drawData {
 	int width;
 	int height;
 	bool repeated;
+	//Scaling
+	float xScale;
+	float yScale;
 
 	//For text :)
 	bool hasText;
@@ -64,6 +67,10 @@ class Object{
 			void setFontSize(unsigned int fontSize);
 			void setTextColor(sf::Color textColor=sf::Color::White);
 			void hideText();
+			//Scale
+			float xScale;
+			float yScale;
+			void setScale(float xScale, float yScale);
 
             //Position
 			float x;

@@ -37,6 +37,8 @@ Object::Object(float x, float y, int collisionlayer, unsigned int collisionFlags
 	this->relativeToObject = false;
 	this->textFont = sf::Font();
 	this->textString = "";
+	this->xScale = 1.0;
+	this->yScale = 1.0;
 	setTextColor();
 }
 
@@ -75,6 +77,9 @@ struct drawData Object::_draw(){
 	data.textFont = this->textFont;
 	data.textString = this->textString;
 	data.textColor = this->textColor;
+	//Scaling
+	data.xScale = this->xScale;
+	data.yScale = this->yScale;
 
 	return data;
 }
@@ -219,4 +224,9 @@ void Object::setFontSize(unsigned int fontSize){
 
 void Object::setTextColor(sf::Color textColor){
 	this->textColor = textColor;
+}
+
+void Object::setScale(float xScale, float yScale){
+	this->xScale = xScale;
+	this->yScale = yScale;
 }

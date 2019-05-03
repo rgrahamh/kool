@@ -152,6 +152,8 @@ void Scene::render(sf::RenderWindow *window){
 				sf::IntRect r(0,0,objDraw.width,objDraw.height);
 				objSprite.setTextureRect(r);
 				objSprite.setPosition(objDraw.x,objDraw.y);
+				//Scaling
+				objSprite.setScale(objDraw.xScale,objDraw.yScale);
 				//Make sure the object sprite is the last thing we draw, so that it is at the foreground.
 				window->draw(objSprite);
 			}

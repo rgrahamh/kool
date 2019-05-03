@@ -11,6 +11,7 @@ extern std::function<Scene *()> levelFunc;
 //Set organization:
 //Right standing, left standing, right running, left running, right jumping, left jumping, dead
 extern std::vector<unsigned int> p1Small;
+extern std::vector<unsigned int> p2Small;
 
 //Super power enum
 enum superPowers {

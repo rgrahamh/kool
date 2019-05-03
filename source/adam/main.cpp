@@ -20,6 +20,7 @@ int playerNum = 3;
 //Set organization:
 //Right standing, left standing, right running, left running, right jumping, left jumping, dead
 std::vector<unsigned int> p1Small = {0,4,3,5,6,7,11};
+std::vector<unsigned int> p2Small = {14,15,16,17,18,19,20};
 
 //Path Strings
 std::string characters = "resources/adam/characters/";
@@ -87,6 +88,32 @@ int main(){
 
 	//index 13
 	Sprite *mystery_box_hit = new Sprite("resources/adam/mystery_box/boxHit.png");
+
+	//index 14
+	Sprite *luigi_standing_right = new Sprite(characters+"luigi/small/stand/LStandingSmall.png");
+
+	//index 15
+	Sprite *luigi_standing_left = new Sprite(characters+"luigi/small/stand/LStandingSmallL.png");
+
+	//index 16
+	Sprite *luigi_running_right = new Sprite(characters+"luigi/small/run/LSmallRun1.png");
+	luigi_running_right->addImage(characters+"luigi/small/run/LSmallRun2.png");
+	luigi_running_right->addImage(characters+"luigi/small/run/LSmallRun3.png");
+
+	//index 17
+	Sprite *luigi_running_left = new Sprite(characters+"luigi/small/run/LSmallRunL1.png");
+	luigi_running_left->addImage(characters+"luigi/small/run/LSmallRunL2.png");
+	luigi_running_left->addImage(characters+"luigi/small/run/LSmallRunL3.png");
+
+	//index 18
+	Sprite *luigi_jumping_right = new Sprite(characters+"luigi/small/jump/LSmallJump.png");
+	
+	//index 19
+	Sprite *luigi_jumping_left = new Sprite(characters+"luigi/small/jump/LSmallJumpL.png");
+
+	//index 20
+	Sprite *luigi_dead = new Sprite(characters+"luigi/small/die/LSmallDie.png");
+
 
 	//Add Scenes to the Engine
 	myEngine.addScene(createMenuScene()); //scene ID = 0

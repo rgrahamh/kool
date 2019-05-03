@@ -38,7 +38,11 @@ void player::create(){
 	this->setText(10,10,12,false,"resources/arial.ttf",players[activePlayer].name);
 	setTextColor(players[activePlayer].pColor);
 	this->poweredUp=false;
-	this->spriteSet = p1Small;
+	if(activePlayer==1){
+		this->spriteSet = p2Small;
+	}else{
+		this->spriteSet = p1Small;
+	}
 }
 
 		
