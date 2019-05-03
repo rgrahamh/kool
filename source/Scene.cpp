@@ -65,11 +65,11 @@ void Scene::process(double delta){
     for(unsigned int i = 0; i < this->objectList.size(); i++){
         obj1 = this->objectList[i];
 		//Check each hitbox for each object
-        if(i < this->objectList.size() && this->objectList[i]!=NULL && this->objectList[i] == obj1 && obj1->collisionLayer >= 0){
+        if(i < this->objectList.size() && this->objectList[i]!=NULL && obj1->collisionLayer >= 0){
             for(unsigned int j = i + 1; j < this->objectList.size(); j++){
                 //Don't check against yourself
                 obj2 = this->objectList[j];
-                if(j < this->objectList.size() && this->objectList[j]!=NULL && this->objectList[j] == obj2 && obj2->collisionLayer >= 0){
+                if(j < this->objectList.size() && this->objectList[j]!=NULL && obj2->collisionLayer >= 0){
                     for(unsigned int k = 0; k < obj1->hitBoxes.size(); k++){
                         float x1 = obj1->hitBoxes[k]->offsetX + obj1->x;
                         float y1 = obj1->hitBoxes[k]->offsetY + obj1->y;

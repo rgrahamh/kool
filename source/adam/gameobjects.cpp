@@ -22,7 +22,7 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void player::create(){
 	this->collisionLayer = 0;
-	this->debug = true;
+	this->debug = false;
 	setSprite((unsigned int)0);
 	sprite_index = 0;
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
@@ -42,6 +42,8 @@ void player::create(){
 	activeDead = false;
 	this->setIndex = 0;
 	this->recovering=false;
+	this->finishedLevel=false;
+	this->finishedFlag = false;
 }
 
 		
@@ -65,6 +67,12 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			direction = BELOW;
 		}
 	if(other->collisionFlags==GROUND && dead==false){
+		if(!finishedFlag && finishedLevel){
+			finishedFlag = true;
+			y-=1;
+			stopAllSounds();
+			playSound("./resources/adam/sounds/stage_clear.wav");
+		}
 		if(direction == ABOVE){
 			this->gravity = false;
 			this->rightGravBound = otherBoxX;
@@ -75,6 +83,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			float offsetY = other->hitBoxes[otherBoxID]->offsetY;
 
 			this->y = ((other->y+offsetY)-(this->sprite->height)-1);
+			//Animation step for end
 		}
 		if(direction == LEFT || direction == RIGHT){
 			this->x-=this->xV;
@@ -144,6 +153,29 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 		this->hitBoxes[0]->height = this->sprite->height;
 		this->y = this->y + heightDiff;
 	}
+	if(other->collisionFlags==0x32){
+		if(!finishedLevel){
+			this->gravity = false;
+			this->setIndex=7;
+			this->finishedLevel = true;
+			this->friction = 0.0;
+			this->yV = 0.0;
+			this->yA = 0.0;
+			this->xV = 0.0;
+			this->xA = 0.0;
+			this->x = other->x;
+			stopAllSounds();
+			playSound("./resources/adam/sounds/flagpole.wav");
+		}
+		else if(!finishedFlag){
+			this->yV = 1.0;
+		}
+		else{
+			this->yV = 0.0;
+			this->xV = 2.0;
+			setIndex=2;
+		}
+	}
 }
 
 void player::process(double delta){
@@ -151,7 +183,7 @@ void player::process(double delta){
 	setSprite(spriteSet[setIndex]);
 	if(dead==false){ //Do stuff if we're not dead
 		//Jumping
-		if(Keys::isKeyPressed(Keys::W) && this->gravity==false){
+		if(Keys::isKeyPressed(Keys::W) && this->gravity==false && !finishedLevel){
 			this->yV = -8;
 			this->gravity = true;
 			if(poweredUp==false){
@@ -162,7 +194,7 @@ void player::process(double delta){
 		}
 
 		//Horizontal Movement
-		if(Keys::isKeyPressed(Keys::D)){
+		if(Keys::isKeyPressed(Keys::D) && !finishedLevel){
 			if(this->xV < this->maxVelocity){
 				this->xA = this->acceleration;
 			}else{
@@ -174,7 +206,7 @@ void player::process(double delta){
 				setIndex=4;
 			}
 		}
-		else if(Keys::isKeyPressed(Keys::A)){
+		else if(Keys::isKeyPressed(Keys::A) && !finishedLevel){
 			if(this->xV > -this->maxVelocity){
 				this->xA = -this->acceleration;
 			}else{
@@ -185,7 +217,7 @@ void player::process(double delta){
 			}else{
 				setIndex=5;
 			}
-		}else{
+		}else if(!finishedLevel){
 			if(this->gravity==false){
 				if(this->xV >= 0.0 && this->setIndex!=6 && this->setIndex!=9){
 					setIndex=0;
@@ -200,7 +232,7 @@ void player::process(double delta){
 				}
 			}
 		}
-		if(Keys::isKeyPressed(Keys::S) && poweredUp==true && gravity==false){
+		if(Keys::isKeyPressed(Keys::S) && poweredUp==true && gravity==false && !finishedLevel){
 			this->xA = 0;
 			this->xV = 0;
 			if(setIndex==3 || setIndex==1){
@@ -224,7 +256,7 @@ void player::process(double delta){
 		}
 
 		//Process if we are falling off our current floor
-		if((x+sprite->width) < rightGravBound || (x > leftGravBound && rightGravBound >= 0)){
+		if(((x+sprite->width) < rightGravBound || (x > leftGravBound && rightGravBound >= 0)) && !finishedLevel){
 			this->gravity = true;
 		}
 	}else{
@@ -266,7 +298,7 @@ Block::Block(float x, float y, int collisionLayer, unsigned int collisionFlags, 
 
 void Block::create(){
 	this->collisionLayer = 0;
-	this->debug = true;
+	this->debug = false;
 	setSprite((unsigned int)8);
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 }
@@ -486,7 +518,6 @@ void MysteryBox::onCollide(Object *other, int myBoxID, int otherBoxID){
 			playSound("./resources/adam/sounds/bump.wav");
 		}
 	}	
-	std::cout << "Collision!" << endl;
 }
 
 //mushroom class
@@ -503,7 +534,7 @@ void mushroom::create(){
 	full = false;
 	animationTime = 20.0;
 	animationAcc = 0.0;
-	this->debug = true;
+	this->debug = false;
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 }
 
@@ -536,7 +567,7 @@ flagpole::flagpole(float x, float y, int collisionLayer, unsigned int collisionF
 
 void flagpole::create(){
 	setSprite((unsigned int)46);
-	this->debug = true;
+	this->debug = false;
 	this->addHitBox(10,20,this->sprite->width-10,this->sprite->height-20);
 }
 
@@ -545,5 +576,6 @@ void flagpole::process(double delta){
 }
 
 void flagpole::onCollide(Object *other, int myBoxID, int otherBoxID){
+	std::cout << "Collision!" << endl;
 	return;
 }

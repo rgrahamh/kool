@@ -211,6 +211,9 @@ int main(){
 	//index 48
 	Sprite *metalblock = new Sprite("resources/adam/metalblock.png");
 
+	//index 49
+	Sprite *castleSpr = new Sprite("resources/adam/castle.png");
+
 	//Add Scenes to the Engine
 	myEngine.addScene(createMenuScene()); //scene ID = 0
 	myEngine.addScene(level1()); //gameScene has sceneID=1

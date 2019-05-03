@@ -11,6 +11,9 @@ Scene *level1(){
 
 	//Background
 	background *bg = new background(0,0);
+	
+	//Flag post
+	flagpole *fp = new flagpole(700,326,0,0x32,false);
 
 	//Player
 	player *p1 = new player(50,50,0,PLAYER,true);
@@ -21,6 +24,7 @@ Scene *level1(){
 	//Add objects to the scenes
 	gameScene->addObject(bg);
 	gameScene->addObject(ground_object);
+	gameScene->addObject(fp);
 	gameScene->addObject(p1);
 	
 	//Blocks
@@ -45,9 +49,6 @@ Scene *level1(){
 		gombaTmp = new gomba(gombas[i][0],gombas[i][1],0,ENEMY,true);
 		gameScene->addObject(gombaTmp);
 	}
-	//Flag post
-	flagpole *fp = new flagpole(700,325,0,0x32,false);
-	gameScene->addObject(fp);
 
 
 	//Edit views
