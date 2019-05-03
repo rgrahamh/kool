@@ -39,7 +39,8 @@ enum collisionFlags {
     ENEMY = 0x2,
     GROUND = 0x4,
     WALL = 0x8,
-    PROJECTILE = 0x10
+    PROJECTILE = 0x10,
+    POWERUP = 0x20,
 };
 
 class Object{

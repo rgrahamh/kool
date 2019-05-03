@@ -9,18 +9,20 @@ int activePlayer = 0;
 int currentLevel = 1;
 std::function<Scene *()> levelFunc = level1;
 
+std::vector<unsigned int> p1Small = {0,4,3,5,6,7,11};
+std::vector<unsigned int> p2Small = {14,15,16,17,18,19,20};
+std::vector<unsigned int> p1Big = {21,22,23,24,25,26,27,28,29,30};
+std::vector<unsigned int> p2Big = {14,15,16,17,18,19,20};
 //Setup Players
-struct playerData gracin = {3,true,"Gracin",sf::Color::Red,TELEKINESIS};
-struct playerData owen = {3,true,"Owen",sf::Color::Green,SUPERSPEED};
+struct playerData gracin = {3,true,"Gracin",sf::Color::Red,TELEKINESIS,p1Small,p1Big};
+struct playerData owen = {3,true,"Owen",sf::Color::Green,SUPERSPEED,p2Small,p2Big};
 struct playerData madison = {3,false,"Madison",sf::Color::Blue,DASH};
 
 struct playerData players[3] = {gracin,owen,madison};
 int playerNum = 3;
 //Setup player sprite sets
 //Set organization:
-//Right standing, left standing, right running, left running, right jumping, left jumping, dead
-std::vector<unsigned int> p1Small = {0,4,3,5,6,7,11};
-std::vector<unsigned int> p2Small = {14,15,16,17,18,19,20};
+//Right standing, left standing, right running, left running, right jumping, left jumping, dead/crouch right, flag1, flag2, crouch left
 
 //Path Strings
 std::string characters = "resources/adam/characters/";
@@ -113,6 +115,43 @@ int main(){
 
 	//index 20
 	Sprite *luigi_dead = new Sprite(characters+"luigi/small/die/LSmallDie.png");
+
+	//index 21
+	Sprite *mbig_stand_r = new Sprite(characters+"mario/big/stand/mStandingBig.png");
+	
+	//index 22
+	Sprite *mbig_stand_l = new Sprite(characters+"mario/big/stand/mStandingBigL.png");
+
+	//index 23
+	Sprite *mbig_run_r = new Sprite(characters+"mario/big/run/mBigRunning1.png");
+	mbig_run_r->addImage(characters+"mario/big/run/mBigRunning2.png");
+	mbig_run_r->addImage(characters+"mario/big/run/mBigRunning3.png");
+
+	//index 24
+	Sprite *mbig_run_l = new Sprite(characters+"mario/big/run/mBigRunningL1.png");
+	mbig_run_l->addImage(characters+"mario/big/run/mBigRunningL2.png");
+	mbig_run_r->addImage(characters+"mario/big/run/mBigRunningL3.png");
+
+	//index 25
+	Sprite *mbig_jump_r = new Sprite(characters+"mario/big/jump/mBigJump.png");
+
+	//index 26
+	Sprite *mbig_jump_l = new Sprite(characters+"mario/big/jump/mBigJumpL.png");
+
+	//index 27
+	Sprite *mbig_crouch_r = new Sprite(characters+"mario/big/crouch/mBigCrouch.png");
+
+	//index 28
+	Sprite *mbig_flag_1 = new Sprite(characters+"mario/big/flag/mBigFlag1.png");
+
+	//index 29
+	Sprite *mbig_flag_2 = new Sprite(characters+"mario/big/flag/mBigFlag2.png");
+
+	//index 30
+	Sprite *mbig_crouch_l = new Sprite(characters+"mario/big/crouch/mBigCrouchL.png");
+
+	//index 31
+	Sprite *mushroom_spr = new Sprite("resources/adam/mushroom.png");
 
 
 	//Add Scenes to the Engine

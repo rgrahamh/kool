@@ -38,11 +38,8 @@ void player::create(){
 	this->setText(10,10,12,false,"resources/arial.ttf",players[activePlayer].name);
 	setTextColor(players[activePlayer].pColor);
 	this->poweredUp=false;
-	if(activePlayer==1){
-		this->spriteSet = p2Small;
-	}else{
-		this->spriteSet = p1Small;
-	}
+	this->spriteSet = players[activePlayer].smallSet;
+
 }
 
 		
@@ -429,8 +426,44 @@ void MysteryBox::onCollide(Object *other, int myBoxID, int otherBoxID){
 		direction = BELOW;
 	}
 	if(other->collisionFlags==PLAYER && direction==ABOVE){
+		if(beenHit==false){
+			mushroom *tmp = new mushroom(this->x,this->y-1,0,POWERUP,false);
+			createObject(tmp);
+		}
 		beenHit = true;
 		setSprite((unsigned int)13);
-		//Spawn mushroom here
 	}	
+}
+
+mushroom::mushroom(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
+	this->create();
+}
+
+void mushroom::create(){
+	setSprite((unsigned int)31);
+	//Keep track of full sprite height, which is 20px
+	sprFullHeight = this->sprite->height;
+	rate = 1;
+	this->sprite->setSize(this->sprite->width,rate);
+	full = false;
+	animationTime = 20.0;
+	animationAcc = 0.0;
+}
+
+void mushroom::process(double delta){
+	if(full == false){
+		animationAcc+=delta;
+		if(animationAcc >= animationTime){
+			this->sprite->setSize(this->sprite->width,this->sprite->height+rate);
+			this->y-=rate;
+			if(this->sprite->height >= sprFullHeight){
+				full = true;
+			}
+			animationAcc = 0.0;
+		}
+	}
+}
+
+void mushroom::onCollide(Object *other, int myBoxID, int otherBoxID){
+	return;
 }

@@ -106,4 +106,20 @@ class timeTrigger: public Object {
 		void setSceneID(unsigned int sID);
 
 };
+
+class mushroom: public Object {
+	public: 
+		int type;
+		int sprFullHeight;
+		double animationTime;
+		double animationAcc;
+		int rate;
+		bool full;
+
+		mushroom(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void create();
+		void process(double delta);
+		void onCollide(Object *other, int myBoxID, int otherBoxID);
+
+};
 #endif

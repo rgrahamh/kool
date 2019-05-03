@@ -12,6 +12,8 @@ extern std::function<Scene *()> levelFunc;
 //Right standing, left standing, right running, left running, right jumping, left jumping, dead
 extern std::vector<unsigned int> p1Small;
 extern std::vector<unsigned int> p2Small;
+extern std::vector<unsigned int> p1Big;
+extern std::vector<unsigned int> p2Big;
 
 //Super power enum
 enum superPowers {
@@ -28,6 +30,8 @@ struct playerData {
 	std::string name;
 	sf::Color pColor;
 	superPowers powers;
+	std::vector<unsigned int> smallSet;
+	std::vector<unsigned int> bigSet;
 };
 
 extern struct playerData gracin;
