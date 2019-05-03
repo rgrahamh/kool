@@ -59,12 +59,11 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 		else if((this->x-xV) > (otherBoxX + otherBoxWidth)){
 			direction = RIGHT;
 		}
-		else if(this->y-yV+this->sprite->height < otherBoxY && gravity==true){
+		else if(this->y-yV+this->sprite->height <= otherBoxY && gravity==true){
 			direction = ABOVE;
 		}else{
 			direction = BELOW;
 		}
-
 	if(other->collisionFlags==GROUND && dead==false){
 		if(direction == ABOVE){
 			this->gravity = false;
@@ -72,7 +71,6 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			this->leftGravBound = otherBoxX + otherBoxWidth;
 			this->yA = 0.0;
 			this->yV = 0.0;
-
 			//Calculate correct y value
 			float offsetY = other->hitBoxes[otherBoxID]->offsetY;
 
@@ -89,7 +87,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 		}
 	}
 	if(other->collisionFlags==ENEMY && other->sprite_index!=10){
-		if(direction == ABOVE){
+		if(direction == ABOVE && this->recovering==false){
 			//We squashed them
 			playSound("./resources/adam/sounds/stomp.wav");
 			yV = -4.0;
@@ -133,11 +131,12 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			heightDiff = heightDiff - this->sprite->height;
 			this->y += heightDiff;
 			activeDead = true;
-			//We're gonna need a way to make sure we don't double-collide with an enemy.
+			playSound("./resources/adam/sounds/power_down.wav");
 		}
 	}
 	if(other->collisionFlags==POWERUP and poweredUp==false){
 		poweredUp=true;
+		playSound("resources/adam/sounds/grow.wav");
 		int heightDiff = this->sprite->height;
 		this->spriteSet = players[activePlayer].bigSet;
 		setSprite(spriteSet[setIndex]);
@@ -155,7 +154,11 @@ void player::process(double delta){
 		if(Keys::isKeyPressed(Keys::W) && this->gravity==false){
 			this->yV = -8;
 			this->gravity = true;
-			playSound("./resources/adam/sounds/jump.wav");
+			if(poweredUp==false){
+				playSound("./resources/adam/sounds/jump.wav");
+			}else{
+				playSound("./resources/adam/sounds/jump_big.wav");
+			}
 		}
 
 		//Horizontal Movement
@@ -184,9 +187,9 @@ void player::process(double delta){
 			}
 		}else{
 			if(this->gravity==false){
-				if(this->xV >= 0.0 && this->sprite_index!=6){
+				if(this->xV >= 0.0 && this->setIndex!=6 && this->setIndex!=9){
 					setIndex=0;
-				}else{
+				}else if(this->setIndex!=9 && this->setIndex!=6){
 					setIndex=1;
 				}
 			}else{
@@ -195,6 +198,21 @@ void player::process(double delta){
 				}else{
 					setIndex=5;
 				}
+			}
+		}
+		if(Keys::isKeyPressed(Keys::S) && poweredUp==true && gravity==false){
+			this->xA = 0;
+			this->xV = 0;
+			if(setIndex==3 || setIndex==1){
+				setIndex = 9;	
+			}else{
+				setIndex = 6; 
+			}
+		}else{
+			if(setIndex==6){
+				setIndex = 0;
+			}else if(setIndex==9){
+				setIndex = 1;
 			}
 		}
 
@@ -248,7 +266,7 @@ Block::Block(float x, float y, int collisionLayer, unsigned int collisionFlags, 
 
 void Block::create(){
 	this->collisionLayer = 0;
-	this->debug = false;
+	this->debug = true;
 	setSprite((unsigned int)8);
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 }
@@ -460,13 +478,18 @@ void MysteryBox::onCollide(Object *other, int myBoxID, int otherBoxID){
 	if(other->collisionFlags==PLAYER && direction==ABOVE){
 		if(beenHit==false){
 			mushroom *tmp = new mushroom(this->x,this->y-1,0,POWERUP,false);
+			playSound("./resources/adam/sounds/mushroom_up.wav");
 			createObject(tmp);
+			beenHit = true;
+			setSprite((unsigned int)13);
+		}else if(other->yV <= 0.0){
+			playSound("./resources/adam/sounds/bump.wav");
 		}
-		beenHit = true;
-		setSprite((unsigned int)13);
 	}	
+	std::cout << "Collision!" << endl;
 }
 
+//mushroom class
 mushroom::mushroom(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
 	this->create();
 }
@@ -500,8 +523,27 @@ void mushroom::process(double delta){
 }
 
 void mushroom::onCollide(Object *other, int myBoxID, int otherBoxID){
+	std::cout << "Collision!" << endl;
 	if(other->collisionFlags==PLAYER){
 		destroyObject(this);
 	}
+	return;
+}
+//flagpole class
+flagpole::flagpole(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
+	this->create();
+}
+
+void flagpole::create(){
+	setSprite((unsigned int)46);
+	this->debug = true;
+	this->addHitBox(10,20,this->sprite->width-10,this->sprite->height-20);
+}
+
+void flagpole::process(double delta){
+	return;
+}
+
+void flagpole::onCollide(Object *other, int myBoxID, int otherBoxID){
 	return;
 }

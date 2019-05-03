@@ -125,4 +125,12 @@ class mushroom: public Object {
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
 
 };
+
+class flagpole: public Object {
+	public:
+		flagpole(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void create();
+		void process(double delta);
+		void onCollide(Object *other, int myBoxID, int otherBoxID);
+};
 #endif

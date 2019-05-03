@@ -80,11 +80,9 @@ void Scene::process(double delta){
                                && x1 < x2 + obj2->hitBoxes[l]->width
                                && y1 + obj1->hitBoxes[k]->height > y2
                                && y1 < y2 + obj2->hitBoxes[l]->height){
-                                //Handle Collision
-								if(obj1!=NULL && obj2!=NULL){
-									obj1->onCollide(obj2, k, l);
-									obj2->onCollide(obj1, k, l);
-								}
+								//Handle Collision
+								obj1->onCollide(obj2, k, l);
+								obj2->onCollide(obj1, k, l);
                             }
                         }
                     }

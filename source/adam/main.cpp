@@ -9,10 +9,10 @@ int activePlayer = 0;
 int currentLevel = 1;
 std::function<Scene *()> levelFunc = level1;
 
-std::vector<unsigned int> p1Small = {0,4,3,5,6,7,11};
-std::vector<unsigned int> p2Small = {14,15,16,17,18,19,20};
+std::vector<unsigned int> p1Small = {0,4,3,5,6,7,11,42,43};
+std::vector<unsigned int> p2Small = {14,15,16,17,18,19,20,44,45};
 std::vector<unsigned int> p1Big = {21,22,23,24,25,26,27,28,29,30};
-std::vector<unsigned int> p2Big = {14,15,16,17,18,19,20};
+std::vector<unsigned int> p2Big = {32,33,34,35,36,37,38,39,40,41};
 //Setup Players
 struct playerData gracin = {3,true,"Gracin",sf::Color::Red,TELEKINESIS,p1Small,p1Big};
 struct playerData owen = {3,true,"Owen",sf::Color::Green,SUPERSPEED,p2Small,p2Big};
@@ -133,7 +133,7 @@ int main(){
 	//index 24
 	Sprite *mbig_run_l = new Sprite(characters+"mario/big/run/mBigRunningL1.png");
 	mbig_run_l->addImage(characters+"mario/big/run/mBigRunningL2.png");
-	mbig_run_r->addImage(characters+"mario/big/run/mBigRunningL3.png");
+	mbig_run_l->addImage(characters+"mario/big/run/mBigRunningL3.png");
 
 	//index 25
 	Sprite *mbig_jump_r = new Sprite(characters+"mario/big/jump/mBigJump.png");
@@ -156,6 +156,60 @@ int main(){
 	//index 31
 	Sprite *mushroom_spr = new Sprite("resources/adam/mushroom.png");
 
+	//index 32
+	Sprite *lbig_stand_r = new Sprite(characters+"luigi/big/stand/LStandingBig.png");
+
+	//index 33
+	Sprite *lbig_stand_l = new Sprite(characters+"luigi/big/stand/LStandingBigL.png");
+
+	//index 34
+	Sprite *lbig_run_r = new Sprite(characters + "luigi/big/run/LBigRunning1.png");
+	lbig_run_r->addImage(characters+"luigi/big/run/LBigRunning2.png");
+	lbig_run_r->addImage(characters+"luigi/big/run/LBigRunning3.png");
+
+	//index 35
+	Sprite *lbig_run_l = new Sprite(characters+"luigi/big/run/LBigRunningL1.png");
+	lbig_run_l->addImage(characters+"luigi/big/run/LBigRunningL2.png");
+	lbig_run_l->addImage(characters+"luigi/big/run/LBigRunningL3.png");
+
+	//index 36
+	Sprite *lbig_jump_r = new Sprite(characters+"luigi/big/jump/LBigJump.png");
+
+	//index 37
+	Sprite *lbig_jump_l = new Sprite(characters+"luigi/big/jump/LBigJumpL.png");
+
+	//index 38
+	Sprite *lbig_crouch_r = new Sprite(characters+"luigi/big/crouch/LBigCrouch.png");
+
+	//index 39
+	Sprite *lbig_flag_1 = new Sprite(characters+"luigi/big/flag/LBigFlag1.png");
+
+	//index 40
+	Sprite *lbig_flag_2 = new Sprite(characters+"luigi/big/flag/LBigFlag2.png");
+
+	//index 41
+	Sprite *lbig_crouch_l = new Sprite(characters+"luigi/big/crouch/LBigCrouchL.png");
+
+	//index 42
+	Sprite *msmall_flag_1 = new Sprite(characters+"mario/small/flag/mSmallFlag1.png");
+	
+	//index 43
+	Sprite *msmall_flag_2 = new Sprite(characters+"mario/small/flag/mSmallFlag2.png");
+
+	//index 44
+	Sprite *lsmall_flag_1 = new Sprite(characters+"luigi/small/flag/LSmallFlag1.png");
+
+	//index 45
+	Sprite *lsmall_flag_2 = new Sprite(characters+"luigi/small/flag/LSmallFlag2.png");
+
+	//index 46
+	Sprite *flagpolesprite = new Sprite("resources/adam/flagpole.png");
+
+	//index 47
+	Sprite *flagsprite = new Sprite("resources/adam/flag.png");
+
+	//index 48
+	Sprite *metalblock = new Sprite("resources/adam/metalblock.png");
 
 	//Add Scenes to the Engine
 	myEngine.addScene(createMenuScene()); //scene ID = 0

@@ -25,7 +25,7 @@ Scene *level1(){
 	
 	//Blocks
 	Block *blockTmp;
-	float blocks[5][2] = {{200,480},{214,480},{228,466},{260,454},{400,480}};
+	float blocks[8][2] = {{200,480},{214,480},{228,466},{260,454},{400,480},{600,480},{614,466},{628,452}};
 	for(unsigned int i = 0; i < (sizeof(blocks)/sizeof(blocks[0])); i++){
 		blockTmp = new Block(blocks[i][0],blocks[i][1],0,GROUND,false);
 		gameScene->addObject(blockTmp);
@@ -45,6 +45,10 @@ Scene *level1(){
 		gombaTmp = new gomba(gombas[i][0],gombas[i][1],0,ENEMY,true);
 		gameScene->addObject(gombaTmp);
 	}
+	//Flag post
+	flagpole *fp = new flagpole(700,325,0,0x32,false);
+	gameScene->addObject(fp);
+
 
 	//Edit views
 	gameScene->getView(0)->setFollowing(p1,300,600);
