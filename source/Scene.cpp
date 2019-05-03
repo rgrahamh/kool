@@ -81,8 +81,10 @@ void Scene::process(double delta){
                                && y1 + obj1->hitBoxes[k]->height > y2
                                && y1 < y2 + obj2->hitBoxes[l]->height){
                                 //Handle Collision
-                                obj1->onCollide(obj2, k, l);
-                                obj2->onCollide(obj1, k, l);
+								if(obj1!=NULL && obj2!=NULL){
+									obj1->onCollide(obj2, k, l);
+									obj2->onCollide(obj1, k, l);
+								}
                             }
                         }
                     }
@@ -154,6 +156,8 @@ void Scene::render(sf::RenderWindow *window){
 				objSprite.setPosition(objDraw.x,objDraw.y);
 				//Scaling
 				objSprite.setScale(objDraw.xScale,objDraw.yScale);
+				//Transparency
+				objSprite.setColor(sf::Color(255,255,255,objDraw.alpha));
 				//Make sure the object sprite is the last thing we draw, so that it is at the foreground.
 				window->draw(objSprite);
 			}

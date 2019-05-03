@@ -39,6 +39,8 @@ Object::Object(float x, float y, int collisionlayer, unsigned int collisionFlags
 	this->textString = "";
 	this->xScale = 1.0;
 	this->yScale = 1.0;
+	this->dynamic = true;
+	this->alpha = 255;
 	setTextColor();
 }
 
@@ -80,6 +82,8 @@ struct drawData Object::_draw(){
 	//Scaling
 	data.xScale = this->xScale;
 	data.yScale = this->yScale;
+	//Alpha
+	data.alpha = this->alpha;
 
 	return data;
 }

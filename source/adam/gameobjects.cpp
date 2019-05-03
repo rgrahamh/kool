@@ -22,7 +22,7 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void player::create(){
 	this->collisionLayer = 0;
-	this->debug = false;
+	this->debug = true;
 	setSprite((unsigned int)0);
 	sprite_index = 0;
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
@@ -39,7 +39,9 @@ void player::create(){
 	setTextColor(players[activePlayer].pColor);
 	this->poweredUp=false;
 	this->spriteSet = players[activePlayer].smallSet;
-
+	activeDead = false;
+	this->setIndex = 0;
+	this->recovering=false;
 }
 
 		
@@ -57,7 +59,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 		else if((this->x-xV) > (otherBoxX + otherBoxWidth)){
 			direction = RIGHT;
 		}
-		else if(this->y-yV < otherBoxY && gravity==true){
+		else if(this->y-yV+this->sprite->height < otherBoxY && gravity==true){
 			direction = ABOVE;
 		}else{
 			direction = BELOW;
@@ -91,13 +93,13 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			//We squashed them
 			playSound("./resources/adam/sounds/stomp.wav");
 			yV = -4.0;
-		}else if(this->poweredUp==false){
+		}else if(this->poweredUp==false && this->recovering==false){
 			//We DIE
 			yV = -16.0;
 			gravity = true;
 			this->collisionLayer = -1;
 			dead = true;
-		
+			activeDead = true;	
 			//Decrement how many lives we have
 			players[activePlayer].lives -= 1;
 
@@ -118,15 +120,36 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			stopAllSounds();
 			playSound("./resources/adam/sounds/die.wav");
 			//Show dieing sprite
-			setSprite(spriteSet[6]);
-		}else{
+			setIndex = 6;
+		}else if(this->poweredUp==true){
 			this->poweredUp = false;
+			this->recovering = true;
+			alpha = 128;
+			recoverTime = 0.0;
+			int heightDiff = this->sprite->height;
+			this->spriteSet = players[activePlayer].smallSet;
+			setSprite(spriteSet[setIndex]);
+			this->hitBoxes[0]->height = this->sprite->height;
+			heightDiff = heightDiff - this->sprite->height;
+			this->y += heightDiff;
+			activeDead = true;
 			//We're gonna need a way to make sure we don't double-collide with an enemy.
 		}
+	}
+	if(other->collisionFlags==POWERUP and poweredUp==false){
+		poweredUp=true;
+		int heightDiff = this->sprite->height;
+		this->spriteSet = players[activePlayer].bigSet;
+		setSprite(spriteSet[setIndex]);
+		heightDiff = heightDiff - this->sprite->height;
+		this->hitBoxes[0]->height = this->sprite->height;
+		this->y = this->y + heightDiff;
 	}
 }
 
 void player::process(double delta){
+	//Set currect sprite
+	setSprite(spriteSet[setIndex]);
 	if(dead==false){ //Do stuff if we're not dead
 		//Jumping
 		if(Keys::isKeyPressed(Keys::W) && this->gravity==false){
@@ -143,9 +166,9 @@ void player::process(double delta){
 				this->xA = 0.0;
 			}
 			if(this->gravity==false){
-				setSprite(spriteSet[2]);
+				setIndex=2;
 			}else{
-				setSprite(spriteSet[4]);
+				setIndex=4;
 			}
 		}
 		else if(Keys::isKeyPressed(Keys::A)){
@@ -155,22 +178,22 @@ void player::process(double delta){
 				this->xA = 0.0;
 			}
 			if(this->gravity==false){
-				setSprite(spriteSet[3]);
+				setIndex=3;
 			}else{
-				setSprite(spriteSet[5]);
+				setIndex=5;
 			}
 		}else{
 			if(this->gravity==false){
 				if(this->xV >= 0.0 && this->sprite_index!=6){
-					setSprite(spriteSet[0]);
+					setIndex=0;
 				}else{
-					setSprite(spriteSet[1]);
+					setIndex=1;
 				}
 			}else{
 				if(this->xV >= 0.0){
-					setSprite(spriteSet[4]);
+					setIndex=4;
 				}else{
-					setSprite(spriteSet[5]);
+					setIndex=5;
 				}
 			}
 		}
@@ -206,6 +229,14 @@ void player::process(double delta){
 				setActiveScene(2);
 			}
 		}
+	}
+	//Recovery
+	if(recoverTime < 1200.0){
+		recoverTime+=delta;
+	}else if(recovering==true){
+		recovering=false;
+		activeDead=false; 
+		alpha = 255;
 	}
 }
 
@@ -299,7 +330,7 @@ void gomba::onCollide(Object *other, int myBoxID, int otherBoxID){
 		}
 	}
 	if(other->collisionFlags==PLAYER && dead==false){
-		if(direction == BELOW && other->sprite_index!=11){
+		if(direction == BELOW && activeDead==false){
 			this->dead = true;
 			this->xV = 0.0;
 			setSprite((unsigned int)10);
@@ -403,6 +434,7 @@ void MysteryBox::create(){
 	this->beenHit = false;
 	this->collisionFlags = GROUND;
 	setSprite((unsigned int)12);
+	this->debug=true;
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 	this->animationDelay = 70.0;
 }
@@ -448,6 +480,8 @@ void mushroom::create(){
 	full = false;
 	animationTime = 20.0;
 	animationAcc = 0.0;
+	this->debug = true;
+	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 }
 
 void mushroom::process(double delta){
@@ -456,6 +490,7 @@ void mushroom::process(double delta){
 		if(animationAcc >= animationTime){
 			this->sprite->setSize(this->sprite->width,this->sprite->height+rate);
 			this->y-=rate;
+			this->hitBoxes[0]->height = this->sprite->height;
 			if(this->sprite->height >= sprFullHeight){
 				full = true;
 			}
@@ -465,5 +500,8 @@ void mushroom::process(double delta){
 }
 
 void mushroom::onCollide(Object *other, int myBoxID, int otherBoxID){
+	if(other->collisionFlags==PLAYER){
+		destroyObject(this);
+	}
 	return;
 }

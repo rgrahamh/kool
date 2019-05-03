@@ -31,6 +31,8 @@ struct drawData {
 	sf::String textString;
 	sf::Color textColor;
 
+	uint8_t alpha;
+
 };
 
 //Developer can add to collisionFlags if they need additional functionality
@@ -72,6 +74,8 @@ class Object{
 			float xScale;
 			float yScale;
 			void setScale(float xScale, float yScale);
+			//Transparency
+			uint8_t alpha;
 
             //Position
 			float x;

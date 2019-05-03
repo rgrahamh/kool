@@ -28,14 +28,17 @@ class player: public Object {
 	public:
 		bool dead;
 		bool poweredUp;
+		bool recovering;
 		float acceleration;
 		float maxVelocity;
 		float rightGravBound;
 		float leftGravBound;
 		double deathTime;
 		double deathMax;
+		double recoverTime;
 		//Keeps track of what character we are.
 		std::vector<unsigned int>spriteSet;
+		int setIndex; 
 		player(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
 		void onCollide(Object *other, int myBoxID, int otherBoxID);

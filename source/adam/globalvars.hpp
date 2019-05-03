@@ -8,6 +8,7 @@ extern int p2Lives;
 extern int activePlayer;
 extern int currentLevel;
 extern std::function<Scene *()> levelFunc;
+extern bool activeDead;
 //Set organization:
 //Right standing, left standing, right running, left running, right jumping, left jumping, dead
 extern std::vector<unsigned int> p1Small;

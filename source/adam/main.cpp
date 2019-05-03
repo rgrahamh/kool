@@ -27,6 +27,9 @@ int playerNum = 3;
 //Path Strings
 std::string characters = "resources/adam/characters/";
 
+//global player dead
+bool activeDead = false;
+
 using namespace std;
 
 int main(){
