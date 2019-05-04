@@ -1,27 +1,26 @@
 #include <iostream>
+#include <string>
 #include "../headers/GameEngine.hpp"
-#include "game.cpp"
+#include "scenes.hpp"
+#include "gameobjects.hpp"
 
 using namespace std;
 
 int main(){
 
-    GameEngine j_engine = *(new GameEngine(800,600,"Space"));
+    GameEngine myEngine = *(new GameEngine(600,525,"Space"));
 
-    Scene *gameScene = new Scene(2000,600);
+    Sprite *spaceship = new Sprite("resources/dolphin.png");
 
-    Sprite *background_sprite = new Sprite("resources/game_space_bg.png");
+    Sprite *background_sprite = new Sprite("resources/space_bg2.jpg");
 	background_sprite->setRepeated(true);
-	background_sprite->setSize(2000,342);
+	background_sprite->setSize(2000,1000);
 
-    background *bg = new background(0,0);
+    //Add Scenes to the Engine
+    myEngine.addScene(level1()); //gameScene has sceneID=1
 
-    gameScene->addObject(bg);
+	//Start Game
+	myEngine.startGame();
 
-    myEngine.addScene(gameScene);
-
-    myEngine.startGame();
-
-
-	return 0;
+return 0;
 }
