@@ -11,7 +11,7 @@ Scene *level1(){
 	//Background
 	background *bg = new background(0,0);
 
-    player *p1 = new player(50,50,0,PLAYER,true);
+    player *p1 = new player(50,50,0,PLAYER,false);
 
     gameScene->addObject(bg);
     gameScene->addObject(p1);
