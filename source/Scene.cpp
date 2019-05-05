@@ -222,6 +222,11 @@ void Scene::destroyObject(Object *obj){
 			delete obj;
 		}
 	}
+	for(unsigned int i = 0; i < this->viewList.size(); i++){
+		if(viewList[i]->following==obj){
+			viewList[i]->setFollowing(NULL,0,0);
+		}
+	}
 }
 Scene::~Scene(){
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
