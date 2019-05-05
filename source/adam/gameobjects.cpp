@@ -22,7 +22,7 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void player::create(){
 	this->collisionLayer = 0;
-	this->debug = true;
+	this->debug = false;
 	setSprite((unsigned int)0);
 	sprite_index = 0;
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
@@ -99,7 +99,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 		if(direction == ABOVE && this->recovering==false){
 			//We squashed them
 			playSound("./resources/adam/sounds/stomp.wav");
-			yV = -4.0;
+			yV = -5.0;
 		}else if(this->poweredUp==false && this->recovering==false){
 			//We DIE
 			yV = -16.0;
@@ -116,7 +116,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			}else{
 				activePlayer = 0;
 			}
-			while(players[activePlayer].isPlaying==false){
+			while(players[activePlayer].isPlaying==false || players[activePlayer].lives < 1){
 				if(activePlayer+1 < playerNum){
 					activePlayer+=1;
 				}else{
@@ -332,7 +332,7 @@ void gomba::create(){
 	this->debug = false;
 	this->collisionFlags = ENEMY;
 	setSprite((unsigned int)9);
-	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+	this->addHitBox(2,5,this->sprite->width-2,this->sprite->height-5);
 	this->dead = false;
 	deadTime = 0.0;
 	deadMax = 300.0;
@@ -489,7 +489,7 @@ void MysteryBox::create(){
 	this->beenHit = false;
 	this->collisionFlags = GROUND;
 	setSprite((unsigned int)12);
-	this->debug=true;
+	this->debug=false;
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 	this->animationDelay = 70.0;
 }
@@ -559,7 +559,6 @@ void mushroom::process(double delta){
 }
 
 void mushroom::onCollide(Object *other, int myBoxID, int otherBoxID){
-	std::cout << "Collision!" << endl;
 	if(other->collisionFlags==PLAYER){
 		destroyObject(this);
 	}
@@ -593,7 +592,7 @@ castle::castle(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void castle::create(){
 	setSprite((unsigned int)49);
-	this->debug = true;
+	this->debug =false;
 	this->addHitBox(30,40,20,40);
 	this->collisionFlags = 0x60;
 }
@@ -604,6 +603,25 @@ void castle::process(double delta){
 
 void castle::onCollide(Object *other, int myBoxID, int otherBoxID){
 	if(other->collisionFlags==PLAYER){
-		//Start new level timer	
+			//Change whose turn it is
+			if(activePlayer+1 < playerNum){
+				activePlayer+=1;
+			}else{
+				activePlayer = 0;
+			}
+			while(players[activePlayer].isPlaying==false || players[activePlayer].lives<1){
+				if(activePlayer+1 < playerNum){
+					activePlayer+=1;
+				}else{
+					activePlayer = 0;
+				}
+			}
+			//Set the level
+			//Start new level timer	
+			sceneChange = new timeTrigger(0,0);
+			sceneChange->setTimer(1000.0);
+			sceneChange->setSceneFunc(createPreviewScene);
+			sceneChange->setSceneID(2);
+			createObject(sceneChange);
 	}
 }

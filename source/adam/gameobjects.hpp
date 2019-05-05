@@ -138,6 +138,8 @@ class flagpole: public Object {
 
 class castle: public Object {
 	public:
+
+	    	timeTrigger* sceneChange;
 		castle(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
 		void process(double delta);
