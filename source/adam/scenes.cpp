@@ -15,6 +15,9 @@ Scene *level1(){
 	//Flag post
 	flagpole *fp = new flagpole(700,326,0,0x32,false);
 
+	//Castle
+	castle *cstl = new castle(840,415,0,0x60,false);
+
 	//Player
 	player *p1 = new player(50,50,0,PLAYER,true);
 
@@ -25,6 +28,7 @@ Scene *level1(){
 	gameScene->addObject(bg);
 	gameScene->addObject(ground_object);
 	gameScene->addObject(fp);
+	gameScene->addObject(cstl);
 	gameScene->addObject(p1);
 	
 	//Blocks

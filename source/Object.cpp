@@ -27,7 +27,7 @@ Object::Object(float x, float y, int collisionlayer, unsigned int collisionFlags
 	this->animationTime = 0;
 	this->animationDelay = 50; //Default to 50 MS animation
     this->collisionFlags = collisionFlags;
-	this->collisionLayer = collisionLayer;
+	this->collisionLayer = collisionlayer;
     this->gravity = grav;
 	//Text stuff
 	this->hasText = false;

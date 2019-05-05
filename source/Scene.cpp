@@ -89,12 +89,12 @@ void Scene::process(double delta){
                 }
             }
         }
-        //Cleanup Object List
-        for(unsigned int i = 0; i < this->objectList.size(); i++){
-            if(this->objectList[i]==NULL){
-                objectList.erase(objectList.begin()+i);
-            }
-        }
+	}
+	//Cleanup Object List
+	for(unsigned int i = 0; i < this->objectList.size(); i++){
+		if(this->objectList[i]==NULL){
+			objectList.erase(objectList.begin()+i);
+		}
 	}
 	//View processing
 	for(unsigned int i = 0; i < this->viewList.size(); i++){

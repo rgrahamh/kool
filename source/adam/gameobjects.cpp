@@ -22,7 +22,7 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void player::create(){
 	this->collisionLayer = 0;
-	this->debug = false;
+	this->debug = true;
 	setSprite((unsigned int)0);
 	sprite_index = 0;
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
@@ -175,6 +175,11 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			this->xV = 2.0;
 			setIndex=2;
 		}
+	}
+	if(other->collisionFlags==0x60){
+		this->xV = 0.0;
+		this->xA = 0.0;
+		destroyObject(this);
 	}
 }
 
@@ -576,6 +581,29 @@ void flagpole::process(double delta){
 }
 
 void flagpole::onCollide(Object *other, int myBoxID, int otherBoxID){
-	std::cout << "Collision!" << endl;
 	return;
+}
+
+//castle class
+
+castle::castle(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
+	this->create();
+
+}
+
+void castle::create(){
+	setSprite((unsigned int)49);
+	this->debug = true;
+	this->addHitBox(30,40,20,40);
+	this->collisionFlags = 0x60;
+}
+
+void castle::process(double delta){
+	return;
+}
+
+void castle::onCollide(Object *other, int myBoxID, int otherBoxID){
+	if(other->collisionFlags==PLAYER){
+		//Start new level timer	
+	}
 }
