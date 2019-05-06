@@ -17,7 +17,7 @@ Scene *level1(){
     gameScene->addObject(p1);
 
 	//Edit views
-	gameScene->getView(0)->setFollowing(p1,300,600);
+	gameScene->getView(0)->setFollowing(p1,300,300);
 	
 	return gameScene;
 }

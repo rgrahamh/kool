@@ -2,8 +2,6 @@
 
 using namespace std;
 
-//Background Class
-
 background::background(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
 		create();
 	}
@@ -21,13 +19,26 @@ void player::create(){
 	this->collisionLayer = 0;
 	this->debug = false;
 	setSprite((unsigned int)0);
+	sprite_index = 0;
+	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+	this->friction = 0.3;
+	this->acceleration = 1.0;
+	this->maxVelocity = 6.5;
+	this->rightGravBound = -1.0;
+	this->leftGravBound = -1.0;
+	this->setIndex = 0;
 }
 
 void player::process(double delta){
 	//Set currect sprite
-		if(Keys::isKeyPressed(Keys::W) && this->gravity==false){
-			this->yV = -8;
-			this->gravity = true;
+		if(Keys::isKeyPressed(Keys::W)){
+			this->yA = -this->acceleration;
+			this->friction = this->friction;
+		}
+
+		if(Keys::isKeyPressed(Keys::S)){
+			this->yA = this->acceleration;
+			this->friction = this->friction;
 		}
 
 		//Horizontal Movement
@@ -53,21 +64,6 @@ void player::process(double delta){
 				setIndex=3;
 			}else{
 				setIndex=5;
-			}
-		}
-		if(Keys::isKeyPressed(Keys::S) && gravity==false){
-			this->xA = 0;
-			this->xV = 0;
-			if(setIndex==3 || setIndex==1){
-				setIndex = 9;	
-			}else{
-				setIndex = 6; 
-			}
-		}else{
-			if(setIndex==6){
-				setIndex = 0;
-			}else if(setIndex==9){
-				setIndex = 1;
 			}
 		}
 
