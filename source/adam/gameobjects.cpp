@@ -92,11 +92,15 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			this->xA = 0.0;
 		}
 		if(direction == BELOW){
-			this->yV = 0.0;
-			this->yA = 0.0;
+			if(yV!=0.0){
+				this->yV = 0.0;
+				this->yA = 0.0;
+			}else{
+				this->xV = 1.0;
+			}
 		}
 	}
-	if(other->collisionFlags==ENEMY && other->sprite_index!=10){
+	if((other->collisionFlags & ENEMY) !=0 && other->sprite_index!=10){
 		if(direction == ABOVE && this->recovering==false){
 			//We squashed them
 			playSound("./resources/adam/sounds/stomp.wav");
@@ -154,7 +158,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 		this->hitBoxes[0]->height = this->sprite->height;
 		this->y = this->y + heightDiff;
 	}
-	if(other->collisionFlags==0x32){
+	if(other->collisionFlags==GOAL){
 		if(!finishedLevel){
 			this->gravity = false;
 			this->setIndex=7;
@@ -400,19 +404,29 @@ void gomba::onCollide(Object *other, int myBoxID, int otherBoxID){
 			setSprite((unsigned int)10);
 		}
 	}
+	if((other->collisionFlags & DANGER_ALL) != 0){
+		dead = true;
+		this->collisionLayer = -1;
+		this->collisionFlags = 0;
+		yV = -9.0;
+		gravity = true;
+		setSprite((unsigned int)54);
+	}
 }
 void gomba::process(double delta){
 
-	//Prevent falling off the map
-	if(x+xV < 0.0 || (x+xV+this->sprite->width) > (float)getSceneWidth()){
-		x-=xV;
-		xV = 0.0;
-		xA = 0.0;
-	}
+	if(dead==false){
+		//Prevent falling off the map
+		if(x+xV < 0.0 || (x+xV+this->sprite->width) > (float)getSceneWidth()){
+			x-=xV;
+			xV = 0.0;
+			xA = 0.0;
+		}
 
-	//Process if we are falling off our current floor
-	if((x+sprite->width) < rightGravBound || (x > leftGravBound && rightGravBound >= 0)){
-		this->gravity = true;
+		//Process if we are falling off our current floor
+		if((x+sprite->width) < rightGravBound || (x > leftGravBound && rightGravBound >= 0)){
+			this->gravity = true;
+		}
 	}
 
 	//Time before we disappear

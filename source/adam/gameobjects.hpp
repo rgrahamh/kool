@@ -158,4 +158,21 @@ class castle: public Object {
 		void process(double delta);
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
 };
+
+class koopa: public Object {
+	public:
+		bool inShell;
+		bool shellMoving;
+		bool dead;
+		double timeInShell;
+		float rightGravBound;
+		float leftGravBound;
+		float shellSpeed;
+
+		koopa(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void create();
+		void process(double delta);
+		void onCollide(Object *other, int myBoxID, int otherBoxID);
+
+};
 #endif

@@ -76,11 +76,11 @@ int main(){
 	Sprite *block = new Sprite("resources/adam/block.png");
 
 	//index 9
-	Sprite *gomba_sprite = new Sprite("resources/adam/gomba1.png");
-	gomba_sprite->addImage("resources/adam/gomba2.png");
+	Sprite *gomba_sprite = new Sprite("resources/adam/enemies/gomba1.png");
+	gomba_sprite->addImage("resources/adam/enemies/gomba2.png");
 
 	//index 10
-	Sprite *gomba_dead = new Sprite("resources/adam/gomba_dead.png");
+	Sprite *gomba_dead = new Sprite("resources/adam/enemies/gomba_dead.png");
 
 	//index 11
 	Sprite *mario_dead = new Sprite(characters+"mario/small/die/mDie.png");
@@ -213,6 +213,23 @@ int main(){
 
 	//index 49
 	Sprite *castleSpr = new Sprite("resources/adam/castle.png");
+
+	//index 50
+	Sprite *koopa = new Sprite("resources/adam/enemies/koopa1.png");
+	koopa->addImage("resources/adam/enemies/koopa2.png");
+	
+	//index 51
+	Sprite *koopaShell = new Sprite("resources/adam/enemies/koopaShell.png");
+
+	//index 52
+	Sprite *koopaShellEscape = new Sprite("resources/adam/enemies/koopaShellEscape.png");
+
+	//index 53
+	Sprite *koopaLeft = new Sprite("resources/adam/enemies/koopa1L.png");
+	koopaLeft->addImage("resources/adam/enemies/koopa2L.png");
+
+	//index 54
+	Sprite *dedGomba = new Sprite("resources/adam/enemies/gombaOof.png");
 
 	//Add Scenes to the Engine
 	myEngine.addScene(createMenuScene()); //scene ID = 0

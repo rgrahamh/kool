@@ -13,7 +13,7 @@ Scene *level1(){
 	background *bg = new background(0,0);
 	
 	//Flag post
-	flagpole *fp = new flagpole(700,326,0,0x32,false);
+	flagpole *fp = new flagpole(700,326,0,GOAL,false);
 
 	//Flag
 	aFlag *theFlag = new aFlag(fp->x-3,fp->y+20,0,0,false);
@@ -39,7 +39,7 @@ Scene *level1(){
 	
 	//Blocks
 	Block *blockTmp;
-	float blocks[8][2] = {{200,480},{214,480},{228,466},{260,454},{400,480},{600,480},{614,466},{628,452}};
+	float blocks[8][2] = {{200,480},{214,480},{228,466},{260,454},{400,456},{600,480},{614,466},{628,452}};
 	for(unsigned int i = 0; i < (sizeof(blocks)/sizeof(blocks[0])); i++){
 		blockTmp = new Block(blocks[i][0],blocks[i][1],0,GROUND,false);
 		gameScene->addObject(blockTmp);
@@ -58,6 +58,13 @@ Scene *level1(){
 	for(unsigned int i = 0; i < (sizeof(gombas)/sizeof(gombas[0]));i++){
 		gombaTmp = new gomba(gombas[i][0],gombas[i][1],0,ENEMY,true);
 		gameScene->addObject(gombaTmp);
+	}
+	//koopas
+	koopa *koopaTmp;
+	float koopas[2][2] = {{400,300},{450,300}};
+	for(unsigned int i = 0; i < (sizeof(koopas)/sizeof(koopas[0]));i++){
+		koopaTmp = new koopa(koopas[i][0],koopas[i][1],0,ENEMY,true);
+		gameScene->addObject(koopaTmp);
 	}
 
 

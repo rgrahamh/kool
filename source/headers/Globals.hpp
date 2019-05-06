@@ -26,6 +26,8 @@ extern int getSceneWidth(int sceneID);
 
 extern int getSceneWidth();
 
+extern int getSceneHeight();
+
 extern int getSceneHeight(int sceneID);
 
 extern int windowWidth;
