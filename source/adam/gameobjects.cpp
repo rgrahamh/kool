@@ -411,6 +411,7 @@ void gomba::onCollide(Object *other, int myBoxID, int otherBoxID){
 		yV = -9.0;
 		gravity = true;
 		setSprite((unsigned int)54);
+		playSound("resources/adam/sounds/kick.wav");
 	}
 }
 void gomba::process(double delta){
@@ -696,7 +697,7 @@ void castle::onCollide(Object *other, int myBoxID, int otherBoxID){
 			//Set the level
 			//Start new level timer	
 			sceneChange = new timeTrigger(0,0);
-			sceneChange->setTimer(1000.0);
+			sceneChange->setTimer(1500.0);
 			sceneChange->setSceneFunc(createPreviewScene);
 			sceneChange->setSceneID(2);
 			createObject(sceneChange);

@@ -13,7 +13,7 @@ void koopa::create(){
 	dead = false;
 	shellMoving = false;
 	timeInShell = 0.0;
-	debug = true;
+	debug = false;
 	setSprite((unsigned int)53);
 	shellSpeed = 3.0;
 	addHitBox(0,0,this->sprite->width,this->sprite->height);
@@ -57,6 +57,9 @@ void koopa::onCollide(Object *other, int myBoxID, int otherBoxID){
 			this->x-=this->xV;
 			this->xV = -xV;
 			this->xA = 0.0;
+			if(inShell){
+				playSound("resources/adam/sounds/bump.wav");
+			}
 		}
 		if(direction == BELOW){
 			this->yV = 0.0;
@@ -73,21 +76,36 @@ void koopa::onCollide(Object *other, int myBoxID, int otherBoxID){
 					this->xV = 0.0;
 					y+=9;
 					this->hitBoxes[0]->height -= 9;
-				}
-				if(shellMoving==true){
-					shellMoving = false;
-					xV = 0.0;
+				}else{
+					if(shellMoving==true){
+						shellMoving = false;
+						xV = 0.0;
+					}else{
+						if(other->x < x){
+							xV = shellSpeed;
+							x+=3*(this->sprite->width / 4);
+							shellMoving = true;
+							playSound("resources/adam/sounds/kick.wav");
+						}else{
+							xV = -shellSpeed;	
+							x-=3*(this->sprite->width / 4);
+							shellMoving = true;
+							playSound("resources/adam/sounds/kick.wav");
+						}
+					}
 				}
 			}
 			else if(direction == LEFT && inShell==true){
 				xV = -shellSpeed;
-				x-=this->sprite->width / 2;
+				x-=(this->sprite->width / 2);
 				shellMoving = true;
+				playSound("resources/adam/sounds/kick.wav");
 			}
 			else if(direction == RIGHT && inShell==true){
 				xV = shellSpeed;
-				x+=this->sprite->width / 2;
+				x+=(this->sprite->width / 2);
 				shellMoving = true;
+				playSound("resources/adam/sounds/kick.wav");
 			}
 		}
 	}
@@ -98,6 +116,7 @@ void koopa::onCollide(Object *other, int myBoxID, int otherBoxID){
 		yV = -9.0;
 		gravity = true;
 		setSprite((unsigned int)51);
+		playSound("resources/adam/sounds/kick.wav");
 	}
 }
 
@@ -108,10 +127,10 @@ void koopa::process(double delta){
 			if(!shellMoving){
 				collisionFlags = 0x99;
 				timeInShell+=delta;
-			}else if(timeInShell > 50.0){
+			}else{
 				collisionFlags = ENEMY | DANGER_ALL;
-			}	
-			if(timeInShell < 3000.0){
+			}
+			if(timeInShell < 3000.0 || shellMoving){
 				setSprite((unsigned int)51);
 			}else if(timeInShell < 3200.0){
 				setSprite((unsigned int)52);
