@@ -144,6 +144,7 @@ class Object{
 			virtual void create();
 			void setSprite(Sprite *sprite);
 			void setSprite(unsigned int index);
+            Sprite* getSprite(unsigned int index);
 			
 			std::vector<HitBox *> getHitBoxes();
 };

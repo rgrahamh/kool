@@ -163,6 +163,13 @@ void Object::setSprite(unsigned int index){
 	}
 }
 
+Sprite* Object::getSprite(unsigned int index){
+    if(index < spriteIndex.size()){
+        return spriteIndex[index];
+    } 
+    return NULL;
+}
+
 void Object::_processPhysics(float grav, float termVel){
 	
 	//Change x acceleration/velocity based on friction

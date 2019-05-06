@@ -31,5 +31,6 @@ class Scene{
 			void setID(int id);
 			std::vector<Object *> getObjectList();
 			void destroyObject(Object *obj);
+            void scaleAllObjects(float xScale, float yScale);
 };
 #endif

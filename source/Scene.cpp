@@ -228,6 +228,13 @@ void Scene::destroyObject(Object *obj){
 		}
 	}
 }
+
+void Scene::scaleAllObjects(float xScale, float yScale){
+    for(unsigned int i = 0; i < this->objectList.size(); i++){
+        objectList[i]->setScale(xScale, yScale);
+    }
+}
+
 Scene::~Scene(){
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
 		if(this->objectList[i]!=NULL){
@@ -235,3 +242,4 @@ Scene::~Scene(){
 		}
 	}
 }
+

@@ -7,6 +7,7 @@ GAMEFILES= ./source/testGame.cpp ./source/GameEngine.cpp ./source/Scene.cpp ./so
 GAMEFILES2= ./source/test2.cpp ./source/GameEngine.cpp ./source/Scene.cpp ./source/View.cpp ./source/Object.cpp ./source/Sprite.cpp ./source/Globals.cpp ./source/HitBox.cpp
 ADAMGAMEFILES= ./source/adam/main.cpp ./source/adam/gameobjects.cpp ./source/GameEngine.cpp ./source/Scene.cpp ./source/View.cpp ./source/Object.cpp ./source/Sprite.cpp ./source/Globals.cpp ./source/HitBox.cpp ./source/adam/scenes.cpp
 JGAMEFILES= ./source/jeremiah/main.cpp ./source/jeremiah/gameobjects.cpp ./source/GameEngine.cpp ./source/Scene.cpp ./source/View.cpp ./source/Object.cpp ./source/Sprite.cpp ./source/Globals.cpp ./source/HitBox.cpp ./source/jeremiah/scenes.cpp
+R1GAMEFILES= ./source/r1/megaman.cpp ./source/r1/gameobjects.cpp ./source/r1/scenes.cpp ./source/GameEngine.cpp ./source/Scene.cpp ./source/View.cpp ./source/Object.cpp ./source/Sprite.cpp ./source/Globals.cpp ./source/HitBox.cpp
 
 kool: ./source/main.cpp
 	$(CC) $(CFLAGS) -o engine $(FILES) $(INCLUDE_SFML) $(OPTS)
@@ -23,5 +24,8 @@ adam: ./source/adam/main.cpp ./source/adam/gameobjects.cpp ./source/adam/scenes.
 jeremiah: ./source/jeremiah/main.cpp ./source/jeremiah/gameobjects.cpp ./source/jeremiah/scenes.cpp
 	$(CC) $(CFLAGS) -o j $(JGAMEFILES) $(INCLUDE_SFML) $(OPTS)
 
+r1: ./source/r1/megaman.cpp
+	$(CC) $(CFLAGS) -o r1 $(R1GAMEFILES) $(INCLUDE_SFML) $(OPTS)
+
 clean:
-	rm engine testGame testGame2
+	rm engine testGame testGame2 adam j r1
