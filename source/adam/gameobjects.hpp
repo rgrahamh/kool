@@ -31,6 +31,7 @@ class player: public Object {
 		bool recovering;
 		bool finishedLevel;
 		bool finishedFlag;
+		bool crouching;
 		float acceleration;
 		float maxVelocity;
 		float rightGravBound;
@@ -120,6 +121,8 @@ class mushroom: public Object {
 		double animationAcc;
 		int rate;
 		bool full;
+		float rightGravBound;
+		float leftGravBound;
 
 		mushroom(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
@@ -128,8 +131,18 @@ class mushroom: public Object {
 
 };
 
+
+class aFlag: public Object {
+	public:
+		aFlag(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void create();
+		void process(double delta);
+		void onCollide(Object *other, int myBoxID, int otherBoxID);
+};
+
 class flagpole: public Object {
 	public:
+		aFlag *myFlag;
 		flagpole(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
 		void process(double delta);
@@ -139,7 +152,7 @@ class flagpole: public Object {
 class castle: public Object {
 	public:
 
-	    	timeTrigger* sceneChange;
+	    timeTrigger* sceneChange;
 		castle(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
 		void process(double delta);

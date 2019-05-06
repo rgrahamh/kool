@@ -44,6 +44,7 @@ void player::create(){
 	this->recovering=false;
 	this->finishedLevel=false;
 	this->finishedFlag = false;
+	this->crouching = false;
 }
 
 		
@@ -199,7 +200,7 @@ void player::process(double delta){
 		}
 
 		//Horizontal Movement
-		if(Keys::isKeyPressed(Keys::D) && !finishedLevel){
+		if(Keys::isKeyPressed(Keys::D) && !finishedLevel && !crouching){
 			if(this->xV < this->maxVelocity){
 				this->xA = this->acceleration;
 			}else{
@@ -211,7 +212,7 @@ void player::process(double delta){
 				setIndex=4;
 			}
 		}
-		else if(Keys::isKeyPressed(Keys::A) && !finishedLevel){
+		else if(Keys::isKeyPressed(Keys::A) && !finishedLevel && !crouching){
 			if(this->xV > -this->maxVelocity){
 				this->xA = -this->acceleration;
 			}else{
@@ -238,19 +239,27 @@ void player::process(double delta){
 			}
 		}
 		if(Keys::isKeyPressed(Keys::S) && poweredUp==true && gravity==false && !finishedLevel){
-			this->xA = 0;
-			this->xV = 0;
+			this->friction = 0.1;
 			if(setIndex==3 || setIndex==1){
 				setIndex = 9;	
 			}else{
 				setIndex = 6; 
 			}
+			crouching = true;
+			this->hitBoxes[0]->height = this->sprite->height-10;
+			this->hitBoxes[0]->offsetY = 10;
 		}else{
+			if(!finishedLevel){
+				this->friction = 0.3;
+			}
 			if(setIndex==6){
 				setIndex = 0;
 			}else if(setIndex==9){
 				setIndex = 1;
 			}
+			crouching = false;
+			this->hitBoxes[0]->height = this->sprite->height;
+			this->hitBoxes[0]->offsetY = 0;
 		}
 
 		//Prevent falling off the map
@@ -552,14 +561,65 @@ void mushroom::process(double delta){
 			this->hitBoxes[0]->height = this->sprite->height;
 			if(this->sprite->height >= sprFullHeight){
 				full = true;
+				this->gravity = true;
+				this->xV = 2.0;
 			}
 			animationAcc = 0.0;
+		}
+	}else{
+		//Process if we are falling off our current floor
+		if((x+sprite->width) < rightGravBound || (x > leftGravBound && rightGravBound >= 0)){
+			this->gravity = true;
 		}
 	}
 }
 
 void mushroom::onCollide(Object *other, int myBoxID, int otherBoxID){
-	if(other->collisionFlags==PLAYER){
+	//Determine what direction we are hitting the ground at
+		enum collideDirection direction;
+		float otherBoxX = other->x+other->hitBoxes[otherBoxID]->offsetX;
+		float otherBoxY = other->y+other->hitBoxes[otherBoxID]->offsetY;
+		int otherBoxWidth = other->hitBoxes[otherBoxID]->width;
+
+		if((this->x+sprite->width-xV) < otherBoxX){
+			direction = LEFT;
+		}
+		else if((this->x-xV) > (otherBoxX + otherBoxWidth)){
+			direction = RIGHT;
+		}
+		else if(this->y-yV < otherBoxY && gravity==true){
+			direction = ABOVE;
+		}else{
+			direction = BELOW;
+		}
+
+	//Interact with walls, floor, ceiling
+	if(other->collisionFlags==GROUND){
+		if(direction == ABOVE){
+			this->gravity = false;
+			this->rightGravBound = otherBoxX;
+			this->leftGravBound = otherBoxX + otherBoxWidth;
+			this->yA = 0.0;
+			this->yV = 0.0;
+			this->xV = 1.0;
+
+			//Calculate correct y value
+			float offsetY = other->hitBoxes[otherBoxID]->offsetY;
+
+			this->y = ((other->y+offsetY)-(this->sprite->height)-1);
+		}
+		if(direction == LEFT || direction == RIGHT){
+			this->x-=this->xV;
+			this->xV = -xV;
+			this->xA = 0.0;
+		}
+		if(direction == BELOW){
+			this->yV = 0.0;
+			this->yA = 0.0;
+			this->xV = -xV;
+		}
+	}
+	else if(other->collisionFlags==PLAYER){
 		destroyObject(this);
 	}
 	return;
@@ -580,6 +640,9 @@ void flagpole::process(double delta){
 }
 
 void flagpole::onCollide(Object *other, int myBoxID, int otherBoxID){
+	if(other->collisionFlags==PLAYER){
+		this->myFlag->y = other->y;
+	}
 	return;
 }
 
@@ -624,4 +687,19 @@ void castle::onCollide(Object *other, int myBoxID, int otherBoxID){
 			sceneChange->setSceneID(2);
 			createObject(sceneChange);
 	}
+}
+aFlag::aFlag(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
+	this->create();
+}
+
+void aFlag::create(){
+	setSprite((unsigned int)47);	
+}
+
+void aFlag::process(double delta){
+	return;
+}
+
+void aFlag::onCollide(Object *other, int myBoxID, int otherBoxID){
+	return;
 }
