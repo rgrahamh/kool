@@ -71,29 +71,39 @@ void Scene::process(double delta){
                 obj2 = this->objectList[j];
                 if(j < this->objectList.size() && this->objectList[j]!=NULL && obj2->collisionLayer >= 0){
                     for(unsigned int k = 0; k < obj1->hitBoxes.size(); k++){
-                        float x1 = obj1->hitBoxes[k]->offsetX + obj1->x;
-                        float y1 = obj1->hitBoxes[k]->offsetY + obj1->y;
-                        for(unsigned int l = 0; l < obj2->hitBoxes.size(); l++){
-                            float x2 = obj2->hitBoxes[l]->offsetX + obj2->x;
-                            float y2 = obj2->hitBoxes[l]->offsetY + obj2->y;
-                            if(x1 + obj1->hitBoxes[k]->width > x2
-                               && x1 < x2 + obj2->hitBoxes[l]->width
-                               && y1 + obj1->hitBoxes[k]->height > y2
-                               && y1 < y2 + obj2->hitBoxes[l]->height){
-								//Handle Collision
-								obj1->onCollide(obj2, k, l);
-								obj2->onCollide(obj1, k, l);
-                            }
-                        }
-                    }
+						if(obj1->hitBoxes[k]!=NULL){
+							float x1 = obj1->hitBoxes[k]->offsetX + obj1->x;
+							float y1 = obj1->hitBoxes[k]->offsetY + obj1->y;
+							for(unsigned int l = 0; l < obj2->hitBoxes.size(); l++){
+							if(obj2->hitBoxes[l]!=NULL){
+								float x2 = obj2->hitBoxes[l]->offsetX + obj2->x;
+								float y2 = obj2->hitBoxes[l]->offsetY + obj2->y;
+									if(x1 + obj1->hitBoxes[k]->width > x2
+									   && x1 < x2 + obj2->hitBoxes[l]->width
+									   && y1 + obj1->hitBoxes[k]->height > y2
+									   && y1 < y2 + obj2->hitBoxes[l]->height){
+														//Handle Collision
+														obj1->onCollide(obj2, k, l);
+														obj2->onCollide(obj1, l, k);
+									}
+								}else{
+									//Clean up deleted hitboxes
+									obj2->hitBoxes.erase(obj2->hitBoxes.begin()+l);
+								}
+							}
+						}else{
+							//Clean up deleted hitboxes
+							obj1->hitBoxes.erase(obj1->hitBoxes.begin()+k);
+						}
+					}
                 }
             }
         }
-	}
-	//Cleanup Object List
-	for(unsigned int i = 0; i < this->objectList.size(); i++){
-		if(this->objectList[i]==NULL){
-			objectList.erase(objectList.begin()+i);
+		//Cleanup Object List
+		for(unsigned int i = 0; i < this->objectList.size(); i++){
+			if(this->objectList[i]==NULL){
+				objectList.erase(objectList.begin()+i);
+			}
 		}
 	}
 	//View processing
@@ -132,77 +142,79 @@ void Scene::render(sf::RenderWindow *window){
 		//cout << "Processing View: " << i << endl;
 		//Iterate through objects
 		for(unsigned int j = 0; j < this->objectList.size();j++){
+			if(objectList[j]!=NULL){
+				//Get data needed to render the object
+				objDraw = objectList[j]->_draw();
 
-			//Get data needed to render the object
-			objDraw = objectList[j]->_draw();
+				//Process View translation
+				translation = this->viewList[i]->translate(objDraw.x,objDraw.y);
 
-			//Process View translation
-			translation = this->viewList[i]->translate(objDraw.x,objDraw.y);
+				objDraw.x = translation.x;
+				objDraw.y = translation.y;
 
-			objDraw.x = translation.x;
-			objDraw.y = translation.y;
-
-			if(objDraw.sprite!=NULL){
-				//Draw Sprite
-				//Retrieve the image with index imageIndex from the sprite pointed to by the
-				//object we are trying to draw
-				sprTexture = (objDraw.sprite->getImage(objDraw.imageIndex));
-				sprTexture.setRepeated(objDraw.repeated);
-				objSprite.setTexture(sprTexture,true);
-				sf::IntRect r(0,0,objDraw.width,objDraw.height);
-				objSprite.setTextureRect(r);
-				objSprite.setPosition(objDraw.x,objDraw.y);
-				//Scaling
-				objSprite.setScale(objDraw.xScale,objDraw.yScale);
-				//Transparency
-				objSprite.setColor(sf::Color(255,255,255,objDraw.alpha));
-				//Make sure the object sprite is the last thing we draw, so that it is at the foreground.
-				window->draw(objSprite);
-			}
-			//Draw text
-			if(objDraw.hasText == true){
-			    //Create text object
-				objText = sf::Text(objDraw.textString,objDraw.textFont);	
-				//Set font size
-				objText.setCharacterSize(objDraw.fontSize);
-				//Set text color
-				objText.setColor(objDraw.textColor);
-				//objText.setOutlineColor(objDraw.textOutlineColor);
-				if(objDraw.relativeToObject == true){
-					objText.setPosition(objDraw.x+objDraw.textX,objDraw.y+objDraw.textY);
-				}else{
-					objText.setPosition(objDraw.textX,objDraw.textY);	
+				if(objDraw.sprite!=NULL){
+					//Draw Sprite
+					//Retrieve the image with index imageIndex from the sprite pointed to by the
+					//object we are trying to draw
+					sprTexture = (objDraw.sprite->getImage(objDraw.imageIndex));
+					sprTexture.setRepeated(objDraw.repeated);
+					objSprite.setTexture(sprTexture,true);
+					sf::IntRect r(0,0,objDraw.width,objDraw.height);
+					objSprite.setTextureRect(r);
+					objSprite.setPosition(objDraw.x,objDraw.y);
+					//Scaling
+					objSprite.setScale(objDraw.xScale,objDraw.yScale);
+					//Transparency
+					objSprite.setColor(sf::Color(255,255,255,objDraw.alpha));
+					//Make sure the object sprite is the last thing we draw, so that it is at the foreground.
+					window->draw(objSprite);
 				}
-				window->draw(objText);
+				//Draw text
+				if(objDraw.hasText == true){
+					//Create text object
+					objText = sf::Text(objDraw.textString,objDraw.textFont);	
+					//Set font size
+					objText.setCharacterSize(objDraw.fontSize);
+					//Set text color
+					objText.setColor(objDraw.textColor);
+					//objText.setOutlineColor(objDraw.textOutlineColor);
+					if(objDraw.relativeToObject == true){
+						objText.setPosition(objDraw.x+objDraw.textX,objDraw.y+objDraw.textY);
+					}else{
+						objText.setPosition(objDraw.textX,objDraw.textY);	
+					}
+					window->draw(objText);
+				}
 			}
 		}
 		//Debug drawing
 		for(unsigned int j = 0; j < this->objectList.size();j++){
+			if(objectList[j]!=NULL){
+				//Get data needed to render the object
+				objDraw = objectList[j]->_draw();
 
-			//Get data needed to render the object
-			objDraw = objectList[j]->_draw();
+				//Process View translation
+				translation = this->viewList[i]->translate(objDraw.x,objDraw.y);
 
-			//Process View translation
-			translation = this->viewList[i]->translate(objDraw.x,objDraw.y);
+				objDraw.x = translation.x;
+				objDraw.y = translation.y;
 
-			objDraw.x = translation.x;
-			objDraw.y = translation.y;
+				if(objDraw.sprite!=NULL){
+					if(objDraw.drawHitBoxes==true){
+						hBoxes = objectList[j]->getHitBoxes();
+						for(unsigned int k = 0; k < hBoxes.size(); k++){
+							rectangle.setSize(sf::Vector2f(hBoxes[k]->width,hBoxes[k]->height));
+							rectangle.setOutlineColor(sf::Color::Red);
+							rectangle.setFillColor(sf::Color::Transparent);
+							rectangle.setOutlineThickness(2);
+							rectangle.setPosition(objDraw.x+hBoxes[k]->offsetX,objDraw.y+hBoxes[k]->offsetY);
 
-			if(objDraw.sprite!=NULL){
-				if(objDraw.drawHitBoxes==true){
-					hBoxes = objectList[j]->getHitBoxes();
-					for(unsigned int k = 0; k < hBoxes.size(); k++){
-						rectangle.setSize(sf::Vector2f(hBoxes[k]->width,hBoxes[k]->height));
-						rectangle.setOutlineColor(sf::Color::Red);
-						rectangle.setFillColor(sf::Color::Transparent);
-						rectangle.setOutlineThickness(2);
-						rectangle.setPosition(objDraw.x+hBoxes[k]->offsetX,objDraw.y+hBoxes[k]->offsetY);
-
-						window->draw(rectangle);
+							window->draw(rectangle);
+						}
 					}
+					//Make sure the object sprite is the last thing we draw, so that it is at the foreground.
+					window->draw(objSprite);
 				}
-				//Make sure the object sprite is the last thing we draw, so that it is at the foreground.
-				window->draw(objSprite);
 			}
 		}
 	}

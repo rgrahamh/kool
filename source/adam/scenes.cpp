@@ -13,7 +13,7 @@ Scene *level1(){
 	background *bg = new background(0,0);
 	
 	//Flag post
-	flagpole *fp = new flagpole(700,326,0,GOAL,false);
+	flagpole *fp = new flagpole(1760,326,0,GOAL,false);
 
 	//Flag
 	aFlag *theFlag = new aFlag(fp->x-3,fp->y+20,0,0,false);
@@ -21,10 +21,10 @@ Scene *level1(){
 	fp->myFlag = theFlag;
 
 	//Castle
-	castle *cstl = new castle(840,415,0,0x60,false);
+	castle *cstl = new castle(1900,415,0,0x60,false);
 
 	//Player
-	player *p1 = new player(50,50,0,PLAYER,true);
+	player *p1 = new player(50,470,0,PLAYER,true);
 
 	//Ground
 	ground *ground_object = new ground(0,342,0,GROUND,false);
@@ -39,29 +39,36 @@ Scene *level1(){
 	
 	//Blocks
 	Block *blockTmp;
-	float blocks[8][2] = {{200,480},{214,480},{228,466},{260,454},{400,456},{600,480},{614,466},{628,452}};
+	float blocks[9][2] = {{98,438},{114,438},{130,438},{720,452},{734,452},{748,452},{776,410},{790,410},{804,410}};
 	for(unsigned int i = 0; i < (sizeof(blocks)/sizeof(blocks[0])); i++){
 		blockTmp = new Block(blocks[i][0],blocks[i][1],0,GROUND,false);
 		gameScene->addObject(blockTmp);
 	}
 	//Mystery Boxes
 	MysteryBox *mysteryTmp;
-	float mysteryBoxes[1][2] = {{450,450}};
+	float mysteryBoxes[1][2] = {{146,438}};
 	for(unsigned int i = 0; i < (sizeof(mysteryBoxes)/sizeof(mysteryBoxes[0])); i++){
 		mysteryTmp = new MysteryBox(mysteryBoxes[i][0],mysteryBoxes[i][1],0,GROUND,false);
 		gameScene->addObject(mysteryTmp);
 	}
+	//Pipes
+	staticPipe *staticPipeTmp;
+	float staticPipes[3][2] = {{296,462},{464,462},{614,462}};
+	for(unsigned int i = 0; i < (sizeof(staticPipes)/sizeof(staticPipes[0])); i++){
+		staticPipeTmp = new staticPipe(staticPipes[i][0],staticPipes[i][1],0,GROUND,false);
+		gameScene->addObject(staticPipeTmp);
+	}
 
 	//Gombas
 	gomba *gombaTmp;
-	float gombas[2][2] = {{300,200},{325,250}};
+	float gombas[4][2] = {{150,460},{320,460},{370,460},{500,460}};
 	for(unsigned int i = 0; i < (sizeof(gombas)/sizeof(gombas[0]));i++){
 		gombaTmp = new gomba(gombas[i][0],gombas[i][1],0,ENEMY,true);
 		gameScene->addObject(gombaTmp);
 	}
 	//koopas
 	koopa *koopaTmp;
-	float koopas[2][2] = {{400,300},{450,300}};
+	float koopas[1][2] = {{560,460}};
 	for(unsigned int i = 0; i < (sizeof(koopas)/sizeof(koopas[0]));i++){
 		koopaTmp = new koopa(koopas[i][0],koopas[i][1],0,ENEMY,true);
 		gameScene->addObject(koopaTmp);

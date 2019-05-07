@@ -33,6 +33,7 @@ struct playerData {
 	superPowers powers;
 	std::vector<unsigned int> smallSet;
 	std::vector<unsigned int> bigSet;
+	bool poweredUp;
 };
 
 extern struct playerData gracin;

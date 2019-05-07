@@ -14,9 +14,9 @@ std::vector<unsigned int> p2Small = {14,15,16,17,18,19,20,44,45};
 std::vector<unsigned int> p1Big = {21,22,23,24,25,26,27,28,29,30};
 std::vector<unsigned int> p2Big = {32,33,34,35,36,37,38,39,40,41};
 //Setup Players
-struct playerData gracin = {3,true,"Gracin",sf::Color::Red,TELEKINESIS,p1Small,p1Big};
-struct playerData owen = {3,true,"Owen",sf::Color::Green,SUPERSPEED,p2Small,p2Big};
-struct playerData madison = {3,false,"Madison",sf::Color::Blue,DASH};
+struct playerData gracin = {3,true,"Gracin",sf::Color::Red,TELEKINESIS,p1Small,p1Big,false};
+struct playerData owen = {3,true,"Owen",sf::Color::Green,SUPERSPEED,p2Small,p2Big,false};
+struct playerData madison = {3,false,"Madison",sf::Color::Blue,DASH,p1Small,p1Big,false};
 
 struct playerData players[3] = {gracin,owen,madison};
 int playerNum = 3;
@@ -230,6 +230,12 @@ int main(){
 
 	//index 54
 	Sprite *dedGomba = new Sprite("resources/adam/enemies/gombaOof.png");
+
+	//index 55
+	Sprite *pipe = new Sprite("resources/adam/pipe.png");
+
+	//index 56
+	Sprite *breakBlock = new Sprite("resources/adam/breakBlock.png");
 
 	//Add Scenes to the Engine
 	myEngine.addScene(createMenuScene()); //scene ID = 0

@@ -22,7 +22,7 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void player::create(){
 	this->collisionLayer = 0;
-	this->debug = false;
+	this->debug = true;
 	setSprite((unsigned int)0);
 	sprite_index = 0;
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
@@ -37,8 +37,11 @@ void player::create(){
 	dead = false;
 	this->setText(10,10,12,false,"resources/arial.ttf",players[activePlayer].name);
 	setTextColor(players[activePlayer].pColor);
-	this->poweredUp=false;
-	this->spriteSet = players[activePlayer].smallSet;
+	if(players[activePlayer].poweredUp==false){
+		this->spriteSet = players[activePlayer].smallSet;
+	}else{
+		this->spriteSet = players[activePlayer].bigSet;
+	}
 	activeDead = false;
 	this->setIndex = 0;
 	this->recovering=false;
@@ -49,142 +52,143 @@ void player::create(){
 
 		
 void player::onCollide(Object *other, int myBoxID, int otherBoxID){
-		
-	//Determine what direction we are hitting the ground at
-		enum collideDirection direction;
-		float otherBoxX = other->x+other->hitBoxes[otherBoxID]->offsetX;
-		float otherBoxY = other->y+other->hitBoxes[otherBoxID]->offsetY;
-		int otherBoxWidth = other->hitBoxes[otherBoxID]->width;
+	if(myBoxID==0){	
+		//Determine what direction we are hitting the ground at
+			enum collideDirection direction;
+			float otherBoxX = other->x+other->hitBoxes[otherBoxID]->offsetX;
+			float otherBoxY = other->y+other->hitBoxes[otherBoxID]->offsetY;
+			int otherBoxWidth = other->hitBoxes[otherBoxID]->width;
 
-		if((this->x+sprite->width-xV) < otherBoxX){
-			direction = LEFT;
-		}
-		else if((this->x-xV) > (otherBoxX + otherBoxWidth)){
-			direction = RIGHT;
-		}
-		else if(this->y-yV+this->sprite->height <= otherBoxY && gravity==true){
-			direction = ABOVE;
-		}else{
-			direction = BELOW;
-		}
-	if(other->collisionFlags==GROUND && dead==false){
-		if(!finishedFlag && finishedLevel){
-			finishedFlag = true;
-			y-=1;
-			stopAllSounds();
-			playSound("./resources/adam/sounds/stage_clear.wav");
-		}
-		if(direction == ABOVE){
-			this->gravity = false;
-			this->rightGravBound = otherBoxX;
-			this->leftGravBound = otherBoxX + otherBoxWidth;
-			this->yA = 0.0;
-			this->yV = 0.0;
-			//Calculate correct y value
-			float offsetY = other->hitBoxes[otherBoxID]->offsetY;
-
-			this->y = ((other->y+offsetY)-(this->sprite->height)-1);
-			//Animation step for end
-		}
-		if(direction == LEFT || direction == RIGHT){
-			this->x-=this->xV;
-			this->xV = 0.0;
-			this->xA = 0.0;
-		}
-		if(direction == BELOW){
-			if(yV!=0.0){
-				this->yV = 0.0;
+			if((this->x+sprite->width-xV) < otherBoxX){
+				direction = LEFT;
+			}
+			else if((this->x-xV) > (otherBoxX + otherBoxWidth)){
+				direction = RIGHT;
+			}
+			else if(this->y-yV+this->sprite->height <= otherBoxY && gravity==true){
+				direction = ABOVE;
+			}else{
+				direction = BELOW;
+			}
+		if(other->collisionFlags==GROUND && dead==false){
+			if(!finishedFlag && finishedLevel){
+				finishedFlag = true;
+				y-=1;
+				stopAllSounds();
+				playSound("./resources/adam/sounds/stage_clear.wav");
+			}
+			if(direction == ABOVE){
+				this->gravity = false;
+				this->rightGravBound = otherBoxX;
+				this->leftGravBound = otherBoxX + otherBoxWidth;
 				this->yA = 0.0;
-			}else{
-				this->xV = 1.0;
+				this->yV = 0.0;
+				//Calculate correct y value
+				float offsetY = other->hitBoxes[otherBoxID]->offsetY;
+
+				this->y = ((other->y+offsetY)-(this->sprite->height)-1);
+				//Animation step for end
+			}
+			if(direction == LEFT || direction == RIGHT){
+				this->x-=this->xV;
+				this->xV = 0.0;
+				this->xA = 0.0;
+			}
+			if(direction == BELOW){
+				if(yV!=0.0){
+					this->yV = 0.0;
+					this->yA = 0.0;
+				}else{
+					this->xV = 1.0;
+				}
 			}
 		}
-	}
-	if((other->collisionFlags & ENEMY) !=0 && other->sprite_index!=10){
-		if(direction == ABOVE && this->recovering==false){
-			//We squashed them
-			playSound("./resources/adam/sounds/stomp.wav");
-			yV = -5.0;
-		}else if(this->poweredUp==false && this->recovering==false){
-			//We DIE
-			yV = -16.0;
-			gravity = true;
-			this->collisionLayer = -1;
-			dead = true;
-			activeDead = true;	
-			//Decrement how many lives we have
-			players[activePlayer].lives -= 1;
+		if((other->collisionFlags & ENEMY) !=0 && other->sprite_index!=10){
+			if(direction == ABOVE && this->recovering==false){
+				//We squashed them
+				playSound("./resources/adam/sounds/stomp.wav");
+				yV = -5.0;
+			}else if(players[activePlayer].poweredUp==false && this->recovering==false){
+				//We DIE
+				yV = -16.0;
+				gravity = true;
+				this->collisionLayer = -1;
+				dead = true;
+				activeDead = true;	
+				//Decrement how many lives we have
+				players[activePlayer].lives -= 1;
 
-			//Change whose turn it is
-			if(activePlayer+1 < playerNum){
-				activePlayer+=1;
-			}else{
-				activePlayer = 0;
-			}
-			while(players[activePlayer].isPlaying==false || players[activePlayer].lives < 1){
+				//Change whose turn it is
 				if(activePlayer+1 < playerNum){
 					activePlayer+=1;
 				}else{
 					activePlayer = 0;
 				}
+				while(players[activePlayer].isPlaying==false || players[activePlayer].lives < 1){
+					if(activePlayer+1 < playerNum){
+						activePlayer+=1;
+					}else{
+						activePlayer = 0;
+					}
+				}
+				//Play dieing sound
+				stopAllSounds();
+				playSound("./resources/adam/sounds/die.wav");
+				//Show dieing sprite
+				setIndex = 6;
+			}else if(players[activePlayer].poweredUp==true){
+				players[activePlayer].poweredUp = false;
+				this->recovering = true;
+				alpha = 128;
+				recoverTime = 0.0;
+				int heightDiff = this->sprite->height;
+				this->spriteSet = players[activePlayer].smallSet;
+				setSprite(spriteSet[setIndex]);
+				this->hitBoxes[0]->height = this->sprite->height;
+				heightDiff = heightDiff - this->sprite->height;
+				this->y += heightDiff;
+				activeDead = true;
+				playSound("./resources/adam/sounds/power_down.wav");
 			}
-			//Play dieing sound
-			stopAllSounds();
-			playSound("./resources/adam/sounds/die.wav");
-			//Show dieing sprite
-			setIndex = 6;
-		}else if(this->poweredUp==true){
-			this->poweredUp = false;
-			this->recovering = true;
-			alpha = 128;
-			recoverTime = 0.0;
-			int heightDiff = this->sprite->height;
-			this->spriteSet = players[activePlayer].smallSet;
-			setSprite(spriteSet[setIndex]);
-			this->hitBoxes[0]->height = this->sprite->height;
-			heightDiff = heightDiff - this->sprite->height;
-			this->y += heightDiff;
-			activeDead = true;
-			playSound("./resources/adam/sounds/power_down.wav");
 		}
-	}
-	if(other->collisionFlags==POWERUP and poweredUp==false){
-		poweredUp=true;
-		playSound("resources/adam/sounds/grow.wav");
-		int heightDiff = this->sprite->height;
-		this->spriteSet = players[activePlayer].bigSet;
-		setSprite(spriteSet[setIndex]);
-		heightDiff = heightDiff - this->sprite->height;
-		this->hitBoxes[0]->height = this->sprite->height;
-		this->y = this->y + heightDiff;
-	}
-	if(other->collisionFlags==GOAL){
-		if(!finishedLevel){
-			this->gravity = false;
-			this->setIndex=7;
-			this->finishedLevel = true;
-			this->friction = 0.0;
-			this->yV = 0.0;
-			this->yA = 0.0;
+		if(other->collisionFlags==POWERUP and players[activePlayer].poweredUp==false){
+			players[activePlayer].poweredUp=true;
+			playSound("resources/adam/sounds/grow.wav");
+			int heightDiff = this->sprite->height;
+			this->spriteSet = players[activePlayer].bigSet;
+			setSprite(spriteSet[setIndex]);
+			heightDiff = heightDiff - this->sprite->height;
+			this->hitBoxes[0]->height = this->sprite->height;
+			this->y = this->y + heightDiff;
+		}
+		if(other->collisionFlags==GOAL){
+			if(!finishedLevel){
+				this->gravity = false;
+				this->setIndex=7;
+				this->finishedLevel = true;
+				this->friction = 0.0;
+				this->yV = 0.0;
+				this->yA = 0.0;
+				this->xV = 0.0;
+				this->xA = 0.0;
+				this->x = other->x;
+				stopAllSounds();
+				playSound("./resources/adam/sounds/flagpole.wav");
+			}
+			else if(!finishedFlag){
+				this->yV = 1.0;
+			}
+			else{
+				this->yV = 0.0;
+				this->xV = 2.0;
+				setIndex=2;
+			}
+		}
+		if(other->collisionFlags==0x60){
 			this->xV = 0.0;
 			this->xA = 0.0;
-			this->x = other->x;
-			stopAllSounds();
-			playSound("./resources/adam/sounds/flagpole.wav");
+			destroyObject(this);
 		}
-		else if(!finishedFlag){
-			this->yV = 1.0;
-		}
-		else{
-			this->yV = 0.0;
-			this->xV = 2.0;
-			setIndex=2;
-		}
-	}
-	if(other->collisionFlags==0x60){
-		this->xV = 0.0;
-		this->xA = 0.0;
-		destroyObject(this);
 	}
 }
 
@@ -196,7 +200,7 @@ void player::process(double delta){
 		if(Keys::isKeyPressed(Keys::W) && this->gravity==false && !finishedLevel){
 			this->yV = -8;
 			this->gravity = true;
-			if(poweredUp==false){
+			if(players[activePlayer].poweredUp==false){
 				playSound("./resources/adam/sounds/jump.wav");
 			}else{
 				playSound("./resources/adam/sounds/jump_big.wav");
@@ -242,7 +246,7 @@ void player::process(double delta){
 				}
 			}
 		}
-		if(Keys::isKeyPressed(Keys::S) && poweredUp==true && gravity==false && !finishedLevel){
+		if(Keys::isKeyPressed(Keys::S) && players[activePlayer].poweredUp==true && gravity==false && !finishedLevel){
 			this->friction = 0.1;
 			if(setIndex==3 || setIndex==1){
 				setIndex = 9;	
@@ -276,6 +280,12 @@ void player::process(double delta){
 		//Process if we are falling off our current floor
 		if(((x+sprite->width) < rightGravBound || (x > leftGravBound && rightGravBound >= 0)) && !finishedLevel){
 			this->gravity = true;
+		}
+		//Process if we are jumping, if so add the jump hit box
+		if(yV < 0.0 && hitBoxes.size() < 2){
+			this->addHitBox(this->sprite->width/2,-2,1,10);
+		}else if (yV >= 0.0 && hitBoxes.size() >= 2){
+			this->deleteHitBox(1);
 		}
 	}else{
 		//Determine whether to go to preview scene or gameover scene
@@ -317,8 +327,35 @@ Block::Block(float x, float y, int collisionLayer, unsigned int collisionFlags, 
 void Block::create(){
 	this->collisionLayer = 0;
 	this->debug = false;
-	setSprite((unsigned int)8);
+	setSprite((unsigned int)56);
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+}
+
+void Block::onCollide(Object *other, int myBoxID, int otherBoxID){
+	//Determine what direction we are hitting at
+		enum collideDirection direction;
+		float otherBoxX = other->x+other->hitBoxes[otherBoxID]->offsetX;
+		float otherBoxY = other->y+other->hitBoxes[otherBoxID]->offsetY;
+		int otherBoxWidth = other->hitBoxes[otherBoxID]->width;
+		if((this->x+sprite->width-xV) < otherBoxX){
+			direction = LEFT;
+		}
+		else if((this->x-xV) > (otherBoxX + otherBoxWidth)){
+			direction = RIGHT;
+		}
+		else if(this->y < (otherBoxY-other->yV)){
+			direction = ABOVE;
+		}else{
+			direction = BELOW;
+		}
+	if(other->collisionFlags==PLAYER && direction == ABOVE && players[activePlayer].poweredUp){
+		if(other->sprite_index==players[activePlayer].bigSet[4] || other->sprite_index==players[activePlayer].bigSet[5]){
+			if(otherBoxID==1){
+			playSound("resources/adam/sounds/break.wav");
+			destroyObject(this);
+			}
+		}
+	}
 }
 
 //ground class
@@ -334,6 +371,21 @@ void ground::create(){
 	this->addHitBox(0,153,this->sprite->width,25);
 
 }
+
+//staticPipe class
+
+staticPipe::staticPipe(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
+	create();
+}
+
+void staticPipe::create(){
+	this->collisionLayer = 0;
+	this->debug = false;
+	setSprite((unsigned int)55);
+	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+
+}
+
 
 //Gomba class
 
@@ -420,8 +472,7 @@ void gomba::process(double delta){
 		//Prevent falling off the map
 		if(x+xV < 0.0 || (x+xV+this->sprite->width) > (float)getSceneWidth()){
 			x-=xV;
-			xV = 0.0;
-			xA = 0.0;
+			xV = -xV;
 		}
 
 		//Process if we are falling off our current floor
@@ -536,7 +587,7 @@ void MysteryBox::onCollide(Object *other, int myBoxID, int otherBoxID){
 	}else{
 		direction = BELOW;
 	}
-	if(other->collisionFlags==PLAYER && direction==ABOVE){
+	if(other->collisionFlags==PLAYER && direction==ABOVE && otherBoxID==1){
 		if(beenHit==false){
 			mushroom *tmp = new mushroom(this->x,this->y-1,0,POWERUP,false);
 			playSound("./resources/adam/sounds/mushroom_up.wav");

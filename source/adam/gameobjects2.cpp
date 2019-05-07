@@ -1,5 +1,6 @@
 #include "gameobjects.hpp"
 #include "globalvars.hpp"
+#include <cstdlib>
 
 using namespace std;
 
@@ -60,19 +61,27 @@ void koopa::onCollide(Object *other, int myBoxID, int otherBoxID){
 			if(inShell){
 				playSound("resources/adam/sounds/bump.wav");
 			}
+
 		}
 		if(direction == BELOW){
 			this->yV = 0.0;
 			this->yA = 0.0;
 			this->xV = -xV;
+			while((x+sprite->width > other->x) && x < other->x+otherBoxWidth){
+				if(x > other->x){
+					x+=1;
+				}else{
+					x-=1;
+				}
+			}
 		}
 	}
 	if(other->collisionFlags==PLAYER){
 		if(activeDead==false){
 			if(direction == BELOW){
+				timeInShell = 0.0;
 				if(inShell==false){
 					inShell = true;
-					timeInShell = 0.0;
 					this->xV = 0.0;
 					y+=9;
 					this->hitBoxes[0]->height -= 9;
