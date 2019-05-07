@@ -56,6 +56,12 @@ class Block: public Object {
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
 };
 
+class metalBlock: public Object {
+	public:
+		metalBlock(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void create();
+};
+
 class MysteryBox: public Object {
 	public:
 		bool beenHit;
