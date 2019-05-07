@@ -1,12 +1,9 @@
 #include "game.h"
+#include "objects.h"
+#include "scenes.h"
 #include "../headers/Globals.hpp"
 #include "../headers/GameEngine.hpp"
 
-
-void Runner::run()
-{
-
-}
 
 background::background(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav) {
     create();
@@ -27,7 +24,11 @@ int main(int argc, char **argv, char **evnp)
     background_sprite->setRepeated(true);
     background_sprite->setSize(600,600);
 
+    // sprite 1
     Sprite *runner_standing = new Sprite("resources/r2/runner_standing.png");
+
+    Sprite *runner_running = new Sprite("resources/r2/runner_anims_01.png");
+    runner_running->addImage("resources/r2/runner_anims_02.png");
 
     engine.startGame();
 
