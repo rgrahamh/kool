@@ -53,7 +53,9 @@ void Scene::process(double delta){
     //printf("%f\r", delta);
     //std::fflush(stdout);
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
-		this->objectList[i]->_process(delta, gravity, termVel);
+	    	if(this->objectList[i]!=NULL){
+			this->objectList[i]->_process(delta, gravity, termVel);
+		}
 	}
 	//Object collision processing
 
@@ -94,12 +96,6 @@ void Scene::process(double delta){
 														if(obj1!=NULL && obj2!=NULL){
 															obj2->onCollide(obj1, l, k);
 														}
-														//Cleanup Object List
-														for(unsigned int i = 0; i < this->objectList.size(); i++){
-															if(this->objectList[i]==NULL){
-																objectList.erase(objectList.begin()+i);
-															}
-														}
 									}
 								}else{
 									//Clean up deleted hitboxes
@@ -114,6 +110,12 @@ void Scene::process(double delta){
                 }
             }
         }
+	}
+	//Cleanup Object List
+	for(unsigned int i = 0; i < this->objectList.size(); i++){
+		if(this->objectList[i]==NULL){
+			objectList.erase(objectList.begin()+i);
+		}
 	}
 	//View processing
 	for(unsigned int i = 0; i < this->viewList.size(); i++){
