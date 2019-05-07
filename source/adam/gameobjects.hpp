@@ -27,7 +27,6 @@ class background: public Object {
 class player: public Object {
 	public:
 		bool dead;
-		bool poweredUp;
 		bool recovering;
 		bool finishedLevel;
 		bool finishedFlag;
@@ -54,6 +53,7 @@ class Block: public Object {
 	public:
 		Block(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
+		void onCollide(Object *other, int myBoxID, int otherBoxID);
 };
 
 class MysteryBox: public Object {
@@ -67,6 +67,13 @@ class MysteryBox: public Object {
 class ground: public Object {
 	public:
 		ground(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void create();
+	
+};
+
+class staticPipe: public Object {
+	public:
+		staticPipe(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
 	
 };

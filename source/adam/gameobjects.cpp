@@ -37,8 +37,11 @@ void player::create(){
 	dead = false;
 	this->setText(10,10,12,false,"resources/arial.ttf",players[activePlayer].name);
 	setTextColor(players[activePlayer].pColor);
-	this->poweredUp=false;
-	this->spriteSet = players[activePlayer].smallSet;
+	if(players[activePlayer].poweredUp==false){
+		this->spriteSet = players[activePlayer].smallSet;
+	}else{
+		this->spriteSet = players[activePlayer].bigSet;
+	}
 	activeDead = false;
 	this->setIndex = 0;
 	this->recovering=false;
@@ -105,7 +108,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			//We squashed them
 			playSound("./resources/adam/sounds/stomp.wav");
 			yV = -5.0;
-		}else if(this->poweredUp==false && this->recovering==false){
+		}else if(players[activePlayer].poweredUp==false && this->recovering==false){
 			//We DIE
 			yV = -16.0;
 			gravity = true;
@@ -133,8 +136,8 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			playSound("./resources/adam/sounds/die.wav");
 			//Show dieing sprite
 			setIndex = 6;
-		}else if(this->poweredUp==true){
-			this->poweredUp = false;
+		}else if(players[activePlayer].poweredUp==true){
+			players[activePlayer].poweredUp = false;
 			this->recovering = true;
 			alpha = 128;
 			recoverTime = 0.0;
@@ -148,8 +151,8 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			playSound("./resources/adam/sounds/power_down.wav");
 		}
 	}
-	if(other->collisionFlags==POWERUP and poweredUp==false){
-		poweredUp=true;
+	if(other->collisionFlags==POWERUP and players[activePlayer].poweredUp==false){
+		players[activePlayer].poweredUp=true;
 		playSound("resources/adam/sounds/grow.wav");
 		int heightDiff = this->sprite->height;
 		this->spriteSet = players[activePlayer].bigSet;
@@ -196,7 +199,7 @@ void player::process(double delta){
 		if(Keys::isKeyPressed(Keys::W) && this->gravity==false && !finishedLevel){
 			this->yV = -8;
 			this->gravity = true;
-			if(poweredUp==false){
+			if(players[activePlayer].poweredUp==false){
 				playSound("./resources/adam/sounds/jump.wav");
 			}else{
 				playSound("./resources/adam/sounds/jump_big.wav");
@@ -242,7 +245,7 @@ void player::process(double delta){
 				}
 			}
 		}
-		if(Keys::isKeyPressed(Keys::S) && poweredUp==true && gravity==false && !finishedLevel){
+		if(Keys::isKeyPressed(Keys::S) && players[activePlayer].poweredUp==true && gravity==false && !finishedLevel){
 			this->friction = 0.1;
 			if(setIndex==3 || setIndex==1){
 				setIndex = 9;	
@@ -317,8 +320,34 @@ Block::Block(float x, float y, int collisionLayer, unsigned int collisionFlags, 
 void Block::create(){
 	this->collisionLayer = 0;
 	this->debug = false;
-	setSprite((unsigned int)8);
+	setSprite((unsigned int)56);
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+}
+
+void Block::onCollide(Object *other, int myBoxID, int otherBoxID){
+	//Determine what direction we are hitting at
+		enum collideDirection direction;
+		float otherBoxX = other->x+other->hitBoxes[otherBoxID]->offsetX;
+		float otherBoxY = other->y+other->hitBoxes[otherBoxID]->offsetY;
+		int otherBoxWidth = other->hitBoxes[otherBoxID]->width;
+
+		if((this->x+sprite->width-xV) < otherBoxX){
+			direction = LEFT;
+		}
+		else if((this->x-xV) > (otherBoxX + otherBoxWidth)){
+			direction = RIGHT;
+		}
+		else if(this->y-yV < otherBoxY && gravity==true){
+			direction = ABOVE;
+		}else{
+			direction = BELOW;
+		}
+	if(other->collisionFlags==PLAYER && direction == BELOW && players[activePlayer].poweredUp){
+		if(other->sprite_index==players[activePlayer].bigSet[4] || other->sprite_index==players[activePlayer].bigSet[5]){
+			playSound("resources/adam/sounds/break.wav");
+			destroyObject(this);
+		}
+	}
 }
 
 //ground class
@@ -334,6 +363,21 @@ void ground::create(){
 	this->addHitBox(0,153,this->sprite->width,25);
 
 }
+
+//staticPipe class
+
+staticPipe::staticPipe(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
+	create();
+}
+
+void staticPipe::create(){
+	this->collisionLayer = 0;
+	this->debug = false;
+	setSprite((unsigned int)55);
+	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+
+}
+
 
 //Gomba class
 
