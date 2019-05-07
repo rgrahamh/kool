@@ -4,18 +4,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-class Runner: public Object
-{
-public:
-    /* attributes */
-    int x_pos;
-    long distance = 0;
-
-    /* methods */
-    void run();
-
-};
-
 class background: public Object
 {
 public:
