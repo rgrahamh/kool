@@ -43,6 +43,8 @@ enum collisionFlags {
     WALL = 0x8,
     PROJECTILE = 0x10,
     POWERUP = 0x20,
+    DANGER_ALL = 0x40,
+    GOAL = 0x80,
 };
 
 class Object{
@@ -55,6 +57,7 @@ class Object{
 			*/
 			void decHitBoxes(double delta); 
 			void addHitBox(int offsetX, int offsetY, int width, int height, double ttl=-1);
+			void deleteHitBox(int id);
             void _processPhysics(float grav, float termVel);
 	public:
 			//Drawing text information

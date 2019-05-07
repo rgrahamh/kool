@@ -241,3 +241,10 @@ void Object::setScale(float xScale, float yScale){
 	this->xScale = xScale;
 	this->yScale = yScale;
 }
+
+void Object::deleteHitBox(int id){
+	if(this->hitBoxes.size()>(unsigned int) id){
+		delete hitBoxes[id];
+		hitBoxes[id]=NULL;
+	}
+}

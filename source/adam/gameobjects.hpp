@@ -27,10 +27,10 @@ class background: public Object {
 class player: public Object {
 	public:
 		bool dead;
-		bool poweredUp;
 		bool recovering;
 		bool finishedLevel;
 		bool finishedFlag;
+		bool crouching;
 		float acceleration;
 		float maxVelocity;
 		float rightGravBound;
@@ -53,6 +53,13 @@ class Block: public Object {
 	public:
 		Block(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
+		void onCollide(Object *other, int myBoxID, int otherBoxID);
+};
+
+class metalBlock: public Object {
+	public:
+		metalBlock(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void create();
 };
 
 class MysteryBox: public Object {
@@ -66,6 +73,13 @@ class MysteryBox: public Object {
 class ground: public Object {
 	public:
 		ground(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void create();
+	
+};
+
+class staticPipe: public Object {
+	public:
+		staticPipe(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
 	
 };
@@ -120,6 +134,8 @@ class mushroom: public Object {
 		double animationAcc;
 		int rate;
 		bool full;
+		float rightGravBound;
+		float leftGravBound;
 
 		mushroom(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
@@ -128,8 +144,18 @@ class mushroom: public Object {
 
 };
 
+
+class aFlag: public Object {
+	public:
+		aFlag(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void create();
+		void process(double delta);
+		void onCollide(Object *other, int myBoxID, int otherBoxID);
+};
+
 class flagpole: public Object {
 	public:
+		aFlag *myFlag;
 		flagpole(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
 		void process(double delta);
@@ -139,10 +165,27 @@ class flagpole: public Object {
 class castle: public Object {
 	public:
 
-	    	timeTrigger* sceneChange;
+	    timeTrigger* sceneChange;
 		castle(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
 		void process(double delta);
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
+};
+
+class koopa: public Object {
+	public:
+		bool inShell;
+		bool shellMoving;
+		bool dead;
+		double timeInShell;
+		float rightGravBound;
+		float leftGravBound;
+		float shellSpeed;
+
+		koopa(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void create();
+		void process(double delta);
+		void onCollide(Object *other, int myBoxID, int otherBoxID);
+
 };
 #endif
