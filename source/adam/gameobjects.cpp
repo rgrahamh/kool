@@ -22,7 +22,7 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void player::create(){
 	this->collisionLayer = 0;
-	this->debug = true;
+	this->debug = false;
 	setSprite((unsigned int)0);
 	sprite_index = 0;
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
@@ -96,7 +96,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			}
 			if(direction == BELOW){
 				if(yV!=0.0){
-					this->yV = 0.0;
+					this->yV = 0.5;
 					this->yA = 0.0;
 				}else{
 					this->xV = 1.0;
@@ -107,7 +107,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			if(direction == ABOVE && this->recovering==false){
 				//We squashed them
 				playSound("./resources/adam/sounds/stomp.wav");
-				yV = -5.0;
+				yV = -10.5;
 			}else if(players[activePlayer].poweredUp==false && this->recovering==false){
 				//We DIE
 				yV = -16.0;
@@ -206,7 +206,9 @@ void player::process(double delta){
 				playSound("./resources/adam/sounds/jump_big.wav");
 			}
 		}
-
+		if(!Keys::isKeyPressed(Keys::W) && this->gravity==true && yV < 0.0){
+			yV = 3*(yV/4);
+		}
 		//Horizontal Movement
 		if(Keys::isKeyPressed(Keys::D) && !finishedLevel && !crouching){
 			if(this->xV < this->maxVelocity){
@@ -283,8 +285,8 @@ void player::process(double delta){
 		}
 		//Process if we are jumping, if so add the jump hit box
 		if(yV < 0.0 && hitBoxes.size() < 2){
-			this->addHitBox(this->sprite->width/2,-2,1,10);
-		}else if (yV >= 0.0 && hitBoxes.size() >= 2){
+			this->addHitBox(this->sprite->width/2-3,0,6,this->sprite->height-2);
+		}else if ((yV > 0.0 || (setIndex!=4 && setIndex !=5)) && hitBoxes.size() >= 2){
 			this->deleteHitBox(1);
 		}
 	}else{
@@ -356,6 +358,18 @@ void Block::onCollide(Object *other, int myBoxID, int otherBoxID){
 			}
 		}
 	}
+}
+//metalBlock class
+
+metalBlock::metalBlock(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
+	create();
+}
+
+void metalBlock::create(){
+	this->collisionLayer = 0;
+	this->debug = false;
+	setSprite((unsigned int)48);
+	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 }
 
 //ground class
@@ -587,7 +601,7 @@ void MysteryBox::onCollide(Object *other, int myBoxID, int otherBoxID){
 	}else{
 		direction = BELOW;
 	}
-	if(other->collisionFlags==PLAYER && direction==ABOVE && otherBoxID==1){
+	if(other->collisionFlags==PLAYER && direction==ABOVE){
 		if(beenHit==false){
 			mushroom *tmp = new mushroom(this->x,this->y-1,0,POWERUP,false);
 			playSound("./resources/adam/sounds/mushroom_up.wav");
