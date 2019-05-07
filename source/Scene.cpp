@@ -71,6 +71,11 @@ void Scene::process(double delta){
                 obj2 = this->objectList[j];
                 if(j < this->objectList.size() && this->objectList[j]!=NULL && obj2->collisionLayer >= 0){
                     for(unsigned int k = 0; k < obj1->hitBoxes.size(); k++){
+						obj2 = this->objectList[j];
+        				obj1 = this->objectList[i];
+						if(obj2==NULL || obj1==NULL){
+							continue;
+						}
 						if(obj1->hitBoxes[k]!=NULL){
 							float x1 = obj1->hitBoxes[k]->offsetX + obj1->x;
 							float y1 = obj1->hitBoxes[k]->offsetY + obj1->y;
@@ -116,7 +121,7 @@ void Scene::process(double delta){
 	}
     //Process if this scene has been destroyed
     if(destroyed==true){
-	delete this;
+		delete this;
     }
 }
 

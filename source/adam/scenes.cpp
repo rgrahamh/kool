@@ -25,7 +25,7 @@ Scene *level1(){
 	castle *cstl = new castle(2000,415,0,0x60,false);
 
 	//Player
-	player *p1 = new player(50,470,0,PLAYER,true);
+	player *p1 = new player(50,450,0,PLAYER,true);
 
 	//Ground
 	ground *ground_object = new ground(0,342,0,GROUND,false);

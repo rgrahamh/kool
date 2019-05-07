@@ -622,7 +622,7 @@ mushroom::mushroom(float x, float y, int collisionLayer, unsigned int collisionF
 void mushroom::create(){
 	setSprite((unsigned int)31);
 	//Keep track of full sprite height, which is 20px
-	sprFullHeight = this->sprite->height;
+	sprFullHeight = 16;
 	rate = 1;
 	this->sprite->setSize(this->sprite->width,rate);
 	full = false;
