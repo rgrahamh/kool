@@ -39,14 +39,14 @@ Scene *level1(){
 	
 	//Blocks
 	Block *blockTmp;
-	float blocks[9][2] = {{98,438},{112,438},{126,438},{720,452},{734,452},{748,452},{776,410},{790,410},{804,410}};
+	float blocks[9][2] = {{98,438},{114,438},{130,438},{720,452},{734,452},{748,452},{776,410},{790,410},{804,410}};
 	for(unsigned int i = 0; i < (sizeof(blocks)/sizeof(blocks[0])); i++){
 		blockTmp = new Block(blocks[i][0],blocks[i][1],0,GROUND,false);
 		gameScene->addObject(blockTmp);
 	}
 	//Mystery Boxes
 	MysteryBox *mysteryTmp;
-	float mysteryBoxes[1][2] = {{140,438}};
+	float mysteryBoxes[1][2] = {{146,438}};
 	for(unsigned int i = 0; i < (sizeof(mysteryBoxes)/sizeof(mysteryBoxes[0])); i++){
 		mysteryTmp = new MysteryBox(mysteryBoxes[i][0],mysteryBoxes[i][1],0,GROUND,false);
 		gameScene->addObject(mysteryTmp);

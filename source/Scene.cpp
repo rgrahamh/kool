@@ -71,21 +71,31 @@ void Scene::process(double delta){
                 obj2 = this->objectList[j];
                 if(j < this->objectList.size() && this->objectList[j]!=NULL && obj2->collisionLayer >= 0){
                     for(unsigned int k = 0; k < obj1->hitBoxes.size(); k++){
-                        float x1 = obj1->hitBoxes[k]->offsetX + obj1->x;
-                        float y1 = obj1->hitBoxes[k]->offsetY + obj1->y;
-                        for(unsigned int l = 0; l < obj2->hitBoxes.size(); l++){
-                            float x2 = obj2->hitBoxes[l]->offsetX + obj2->x;
-                            float y2 = obj2->hitBoxes[l]->offsetY + obj2->y;
-                            if(x1 + obj1->hitBoxes[k]->width > x2
-                               && x1 < x2 + obj2->hitBoxes[l]->width
-                               && y1 + obj1->hitBoxes[k]->height > y2
-                               && y1 < y2 + obj2->hitBoxes[l]->height){
-								//Handle Collision
-								obj1->onCollide(obj2, k, l);
-								obj2->onCollide(obj1, k, l);
-                            }
-                        }
-                    }
+						if(obj1->hitBoxes[k]!=NULL){
+							float x1 = obj1->hitBoxes[k]->offsetX + obj1->x;
+							float y1 = obj1->hitBoxes[k]->offsetY + obj1->y;
+							for(unsigned int l = 0; l < obj2->hitBoxes.size(); l++){
+							if(obj2->hitBoxes[l]!=NULL){
+								float x2 = obj2->hitBoxes[l]->offsetX + obj2->x;
+								float y2 = obj2->hitBoxes[l]->offsetY + obj2->y;
+									if(x1 + obj1->hitBoxes[k]->width > x2
+									   && x1 < x2 + obj2->hitBoxes[l]->width
+									   && y1 + obj1->hitBoxes[k]->height > y2
+									   && y1 < y2 + obj2->hitBoxes[l]->height){
+														//Handle Collision
+														obj1->onCollide(obj2, k, l);
+														obj2->onCollide(obj1, l, k);
+									}
+								}else{
+									//Clean up deleted hitboxes
+									obj2->hitBoxes.erase(obj2->hitBoxes.begin()+l);
+								}
+							}
+						}else{
+							//Clean up deleted hitboxes
+							obj1->hitBoxes.erase(obj1->hitBoxes.begin()+k);
+						}
+					}
                 }
             }
         }
