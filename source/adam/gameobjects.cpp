@@ -622,25 +622,26 @@ mushroom::mushroom(float x, float y, int collisionLayer, unsigned int collisionF
 
 void mushroom::create(){
 	setSprite((unsigned int)31);
-	//Keep track of full sprite height, which is 20px
-	sprFullHeight = 16;
+	//Keep track of full sprite height, which is 16px
+	sprFullHeight = this->sprite->height;
 	rate = 1;
-	this->sprite->setSize(this->sprite->width,rate);
+	this->sprite_width = this->sprite->width;
+	this->sprite_height = rate;
 	full = false;
 	animationTime = 20.0;
 	animationAcc = 0.0;
 	this->debug = false;
-	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+	this->addHitBox(0,0,this->sprite_width,this->sprite_height);
 }
 
 void mushroom::process(double delta){
 	if(full == false){
 		animationAcc+=delta;
 		if(animationAcc >= animationTime){
-			this->sprite->setSize(this->sprite->width,this->sprite->height+rate);
+			this->sprite_height+=rate;
 			this->y-=rate;
-			this->hitBoxes[0]->height = this->sprite->height;
-			if(this->sprite->height >= sprFullHeight){
+			this->hitBoxes[0]->height = this->sprite_height;
+			if(this->sprite_height >= sprFullHeight){
 				full = true;
 				this->gravity = true;
 				this->xV = 2.0;

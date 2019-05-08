@@ -79,6 +79,9 @@ class Object{
 			void setScale(float xScale, float yScale);
 			//Transparency
 			uint8_t alpha;
+			//width/height
+			int sprite_width;
+			int sprite_height;
 
             //Position
 			float x;
