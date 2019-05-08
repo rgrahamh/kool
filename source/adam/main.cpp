@@ -17,7 +17,7 @@ std::vector<unsigned int> p2Big = {32,33,34,35,36,37,38,39,40,41};
 //Setup Players
 struct playerData gracin = {3,true,"Gracin",sf::Color::Red,TELEKINESIS,p1Small,p1Big,false};
 struct playerData owen = {3,true,"Owen",sf::Color::Green,SUPERSPEED,p2Small,p2Big,false};
-struct playerData madison = {3,false,"Madison",sf::Color::Blue,DASH,p1Small,p1Big,false};
+struct playerData madison = {3,true,"Madison",sf::Color::Blue,GHOST,p1Small,p1Big,false};
 
 struct playerData players[3] = {gracin,owen,madison};
 int playerNum = 3;
@@ -237,6 +237,38 @@ int main(){
 
 	//index 56
 	Sprite *breakBlock = new Sprite("resources/adam/breakBlock.png");
+
+	//index 57
+	Sprite *pulse = new Sprite("resources/adam/effects/pulse1.png");
+	pulse->addImage("resources/adam/effects/pulse2.png");
+	pulse->addImage("resources/adam/effects/pulse3.png");
+	pulse->addImage("resources/adam/effects/pulse4.png");
+	pulse->addImage("resources/adam/effects/pulse5.png");
+	pulse->addImage("resources/adam/effects/pulse6.png");
+	pulse->addImage("resources/adam/effects/pulse7.png");
+	pulse->addImage("resources/adam/effects/pulse8.png");
+	pulse->addImage("resources/adam/effects/pulse9.png");
+	pulse->addImage("resources/adam/effects/pulse10.png");
+	pulse->addImage("resources/adam/effects/pulse11.png");
+	pulse->addImage("resources/adam/effects/pulse12.png");
+	pulse->addImage("resources/adam/effects/pulse13.png");
+	pulse->addImage("resources/adam/effects/pulse14.png");
+	pulse->addImage("resources/adam/effects/pulse15.png");
+	pulse->addImage("resources/adam/effects/pulse16.png");
+	pulse->addImage("resources/adam/effects/pulse17.png");
+	pulse->addImage("resources/adam/effects/pulse18.png");
+	pulse->addImage("resources/adam/effects/pulse19.png");
+	pulse->addImage("resources/adam/effects/pulse20.png");
+	pulse->addImage("resources/adam/effects/pulse21.png");
+	pulse->addImage("resources/adam/effects/pulse22.png");
+	pulse->addImage("resources/adam/effects/pulse23.png");
+	pulse->addImage("resources/adam/effects/pulse24.png");
+	pulse->addImage("resources/adam/effects/pulse25.png");
+	pulse->addImage("resources/adam/effects/pulse26.png");
+	pulse->addImage("resources/adam/effects/pulse27.png");
+	pulse->addImage("resources/adam/effects/pulse28.png");
+	pulse->addImage("resources/adam/effects/pulse29.png");
+	pulse->addImage("resources/adam/effects/pulse30.png");
 
 	//Add Scenes to the Engine
 	myEngine.addScene(createMenuScene()); //scene ID = 0

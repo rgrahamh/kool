@@ -57,11 +57,11 @@ class Object{
 			*/
 			void decHitBoxes(double delta); 
 			void addHitBox(int offsetX, int offsetY, int width, int height, double ttl=-1);
-			void deleteHitBox(int id);
             void _processPhysics(float grav, float termVel);
 	public:
 			//Drawing text information
 			bool hasText;
+			void deleteHitBox(int id);
 			int textX;
 			int textY;
 			unsigned int fontSize;

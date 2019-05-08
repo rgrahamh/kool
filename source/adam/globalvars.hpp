@@ -21,7 +21,7 @@ extern std::vector<unsigned int> p2Big;
 enum superPowers {
 	FIREBOLT = 0x0,
 	SUPERSPEED = 0x1,
-	DASH = 0x2,
+	GHOST = 0x2,
 	TELEKINESIS = 0x4
 };
 

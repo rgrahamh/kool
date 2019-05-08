@@ -27,6 +27,8 @@ void player::create(){
 	setSprite((unsigned int)0);
 	sprite_index = 0;
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+	this->addHitBox(-10,this->sprite->height,this->sprite->width+20,5);
+	hitBoxes[1]->type = 2;
 	this->friction = 0.3;
 	this->acceleration = 1.0;
 	this->maxVelocity = 6.5;
@@ -49,28 +51,30 @@ void player::create(){
 	this->finishedLevel=false;
 	this->finishedFlag = false;
 	this->crouching = false;
+	this->alphaChange = 0;
+	this->ghostTime = 0.0;
 }
 
 		
 void player::onCollide(Object *other, int myBoxID, int otherBoxID){
-	if(myBoxID==0){	
-		//Determine what direction we are hitting the ground at
-			enum collideDirection direction;
-			float otherBoxX = other->x+other->hitBoxes[otherBoxID]->offsetX;
-			float otherBoxY = other->y+other->hitBoxes[otherBoxID]->offsetY;
-			int otherBoxWidth = other->hitBoxes[otherBoxID]->width;
+//Determine what direction we are hitting the ground at
+	enum collideDirection direction;
+	float otherBoxX = other->x+other->hitBoxes[otherBoxID]->offsetX;
+	float otherBoxY = other->y+other->hitBoxes[otherBoxID]->offsetY;
+	int otherBoxWidth = other->hitBoxes[otherBoxID]->width;
 
-			if((this->x+sprite->width-xV) < otherBoxX){
-				direction = LEFT;
-			}
-			else if((this->x-xV) > (otherBoxX + otherBoxWidth)){
-				direction = RIGHT;
-			}
-			else if(this->y-yV+this->sprite->height <= otherBoxY && gravity==true){
-				direction = ABOVE;
-			}else{
-				direction = BELOW;
-			}
+	if((this->x+sprite->width-xV) < otherBoxX){
+		direction = LEFT;
+	}
+	else if((this->x-xV) > (otherBoxX + otherBoxWidth)){
+		direction = RIGHT;
+	}
+	else if(this->y-yV+this->sprite->height <= otherBoxY && gravity==true){
+		direction = ABOVE;
+	}else{
+		direction = BELOW;
+	}
+	if(myBoxID==0){	
 		if(other->collisionFlags==GROUND && dead==false){
 			if(!finishedFlag && finishedLevel){
 				finishedFlag = true;
@@ -90,13 +94,14 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 				this->y = ((other->y+offsetY)-(this->sprite->height)-1);
 				//Animation step for end
 			}
-			if(direction == LEFT || direction == RIGHT){
+			if((direction == LEFT || direction == RIGHT) && !(usingPower && players[activePlayer].powers==GHOST)){
 				this->x-=this->xV;
 				this->xV = 0.0;
 				this->xA = 0.0;
 			}
-			if(direction == BELOW){
+			if(direction == BELOW && !(usingPower && players[activePlayer].powers==GHOST)){
 				if(yV!=0.0){
+					this->y -= yV;
 					this->yV = 0.5;
 					this->yA = 0.0;
 				}else{
@@ -104,7 +109,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 				}
 			}
 		}
-		if((other->collisionFlags & ENEMY) !=0 && other->sprite_index!=10){
+		if((other->collisionFlags & ENEMY) !=0 && other->sprite_index!=10 && otherBoxID==0){
 			if(direction == ABOVE && this->recovering==false){
 				//We squashed them
 				playSound("./resources/adam/sounds/stomp.wav");
@@ -139,6 +144,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 				setIndex = 6;
 			}else if(players[activePlayer].poweredUp==true){
 				players[activePlayer].poweredUp = false;
+				usingPower = false;
 				this->recovering = true;
 				alpha = 128;
 				recoverTime = 0.0;
@@ -146,6 +152,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 				this->spriteSet = players[activePlayer].smallSet;
 				setSprite(spriteSet[setIndex]);
 				this->hitBoxes[0]->height = this->sprite->height;
+				this->hitBoxes[1]->offsetY = this->sprite->height;
 				heightDiff = heightDiff - this->sprite->height;
 				this->y += heightDiff;
 				activeDead = true;
@@ -160,6 +167,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			setSprite(spriteSet[setIndex]);
 			heightDiff = heightDiff - this->sprite->height;
 			this->hitBoxes[0]->height = this->sprite->height;
+			this->hitBoxes[1]->offsetY = this->sprite->height;
 			this->y = this->y + heightDiff;
 		}
 		if(other->collisionFlags==GOAL){
@@ -173,6 +181,9 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 				this->xV = 0.0;
 				this->xA = 0.0;
 				this->x = other->x;
+				if(y < other->y + 15.0){
+					y = other->y + 15.0;
+				}
 				stopAllSounds();
 				playSound("./resources/adam/sounds/flagpole.wav");
 			}
@@ -191,6 +202,16 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			destroyObject(this);
 		}
 	}
+	else if(myBoxID==1){
+		if(other->collisionFlags==GROUND){
+			if(otherBoxX + otherBoxWidth > leftGravBound){
+				leftGravBound = otherBoxX + otherBoxWidth;
+			}
+			if(otherBoxX < rightGravBound){
+				rightGravBound = otherBoxX;
+			}
+		}
+	}
 }
 
 void player::process(double delta){
@@ -199,7 +220,7 @@ void player::process(double delta){
 	int boxType;
 	if(dead==false){ //Do stuff if we're not dead
 		//Jumping
-		if(Keys::isKeyPressed(Keys::W) && this->gravity==false && !finishedLevel){
+		if(Keys::isKeyPressed(Keys::W) && this->gravity==false && !finishedLevel && !(Keys::isKeyPressed(Keys::X) && players[activePlayer].powers==TELEKINESIS)){
 			this->yV = -8;
 			this->gravity = true;
 			if(players[activePlayer].poweredUp==false){
@@ -207,13 +228,16 @@ void player::process(double delta){
 			}else{
 				playSound("./resources/adam/sounds/jump_big.wav");
 			}
-			this->addHitBox(this->sprite->width/2-3,0,6,this->sprite->height-2);
+			if(!(usingPower && players[activePlayer].powers==GHOST)){
+				this->addHitBox(0,-25,this->sprite->width,this->sprite->height);
+				hitBoxes[hitBoxes.size()-1]->type=3;
+			}
 		}
 		if(!Keys::isKeyPressed(Keys::W) && this->gravity==true && yV < 0.0){
 			yV = 3*(yV/4);
 		}
 		//Horizontal Movement
-		if(Keys::isKeyPressed(Keys::D) && !finishedLevel && !crouching){
+		if(Keys::isKeyPressed(Keys::D) && !finishedLevel && !crouching && !(Keys::isKeyPressed(Keys::X) && players[activePlayer].powers==TELEKINESIS)){
 			if(this->xV < this->maxVelocity){
 				this->xA = this->acceleration;
 			}else{
@@ -225,7 +249,7 @@ void player::process(double delta){
 				setIndex=4;
 			}
 		}
-		else if(Keys::isKeyPressed(Keys::A) && !finishedLevel && !crouching){
+		else if(Keys::isKeyPressed(Keys::A) && !finishedLevel && !crouching && !(Keys::isKeyPressed(Keys::X) && players[activePlayer].powers==TELEKINESIS)){
 			if(this->xV > -this->maxVelocity){
 				this->xA = -this->acceleration;
 			}else{
@@ -255,27 +279,73 @@ void player::process(double delta){
 		if(Keys::isKeyPressed(Keys::X) && players[activePlayer].poweredUp){
 			if(players[activePlayer].powers==TELEKINESIS && !usingPower){
 				//Create hitbox that throws enemies in the air		
-				this->addHitBox(-2*sprite->width,0,sprite->width*5,sprite->height);
+				this->addHitBox(-2*sprite->width,-20,sprite->width*5,sprite->height+20);
 				hitBoxes[hitBoxes.size()-1]->type = 1;
+				//Create animation
+				pulseWave *tmp = new pulseWave(x-42,y-34);
+				player *me = this;
+				tmp->parent = me;
+				createObject(tmp);
+				//Say that we are using our power
 				usingPower=true;
+				playSound("./resources/adam/sounds/swoosh.wav");
+			}
+			if(players[activePlayer].powers==SUPERSPEED && !usingPower){
+				this->maxVelocity = maxVelocity*2;
+				this->acceleration = acceleration*2;
+				usingPower = true;
+			}
+			if(players[activePlayer].powers==GHOST && !usingPower){
+				alpha = 128;
+				alphaChange = 1;
+				usingPower = true;
 			}
 		
 		}else{
-			if(players[activePlayer].powers==TELEKINESIS){
-				//Destroy that hitbox
-			    	if(usingPower){
-				    for(unsigned int i = 1; i < hitBoxes.size(); i++){
+			if(players[activePlayer].powers==SUPERSPEED && usingPower){
+				this->maxVelocity = maxVelocity/2;
+				this->acceleration = acceleration/2;
+				usingPower = false;
+			}
+			if(players[activePlayer].powers==GHOST && usingPower){
+				alpha = 255;
+				usingPower = false;
+			}
+		}
+		//Cleanup telekinesis hitbox and make sure player can't move while using powers
+		if(players[activePlayer].powers==TELEKINESIS){
+			//Destroy that hitbox
+			if(!usingPower && hitBoxes.size()>2){
+				for(unsigned int i = 2; i < hitBoxes.size(); i++){
 					if(hitBoxes[i]!=NULL){
-					    boxType = hitBoxes[i]->type;
-					    if(boxType==1){
-						    this->deleteHitBox(i);
-						    usingPower=false;
-					    }
+						boxType = hitBoxes[i]->type;
+						if(boxType==1){
+							this->deleteHitBox(i);
+						}
 					}
-				    }
 				}
 			}
-
+		}
+		//Cleanup super speed
+		if(!usingPower && players[activePlayer].powers==SUPERSPEED){
+			if(maxVelocity>6.5){
+				maxVelocity=6.5;
+				acceleration=1.0;
+			}
+		}
+		//pulse ghost transparency
+		if(usingPower && players[activePlayer].powers==GHOST){
+			if(alpha>=220){
+				alphaChange = -1;
+			}
+			else if(alpha<=128){
+				alphaChange = 1;
+			}
+			ghostTime+=delta;
+			if(ghostTime > 0.2){
+				ghostTime = 0.0;
+				alpha+=alphaChange;
+			}
 		}
 		if(Keys::isKeyPressed(Keys::S) && players[activePlayer].poweredUp==true && gravity==false && !finishedLevel){
 			this->friction = 0.1;
@@ -313,13 +383,13 @@ void player::process(double delta){
 			this->gravity = true;
 		}
 		//Process if we are jumping, if so add the jump hit box
-		if(yV < 0.0 && hitBoxes.size() < 2){
+		if(yV < 0.0 && hitBoxes.size() < 3){
 			//pass
-		}else if (((setIndex!=4 && setIndex !=5)) && hitBoxes.size() >= 2){
-			for(unsigned int i = 1; i < hitBoxes.size(); i++){
+		}else if (((setIndex!=4 && setIndex !=5)) && hitBoxes.size() >= 3){
+			for(unsigned int i = 2; i < hitBoxes.size(); i++){
 			    	if(hitBoxes[i]!=NULL){
 				    boxType = this->hitBoxes[i]->type;
-				    if(boxType==0){
+				    if(boxType==3){
 					    this->deleteHitBox(i);
 					    break;
 				    }
@@ -394,11 +464,12 @@ void Block::onCollide(Object *other, int myBoxID, int otherBoxID){
 		}else{
 			direction = BELOW;
 		}
-	if(other->collisionFlags==PLAYER && players[activePlayer].poweredUp){
-		if(other->sprite_index==players[activePlayer].bigSet[4] || other->sprite_index==players[activePlayer].bigSet[5]){
-			if(otherBoxID>0 && other->hitBoxes[otherBoxID]->type==0){
-			playSound("resources/adam/sounds/break.wav");
-			destroyObject(this);
+	if(other->collisionFlags==PLAYER && players[activePlayer].poweredUp && direction==ABOVE){
+		if((other->sprite_index==players[activePlayer].bigSet[4] || other->sprite_index==players[activePlayer].bigSet[5]) && other->yV >= 0.0){
+			if(otherBoxID==0 && other->hitBoxes[otherBoxID]->type==0){
+				playSound("resources/adam/sounds/break.wav");
+				destroyObject(this);
+			return;
 			}
 		}
 	}
@@ -508,14 +579,33 @@ void gomba::onCollide(Object *other, int myBoxID, int otherBoxID){
 		}
 	}
 	if(other->collisionFlags==PLAYER && dead==false){
-		if(direction == BELOW && activeDead==false && other->hitBoxes[otherBoxID]->type==0){
-			this->dead = true;
-			this->xV = 0.0;
-			setSprite((unsigned int)10);
+		if(otherBoxID==0){
+			if(direction == BELOW && activeDead==false && other->hitBoxes[otherBoxID]->type==0){
+				this->dead = true;
+				this->xV = 0.0;
+				setSprite((unsigned int)10);
+			}
 		}
 		else if(other->hitBoxes[otherBoxID]->type==1){
 			this->yV=-9.0;
 			this->gravity=true;
+			if(other->x > x){
+				xV = -1.0;
+			}else{
+				xV = 1.0;
+			}
+		}
+		else if(other->hitBoxes[otherBoxID]->type==3){
+			if(gravity==false){
+				dead = true;
+				this->collisionLayer = -1;
+				this->collisionFlags = 0;
+				yV = -9.0;
+				gravity = true;
+				setSprite((unsigned int)54);
+				playSound("resources/adam/sounds/kick.wav");
+				
+			}
 		}
 	}
 	if((other->collisionFlags & DANGER_ALL) != 0){
@@ -748,7 +838,7 @@ void mushroom::onCollide(Object *other, int myBoxID, int otherBoxID){
 			this->xV = -xV;
 		}
 	}
-	else if(other->collisionFlags==PLAYER){
+	else if(other->collisionFlags==PLAYER && otherBoxID < 1){
 		destroyObject(this);
 	}
 	return;
@@ -761,7 +851,7 @@ flagpole::flagpole(float x, float y, int collisionLayer, unsigned int collisionF
 void flagpole::create(){
 	setSprite((unsigned int)46);
 	this->debug = false;
-	this->addHitBox(10,20,this->sprite->width-10,this->sprite->height-20);
+	this->addHitBox(10,-20,this->sprite->width-10,this->sprite->height+40);
 }
 
 void flagpole::process(double delta){
@@ -794,7 +884,7 @@ void castle::process(double delta){
 }
 
 void castle::onCollide(Object *other, int myBoxID, int otherBoxID){
-	if(other->collisionFlags==PLAYER){
+	if(other->collisionFlags==PLAYER && otherBoxID==0){
 			//Change whose turn it is
 			if(activePlayer+1 < playerNum){
 				activePlayer+=1;
