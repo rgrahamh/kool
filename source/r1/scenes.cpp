@@ -17,6 +17,7 @@ Scene* createMainGame(){
 
     //Add objects to the scenes
     scene->addObject(background);
+    scene->addObject(barrels);
     scene->addObject(ground);
     scene->addObject(mman);
 
