@@ -13,8 +13,13 @@ class Player: public Object{
     public:
 		Player(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
         void create();
+        void onCollide(Object* other, int myBoxID, int otherBoxID);
+        void process(float delta);
     private:
         std::vector<Sprite*> sprites;
+        bool grounded;
+        float speed;
+        float maxVelocity;
 };
 
 class Ground: public Object{

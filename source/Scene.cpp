@@ -260,6 +260,10 @@ void Scene::destroyObject(Object *obj){
 void Scene::scaleAllObjects(float xScale, float yScale){
     for(unsigned int i = 0; i < this->objectList.size(); i++){
         objectList[i]->setScale(xScale, yScale);
+        for(unsigned int j = 0; j < this->objectList[i]->hitBoxes.size(); j++){
+            objectList[i]->hitBoxes[j]->width *= xScale;
+            objectList[i]->hitBoxes[j]->height *= yScale;
+        }
     }
 }
 

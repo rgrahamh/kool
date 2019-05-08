@@ -61,7 +61,7 @@ int main(int argc, char* argv){
     //SPRITE IDX = 11
     Sprite *bottom_ground_sprite = new Sprite(GROUND_PATH + "bottom_ground_tile.png");
     bottom_ground_sprite->setRepeated(true);
-    bottom_ground_sprite->setSize(20000, 900);
+    bottom_ground_sprite->setSize(2000, 900);
 
     //SPRITE IDX = 12
     Sprite *top_ground_sprite = new Sprite(GROUND_PATH + "top_ground_tile.png");
