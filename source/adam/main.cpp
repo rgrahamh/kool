@@ -6,8 +6,9 @@
 #include "globalvars.hpp"
 
 int activePlayer = 0;
-int currentLevel = 1;
+int currentLevel = 0;
 std::function<Scene *()> levelFunc = level1;
+std::vector<std::function<Scene *()>> levels = {level1};
 
 std::vector<unsigned int> p1Small = {0,4,3,5,6,7,11,42,43};
 std::vector<unsigned int> p2Small = {14,15,16,17,18,19,20,44,45};
