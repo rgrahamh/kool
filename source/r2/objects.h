@@ -20,4 +20,10 @@ public:
     void init();
 };
 
+class background: public Object
+{
+    background(float x, float y, int collisionLayer=1, unsigned int collisionFlags=0, bool grav=false);
+    void init();
+}
+
 #endif
