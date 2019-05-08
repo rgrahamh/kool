@@ -16,6 +16,14 @@ class background: public Object {
 		void create();
 };
 
+class planet: public Object {
+
+    public:
+		//This code has to be present in all child objects of Object
+		planet(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void create();
+};
+
 class player: public Object {
 	public:
 		player(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);

@@ -8,17 +8,27 @@ background::background(float x, float y, int collisionLayer, unsigned int collis
 
 void background::create(){
 		this->collisionLayer = -1;
-		setSprite((unsigned int)1);
+		setSprite((unsigned int)2); //index 2
 	}
 
+planet::planet(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
+		create();
+	}
+
+void planet::create(){
+		this->collisionLayer = 0;
+		setSprite((unsigned int)1); //index1
+	}
+
+
 player::player(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav){
-			create();
+			create(); 
 		}
 
 void player::create(){
 	this->collisionLayer = 0;
 	this->debug = false;
-	setSprite((unsigned int)0);
+	setSprite((unsigned int)0);//index 0
 	sprite_index = 0;
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 	this->friction = 0.3;
@@ -32,13 +42,15 @@ void player::create(){
 void player::process(double delta){
 	//Set currect sprite
 		if(Keys::isKeyPressed(Keys::W)){
-			this->yA = -this->acceleration;
+			this->yV = -2;
 			this->friction = this->friction;
+			this->yA = -this->acceleration;
 		}
 
 		if(Keys::isKeyPressed(Keys::S)){
-			this->yA = this->acceleration;
+			this->yV = 2;
 			this->friction = this->friction;
+			this->yA = this->acceleration;
 		}
 
 		//Horizontal Movement
