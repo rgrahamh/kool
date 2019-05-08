@@ -41,6 +41,8 @@ Object::Object(float x, float y, int collisionlayer, unsigned int collisionFlags
 	this->yScale = 1.0;
 	this->dynamic = true;
 	this->alpha = 255;
+	this->sprite_height = -1;
+	this->sprite_width = -1;
 	setTextColor();
 }
 
@@ -58,8 +60,16 @@ struct drawData Object::_draw(){
 	if(this->sprite!=NULL){
 		data.imageIndex = this->imageIndex; 	
 		data.repeated = this->sprite->repeated;
-		data.width = this->sprite->width;
-		data.height = this->sprite->height;
+		if(this->sprite_width==-1){
+			data.width = this->sprite->width;
+		}else{
+			data.width = this->sprite_width;
+		}
+		if(this->sprite_height==-1){
+			data.height = this->sprite->height;
+		}else{
+			data.height = this->sprite_height;
+		}
 	}else{
 		data.imageIndex = -1;
 	}

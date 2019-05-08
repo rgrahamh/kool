@@ -53,7 +53,9 @@ void Scene::process(double delta){
     //printf("%f\r", delta);
     //std::fflush(stdout);
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
-		this->objectList[i]->_process(delta, gravity, termVel);
+	    	if(this->objectList[i]!=NULL){
+			this->objectList[i]->_process(delta, gravity, termVel);
+		}
 	}
 	//Object collision processing
 
@@ -71,6 +73,11 @@ void Scene::process(double delta){
                 obj2 = this->objectList[j];
                 if(j < this->objectList.size() && this->objectList[j]!=NULL && obj2->collisionLayer >= 0){
                     for(unsigned int k = 0; k < obj1->hitBoxes.size(); k++){
+						obj2 = this->objectList[j];
+        				obj1 = this->objectList[i];
+						if(obj2==NULL || obj1==NULL){
+							continue;
+						}
 						if(obj1->hitBoxes[k]!=NULL){
 							float x1 = obj1->hitBoxes[k]->offsetX + obj1->x;
 							float y1 = obj1->hitBoxes[k]->offsetY + obj1->y;
@@ -83,8 +90,12 @@ void Scene::process(double delta){
 									   && y1 + obj1->hitBoxes[k]->height > y2
 									   && y1 < y2 + obj2->hitBoxes[l]->height){
 														//Handle Collision
-														obj1->onCollide(obj2, k, l);
-														obj2->onCollide(obj1, l, k);
+														if(obj1!=NULL && obj2!=NULL){
+															obj1->onCollide(obj2, k, l);
+														}
+														if(obj1!=NULL && obj2!=NULL){
+															obj2->onCollide(obj1, l, k);
+														}
 									}
 								}else{
 									//Clean up deleted hitboxes
@@ -99,11 +110,11 @@ void Scene::process(double delta){
                 }
             }
         }
-		//Cleanup Object List
-		for(unsigned int i = 0; i < this->objectList.size(); i++){
-			if(this->objectList[i]==NULL){
-				objectList.erase(objectList.begin()+i);
-			}
+	}
+	//Cleanup Object List
+	for(unsigned int i = 0; i < this->objectList.size(); i++){
+		if(this->objectList[i]==NULL){
+			objectList.erase(objectList.begin()+i);
 		}
 	}
 	//View processing
@@ -112,7 +123,7 @@ void Scene::process(double delta){
 	}
     //Process if this scene has been destroyed
     if(destroyed==true){
-	delete this;
+		delete this;
     }
 }
 

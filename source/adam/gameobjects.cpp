@@ -205,6 +205,7 @@ void player::process(double delta){
 			}else{
 				playSound("./resources/adam/sounds/jump_big.wav");
 			}
+			this->addHitBox(this->sprite->width/2-3,0,6,this->sprite->height-2);
 		}
 		if(!Keys::isKeyPressed(Keys::W) && this->gravity==true && yV < 0.0){
 			yV = 3*(yV/4);
@@ -285,7 +286,7 @@ void player::process(double delta){
 		}
 		//Process if we are jumping, if so add the jump hit box
 		if(yV < 0.0 && hitBoxes.size() < 2){
-			this->addHitBox(this->sprite->width/2-3,0,6,this->sprite->height-2);
+			//pass
 		}else if ((yV > 0.0 || (setIndex!=4 && setIndex !=5)) && hitBoxes.size() >= 2){
 			this->deleteHitBox(1);
 		}
@@ -350,7 +351,7 @@ void Block::onCollide(Object *other, int myBoxID, int otherBoxID){
 		}else{
 			direction = BELOW;
 		}
-	if(other->collisionFlags==PLAYER && direction == ABOVE && players[activePlayer].poweredUp){
+	if(other->collisionFlags==PLAYER && players[activePlayer].poweredUp){
 		if(other->sprite_index==players[activePlayer].bigSet[4] || other->sprite_index==players[activePlayer].bigSet[5]){
 			if(otherBoxID==1){
 			playSound("resources/adam/sounds/break.wav");
@@ -621,25 +622,26 @@ mushroom::mushroom(float x, float y, int collisionLayer, unsigned int collisionF
 
 void mushroom::create(){
 	setSprite((unsigned int)31);
-	//Keep track of full sprite height, which is 20px
+	//Keep track of full sprite height, which is 16px
 	sprFullHeight = this->sprite->height;
 	rate = 1;
-	this->sprite->setSize(this->sprite->width,rate);
+	this->sprite_width = this->sprite->width;
+	this->sprite_height = rate;
 	full = false;
 	animationTime = 20.0;
 	animationAcc = 0.0;
 	this->debug = false;
-	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+	this->addHitBox(0,0,this->sprite_width,this->sprite_height);
 }
 
 void mushroom::process(double delta){
 	if(full == false){
 		animationAcc+=delta;
 		if(animationAcc >= animationTime){
-			this->sprite->setSize(this->sprite->width,this->sprite->height+rate);
+			this->sprite_height+=rate;
 			this->y-=rate;
-			this->hitBoxes[0]->height = this->sprite->height;
-			if(this->sprite->height >= sprFullHeight){
+			this->hitBoxes[0]->height = this->sprite_height;
+			if(this->sprite_height >= sprFullHeight){
 				full = true;
 				this->gravity = true;
 				this->xV = 2.0;
