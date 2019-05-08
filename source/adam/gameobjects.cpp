@@ -22,7 +22,8 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void player::create(){
 	this->collisionLayer = 0;
-	this->debug = false;
+	this->debug = true;
+	this->usingPower = false;
 	setSprite((unsigned int)0);
 	sprite_index = 0;
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
@@ -195,6 +196,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 void player::process(double delta){
 	//Set currect sprite
 	setSprite(spriteSet[setIndex]);
+	int boxType;
 	if(dead==false){ //Do stuff if we're not dead
 		//Jumping
 		if(Keys::isKeyPressed(Keys::W) && this->gravity==false && !finishedLevel){
@@ -249,6 +251,32 @@ void player::process(double delta){
 				}
 			}
 		}
+		//Using your super power
+		if(Keys::isKeyPressed(Keys::X) && players[activePlayer].poweredUp){
+			if(players[activePlayer].powers==TELEKINESIS && !usingPower){
+				//Create hitbox that throws enemies in the air		
+				this->addHitBox(-2*sprite->width,0,sprite->width*5,sprite->height);
+				hitBoxes[hitBoxes.size()-1]->type = 1;
+				usingPower=true;
+			}
+		
+		}else{
+			if(players[activePlayer].powers==TELEKINESIS){
+				//Destroy that hitbox
+			    	if(usingPower){
+				    for(unsigned int i = 1; i < hitBoxes.size(); i++){
+					if(hitBoxes[i]!=NULL){
+					    boxType = hitBoxes[i]->type;
+					    if(boxType==1){
+						    this->deleteHitBox(i);
+						    usingPower=false;
+					    }
+					}
+				    }
+				}
+			}
+
+		}
 		if(Keys::isKeyPressed(Keys::S) && players[activePlayer].poweredUp==true && gravity==false && !finishedLevel){
 			this->friction = 0.1;
 			if(setIndex==3 || setIndex==1){
@@ -287,8 +315,23 @@ void player::process(double delta){
 		//Process if we are jumping, if so add the jump hit box
 		if(yV < 0.0 && hitBoxes.size() < 2){
 			//pass
-		}else if ((yV > 0.0 || (setIndex!=4 && setIndex !=5)) && hitBoxes.size() >= 2){
-			this->deleteHitBox(1);
+		}else if (((setIndex!=4 && setIndex !=5)) && hitBoxes.size() >= 2){
+			for(unsigned int i = 1; i < hitBoxes.size(); i++){
+			    	if(hitBoxes[i]!=NULL){
+				    boxType = this->hitBoxes[i]->type;
+				    if(boxType==0){
+					    this->deleteHitBox(i);
+					    break;
+				    }
+				}
+			}
+		}
+		//Process if we're outside the room
+		if(y > getSceneHeight()){
+			dead = true;
+			//Play dieing sound
+			stopAllSounds();
+			playSound("./resources/adam/sounds/die.wav");
 		}
 	}else{
 		//Determine whether to go to preview scene or gameover scene
@@ -353,7 +396,7 @@ void Block::onCollide(Object *other, int myBoxID, int otherBoxID){
 		}
 	if(other->collisionFlags==PLAYER && players[activePlayer].poweredUp){
 		if(other->sprite_index==players[activePlayer].bigSet[4] || other->sprite_index==players[activePlayer].bigSet[5]){
-			if(otherBoxID==1){
+			if(otherBoxID>0 && other->hitBoxes[otherBoxID]->type==0){
 			playSound("resources/adam/sounds/break.wav");
 			destroyObject(this);
 			}
@@ -465,10 +508,14 @@ void gomba::onCollide(Object *other, int myBoxID, int otherBoxID){
 		}
 	}
 	if(other->collisionFlags==PLAYER && dead==false){
-		if(direction == BELOW && activeDead==false){
+		if(direction == BELOW && activeDead==false && other->hitBoxes[otherBoxID]->type==0){
 			this->dead = true;
 			this->xV = 0.0;
 			setSprite((unsigned int)10);
+		}
+		else if(other->hitBoxes[otherBoxID]->type==1){
+			this->yV=-9.0;
+			this->gravity=true;
 		}
 	}
 	if((other->collisionFlags & DANGER_ALL) != 0){
@@ -763,6 +810,13 @@ void castle::onCollide(Object *other, int myBoxID, int otherBoxID){
 			}
 			//Set the level
 			//Start new level timer	
+			currentLevel++;
+			if(currentLevel < levels.size()){
+				levelFunc = levels[currentLevel];
+			}else{
+				levelFunc = levels[0];
+				currentLevel = 0;
+			}
 			sceneChange = new timeTrigger(0,0);
 			sceneChange->setTimer(1500.0);
 			sceneChange->setSceneFunc(createPreviewScene);

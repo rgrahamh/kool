@@ -93,6 +93,7 @@ void Scene::process(double delta){
 														if(obj1!=NULL && obj2!=NULL){
 															obj1->onCollide(obj2, k, l);
 														}
+														obj2 = this->objectList[j];
 														if(obj1!=NULL && obj2!=NULL){
 															obj2->onCollide(obj1, l, k);
 														}

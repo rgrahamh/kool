@@ -31,6 +31,7 @@ class player: public Object {
 		bool finishedLevel;
 		bool finishedFlag;
 		bool crouching;
+		bool usingPower;
 		float acceleration;
 		float maxVelocity;
 		float rightGravBound;
