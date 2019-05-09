@@ -56,7 +56,7 @@ void koopa::onCollide(Object *other, int myBoxID, int otherBoxID){
 					if(xV==0.0){
 						this->xV = 1.0;
 					}
-				}else{
+				}else if(xV==0){
 					xV = 0.0;
 				}
 
@@ -133,9 +133,31 @@ void koopa::onCollide(Object *other, int myBoxID, int otherBoxID){
 					yV = -9.0;
 					gravity = true;
 					if(x < other->x){
-						xV = -1.0;
+						if(!inShell){
+							xV = -1.0;
+						}else{
+							xV = -shellSpeed;
+							shellMoving = true;
+						}
 					}else{
-						xV = 1.0;
+						if(!inShell){
+							xV = 1.0;
+						}else{
+							xV = shellSpeed;
+							shellMoving = true;
+						}
+					}
+				}
+				else if(other->hitBoxes[otherBoxID]->type==3 && other->yV <= 0.0 && other->gravity){
+					if(gravity==false){
+						dead = true;
+						this->collisionLayer = -1;
+						this->collisionFlags = 0;
+						yV = -9.0;
+						gravity = true;
+						setSprite((unsigned int)51);
+						playSound("resources/adam/sounds/kick.wav");
+						
 					}
 				}
 			}
@@ -152,10 +174,10 @@ void koopa::onCollide(Object *other, int myBoxID, int otherBoxID){
 	}
 	else if(myBoxID==1){
 		if(other->collisionFlags==GROUND){
-			if(otherBoxX + otherBoxWidth > leftGravBound){
+			if(otherBoxX + otherBoxWidth > leftGravBound || leftGravBound==-1){
 				leftGravBound = otherBoxX + otherBoxWidth;
 			}
-			if(otherBoxX < rightGravBound){
+			if(otherBoxX < rightGravBound || rightGravBound==-1){
 				rightGravBound = otherBoxX;
 			}
 		}
@@ -213,6 +235,10 @@ void koopa::process(double delta){
 		if(xV==0.0 && inShell){
 			shellMoving = false;
 		}
+		//If our bounds are -1 and we're not falling...we need to be
+		if(rightGravBound==-1 && gravity == false){
+			gravity = true;
+		}
 	}
 	
 
@@ -220,6 +246,9 @@ void koopa::process(double delta){
 	if(y > (float)getSceneHeight()){
 		destroyObject(this);
 	}
+	//reset gravity boundaries
+	rightGravBound = -1;
+	leftGravBound = -1;
 
 }
 

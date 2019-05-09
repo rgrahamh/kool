@@ -22,7 +22,7 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void player::create(){
 	this->collisionLayer = 0;
-	this->debug = true;
+	this->debug = false;
 	this->usingPower = false;
 	setSprite((unsigned int)0);
 	sprite_index = 0;
@@ -101,7 +101,6 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 			}
 			if(direction == BELOW && !(usingPower && players[activePlayer].powers==GHOST)){
 				if(yV!=0.0){
-					this->y -= yV;
 					this->yV = 0.5;
 					this->yA = 0.0;
 				}else{
@@ -112,6 +111,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 		if((other->collisionFlags & ENEMY) !=0 && other->sprite_index!=10 && otherBoxID==0){
 			if(direction == ABOVE && this->recovering==false){
 				//We squashed them
+				y -= yV;
 				playSound("./resources/adam/sounds/stomp.wav");
 				yV = -10.5;
 			}else if(players[activePlayer].poweredUp==false && this->recovering==false){
@@ -527,9 +527,13 @@ void gomba::create(){
 	this->collisionFlags = ENEMY;
 	setSprite((unsigned int)9);
 	this->addHitBox(2,5,this->sprite->width-2,this->sprite->height-5);
+	addHitBox(-10,this->sprite->height,this->sprite->width+20,5);
 	this->dead = false;
 	deadTime = 0.0;
 	deadMax = 300.0;
+	rightGravBound = -1;
+	leftGravBound = -1;
+	xV = 0.0;
 }
 
 void gomba::onCollide(Object *other, int myBoxID, int otherBoxID){
@@ -551,71 +555,84 @@ void gomba::onCollide(Object *other, int myBoxID, int otherBoxID){
 		}else{
 			direction = BELOW;
 		}
+	if(myBoxID==0){
+		//Interact with walls, floor, ceiling
+		if(other->collisionFlags==GROUND){
+			if(direction == ABOVE){
+				this->gravity = false;
+				this->rightGravBound = otherBoxX;
+				this->leftGravBound = otherBoxX + otherBoxWidth;
+				this->yA = 0.0;
+				this->yV = 0.0;
+				if(xV==0.0){
+					this->xV = 1.0;
+				}
 
-	//Interact with walls, floor, ceiling
-	if(other->collisionFlags==GROUND){
-		if(direction == ABOVE){
-			this->gravity = false;
-			this->rightGravBound = otherBoxX;
-			this->leftGravBound = otherBoxX + otherBoxWidth;
-			this->yA = 0.0;
-			this->yV = 0.0;
-			this->xV = 1.0;
+				//Calculate correct y value
+				float offsetY = other->hitBoxes[otherBoxID]->offsetY;
 
-			//Calculate correct y value
-			float offsetY = other->hitBoxes[otherBoxID]->offsetY;
-
-			this->y = ((other->y+offsetY)-(this->sprite->height)-1);
+				this->y = ((other->y+offsetY)-(this->sprite->height)-1);
+			}
+			if(direction == LEFT || direction == RIGHT){
+				this->x-=this->xV;
+				this->xV = -xV;
+				this->xA = 0.0;
+			}
+			if(direction == BELOW){
+				this->yV = 0.0;
+				this->yA = 0.0;
+				this->xV = -xV;
+			}
 		}
-		if(direction == LEFT || direction == RIGHT){
-			this->x-=this->xV;
-			this->xV = -xV;
-			this->xA = 0.0;
+		if(other->collisionFlags==PLAYER && dead==false){
+			if(otherBoxID==0){
+				if(direction == BELOW && activeDead==false && other->hitBoxes[otherBoxID]->type==0){
+					this->dead = true;
+					this->xV = 0.0;
+					setSprite((unsigned int)10);
+				}
+			}
+			else if(other->hitBoxes[otherBoxID]->type==1){
+				this->yV=-9.0;
+				this->gravity=true;
+				if(other->x > x){
+					xV = -1.0;
+				}else{
+					xV = 1.0;
+				}
+			}
+			else if(other->hitBoxes[otherBoxID]->type==3 && other->yV <= 0.0 && other->gravity){
+				if(gravity==false){
+					dead = true;
+					this->collisionLayer = -1;
+					this->collisionFlags = 0;
+					yV = -9.0;
+					gravity = true;
+					setSprite((unsigned int)54);
+					playSound("resources/adam/sounds/kick.wav");
+					
+				}
+			}
 		}
-		if(direction == BELOW){
-			this->yV = 0.0;
-			this->yA = 0.0;
-			this->xV = -xV;
+		if((other->collisionFlags & DANGER_ALL) != 0){
+			dead = true;
+			this->collisionLayer = -1;
+			this->collisionFlags = 0;
+			yV = -9.0;
+			gravity = true;
+			setSprite((unsigned int)54);
+			playSound("resources/adam/sounds/kick.wav");
 		}
 	}
-	if(other->collisionFlags==PLAYER && dead==false){
-		if(otherBoxID==0){
-			if(direction == BELOW && activeDead==false && other->hitBoxes[otherBoxID]->type==0){
-				this->dead = true;
-				this->xV = 0.0;
-				setSprite((unsigned int)10);
+	else if(myBoxID==1){
+		if(other->collisionFlags==GROUND){
+			if(otherBoxX + otherBoxWidth > leftGravBound || leftGravBound==-1){
+				leftGravBound = otherBoxX + otherBoxWidth;
+			}
+			if(otherBoxX < rightGravBound || rightGravBound==-1){
+				rightGravBound = otherBoxX;
 			}
 		}
-		else if(other->hitBoxes[otherBoxID]->type==1){
-			this->yV=-9.0;
-			this->gravity=true;
-			if(other->x > x){
-				xV = -1.0;
-			}else{
-				xV = 1.0;
-			}
-		}
-		else if(other->hitBoxes[otherBoxID]->type==3){
-			if(gravity==false){
-				dead = true;
-				this->collisionLayer = -1;
-				this->collisionFlags = 0;
-				yV = -9.0;
-				gravity = true;
-				setSprite((unsigned int)54);
-				playSound("resources/adam/sounds/kick.wav");
-				
-			}
-		}
-	}
-	if((other->collisionFlags & DANGER_ALL) != 0){
-		dead = true;
-		this->collisionLayer = -1;
-		this->collisionFlags = 0;
-		yV = -9.0;
-		gravity = true;
-		setSprite((unsigned int)54);
-		playSound("resources/adam/sounds/kick.wav");
 	}
 }
 void gomba::process(double delta){
@@ -640,6 +657,9 @@ void gomba::process(double delta){
 			destroyObject(this);
 		}
 	}
+	//reset left/right grav bounds
+	leftGravBound = -1;
+	rightGravBound = -1;
 }
 
 //genericText class
@@ -739,7 +759,7 @@ void MysteryBox::onCollide(Object *other, int myBoxID, int otherBoxID){
 	}else{
 		direction = BELOW;
 	}
-	if(other->collisionFlags==PLAYER && direction==ABOVE){
+	if(other->collisionFlags==PLAYER && direction==ABOVE && other->hitBoxes[otherBoxID]->type==0){
 		if(beenHit==false){
 			mushroom *tmp = new mushroom(this->x,this->y-1,0,POWERUP,false);
 			playSound("./resources/adam/sounds/mushroom_up.wav");
@@ -851,7 +871,7 @@ flagpole::flagpole(float x, float y, int collisionLayer, unsigned int collisionF
 void flagpole::create(){
 	setSprite((unsigned int)46);
 	this->debug = false;
-	this->addHitBox(10,-20,this->sprite->width-10,this->sprite->height+40);
+	this->addHitBox(10,-100,this->sprite->width-10,this->sprite->height+120);
 }
 
 void flagpole::process(double delta){
@@ -859,7 +879,7 @@ void flagpole::process(double delta){
 }
 
 void flagpole::onCollide(Object *other, int myBoxID, int otherBoxID){
-	if(other->collisionFlags==PLAYER){
+	if(other->collisionFlags==PLAYER && otherBoxID==0){
 		this->myFlag->y = other->y;
 	}
 	return;
