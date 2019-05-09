@@ -202,7 +202,7 @@ void Object::_processPhysics(float grav, float termVel){
 
     //Adding gravity to vertical acceleration (implies that gravity is always up or down)
     if(this->gravity){
-        yA =+ grav;
+        yA += grav;
     }
 
     //Adding vertical acceleration to the vertical velocity
