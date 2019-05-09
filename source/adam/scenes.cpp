@@ -5,16 +5,21 @@
 
 Scene *level2(){
 
-	Scene *gameScene = new Scene(2200,525);
+	Scene *gameScene = new Scene(3000,520);
 	
 	//Create objects
+	//Backmost background
+	background *bg2 = new background(0,0);
+	bg2->setSprite((unsigned int)58);
+	bg2->sprite_width = 3000;
+	bg2->sprite_height = 520;
 
 	//Background
 	background *bg = new background(0,0);
-	spriteIndex[1]->setSize(2500,342);
+	spriteIndex[1]->setSize(gameScene->width,342);
 	
 	//Flag post
-	flagpole *fp = new flagpole(1880,326,0,GOAL,false);
+	flagpole *fp = new flagpole(gameScene->width-320,326,0,GOAL,false);
 
 	//Flag
 	aFlag *theFlag = new aFlag(fp->x-3,fp->y+20,0,0,false);
@@ -22,18 +27,24 @@ Scene *level2(){
 	fp->myFlag = theFlag;
 
 	//Castle
-	castle *cstl = new castle(2000,415,0,0x60,false);
+	castle *cstl = new castle(gameScene->width-200,415,0,0x60,false);
 
 	//Player
-	player *p1 = new player(50,450,0,PLAYER,true);
+	player *p1 = new player(50,452,0,PLAYER,true);
 
 	//Ground
 	ground *ground_object = new ground(0,342,0,GROUND,false);
-	spriteIndex[2]->setSize(2500,180);
+	ground_object->sprite_width=248;
+
+	//Ground
+	ground *ground_object2 = new ground(296,342,0,GROUND,false);
+	ground_object2->sprite_width=3000-296;
 
 	//Add objects to the scenes
+	gameScene->addObject(bg2);
 	gameScene->addObject(bg);
 	gameScene->addObject(ground_object);
+	gameScene->addObject(ground_object2);
 	gameScene->addObject(theFlag);
 	gameScene->addObject(fp);
 	gameScene->addObject(cstl);
@@ -41,20 +52,60 @@ Scene *level2(){
 	
 	//Blocks
 	Block *blockTmp;
-	float blocks[18][2] = {{50,300},{66,300},{82,300},
-						  {720,452},{734,452},{748,452},{776,410},{790,410},{804,410},
-						  {1100,438},{1116,438},{1132,438},
-						  {1200,394},{1216,394},{1232,394},
-						  {1300,438},{1316,438},{1332,438}
-						 };
+	float blocks[][2] ={{29,376},{45,392},{61,408},{75,424},{91,440},
+			    {898,430},{914,430},{930,430},
+			    {1026,430},{1042,430},{1058,430}
+			};
 	for(unsigned int i = 0; i < (sizeof(blocks)/sizeof(blocks[0])); i++){
 		blockTmp = new Block(blocks[i][0],blocks[i][1],0,GROUND,false);
 		gameScene->addObject(blockTmp);
 	}
 	//metal blocks
 	metalBlock *mBlockTmp;
-	float startX = 1610;
-	float startY = 494;
+	float startX;
+	float startY;
+	float mBlocks[][2] = {{1074,430},{1074,446},{1074,462},{1074,478}};
+	for(unsigned int i = 0; i < (sizeof(mBlocks)/sizeof(mBlocks[0])); i++){
+		mBlockTmp = new metalBlock(mBlocks[i][0],mBlocks[i][1],0,GROUND,false);
+		gameScene->addObject(mBlockTmp);
+	}
+
+	//Ascending stairs
+	startX = 200;
+	startY = 494;
+	for(unsigned int i = 0; i < 3; i++){
+		for(unsigned int j = 0; j < i+1; j++){
+			mBlockTmp = new metalBlock(startX+(16*i),startY-(16*(j+1)),0,GROUND,false);
+			gameScene->addObject(mBlockTmp);
+		}
+	}
+	//Descending stairs
+	startX = startX+96;
+	for(int i = 2; i > -1; i--){
+		for(int j = 0; j < 3-i; j++){
+			mBlockTmp = new metalBlock(startX+(16*i),startY-(16*(j+1)),0,GROUND,false);
+			gameScene->addObject(mBlockTmp);
+		}
+	}
+	//Ascending stairs
+	startX = 770;
+	for(unsigned int i = 0; i < 3; i++){
+		for(unsigned int j = 0; j < i+1; j++){
+			mBlockTmp = new metalBlock(startX+(16*i),startY-(16*(j+1)),0,GROUND,false);
+			gameScene->addObject(mBlockTmp);
+		}
+	}
+	//Ceiling	
+	float ceilingStart = 0;
+	unsigned int ceilingLength = 48;
+	for(unsigned int i = 0; i < ceilingLength; i++){
+		mBlockTmp = new metalBlock(ceilingStart+(16*i),325,0,GROUND,false);
+		gameScene->addObject(mBlockTmp);
+	}
+
+	startX = gameScene->width-590;
+	startY = 494;
+	//Final flag stairs
 	for(unsigned int i = 0; i < 9; i++){
 		for(unsigned int j = 0; j < i+1; j++){
 			if(j > 8){
@@ -67,11 +118,14 @@ Scene *level2(){
 
 	//Mystery Boxes
 	MysteryBox *mysteryTmp;
-	float mysteryBoxes[2][2] = {{146,438},{820,438}};
+	
+	float mysteryBoxes[][2] = {{978,430}};
 	for(unsigned int i = 0; i < (sizeof(mysteryBoxes)/sizeof(mysteryBoxes[0])); i++){
 		mysteryTmp = new MysteryBox(mysteryBoxes[i][0],mysteryBoxes[i][1],0,GROUND,false);
 		gameScene->addObject(mysteryTmp);
 	}
+	
+	/*
 	//Pipes
 	staticPipe *staticPipeTmp;
 	float staticPipes[5][2] = {{296,462},{464,462},{614,462},{870,462},{1500,462}};
@@ -79,26 +133,23 @@ Scene *level2(){
 		staticPipeTmp = new staticPipe(staticPipes[i][0],staticPipes[i][1],0,GROUND,false);
 		gameScene->addObject(staticPipeTmp);
 	}
-
+	*/
 	//Gombas
+	
 	gomba *gombaTmp;
-	float gombas[9][2] = {{150,460},
-						{320,460},{370,460},
-						{500,460},
-						{900,462},{1100,462},{1200,462},{1300,462},{1400,462}
-						};
+	float gombas[][2] = {{190,305},{400,452},{460,452},{510,452},{560,452}};
 	for(unsigned int i = 0; i < (sizeof(gombas)/sizeof(gombas[0]));i++){
 		gombaTmp = new gomba(gombas[i][0],gombas[i][1],0,ENEMY,true);
 		gameScene->addObject(gombaTmp);
 	}
 	//koopas
 	koopa *koopaTmp;
-	float koopas[2][2] = {{560,460},{1000,460}};
+	float koopas[][2] = {{50,305},{125,305},{930,398},{1042,398}};
 	for(unsigned int i = 0; i < (sizeof(koopas)/sizeof(koopas[0]));i++){
 		koopaTmp = new koopa(koopas[i][0],koopas[i][1],0,ENEMY,true);
 		gameScene->addObject(koopaTmp);
 	}
-
+	
 
 	//Edit views
 	gameScene->getView(0)->setFollowing(p1,300,600);
@@ -107,7 +158,7 @@ Scene *level2(){
 }
 Scene *level1(){
 
-	Scene *gameScene = new Scene(2200,525);
+	Scene *gameScene = new Scene(2200,520);
 	
 	//Create objects
 
@@ -211,7 +262,7 @@ Scene *level1(){
 
 Scene *createMenuScene(){
 
-	Scene *menuScene = new Scene(600,525);
+	Scene *menuScene = new Scene(600,520);
 
 	//Create Objects
 	background *bg = new background(0,0);
@@ -242,7 +293,7 @@ Scene *createMenuScene(){
 }
 
 Scene *createPreviewScene(){
-	Scene *previewScene = new Scene(600,525);
+	Scene *previewScene = new Scene(600,520);
 
 	//Create Objects
 	genericText *turnText = new genericText(0,0,-1,0,false);
@@ -274,7 +325,7 @@ Scene *createPreviewScene(){
 }
 
 Scene *gameoverScene(){
-	Scene *gameoverScene = new Scene(600,525);
+	Scene *gameoverScene = new Scene(600,520);
 
 	//Create Objects
 	genericText *gameoverText = new genericText(0,0,-1,0,false);

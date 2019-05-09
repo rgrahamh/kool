@@ -8,7 +8,7 @@
 int activePlayer = 0;
 int currentLevel = 0;
 std::function<Scene *()> levelFunc = level1;
-std::vector<std::function<Scene *()>> levels = {level1,level2};
+std::vector<std::function<Scene *()>> levels = {level2,level2};
 
 std::vector<unsigned int> p1Small = {0,4,3,5,6,7,11,42,43};
 std::vector<unsigned int> p2Small = {14,15,16,17,18,19,20,44,45};
@@ -35,7 +35,7 @@ using namespace std;
 
 int main(){
 
-	GameEngine myEngine = *(new GameEngine(600,525,"Super Mario Bros"));
+	GameEngine myEngine = *(new GameEngine(600,520,"Super Mario Bros"));
 
 	//Create Scene
 
@@ -269,6 +269,9 @@ int main(){
 	pulse->addImage("resources/adam/effects/pulse28.png");
 	pulse->addImage("resources/adam/effects/pulse29.png");
 	pulse->addImage("resources/adam/effects/pulse30.png");
+
+	//index 58
+	Sprite *background2 = new Sprite("resources/adam/plain_bg.jpg");
 
 	//Add Scenes to the Engine
 	myEngine.addScene(createMenuScene()); //scene ID = 0

@@ -88,6 +88,7 @@ class ground: public Object {
 	public:
 		ground(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
+		void process(double delta);
 	
 };
 

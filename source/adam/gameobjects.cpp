@@ -22,7 +22,7 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void player::create(){
 	this->collisionLayer = 0;
-	this->debug = false;
+	this->debug = true;
 	this->usingPower = false;
 	setSprite((unsigned int)0);
 	sprite_index = 0;
@@ -123,14 +123,14 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 				activeDead = true;	
 				//Decrement how many lives we have
 				players[activePlayer].lives -= 1;
-
+				int curPlayer = activePlayer;
 				//Change whose turn it is
 				if(activePlayer+1 < playerNum){
 					activePlayer+=1;
 				}else{
 					activePlayer = 0;
 				}
-				while(players[activePlayer].isPlaying==false || players[activePlayer].lives < 1){
+				while((players[activePlayer].isPlaying==false || players[activePlayer].lives < 1) && activePlayer!=curPlayer){
 					if(activePlayer+1 < playerNum){
 						activePlayer+=1;
 					}else{
@@ -221,14 +221,18 @@ void player::process(double delta){
 	if(dead==false){ //Do stuff if we're not dead
 		//Jumping
 		if(Keys::isKeyPressed(Keys::W) && this->gravity==false && !finishedLevel && !(Keys::isKeyPressed(Keys::X) && players[activePlayer].powers==TELEKINESIS)){
-			this->yV = -8;
+			if(!(usingPower && players[activePlayer].powers==SUPERSPEED)){//Default
+				this->yV = -8;
+			}else{
+				this->yV = -11;
+			}
 			this->gravity = true;
 			if(players[activePlayer].poweredUp==false){
 				playSound("./resources/adam/sounds/jump.wav");
 			}else{
 				playSound("./resources/adam/sounds/jump_big.wav");
 			}
-			if(!(usingPower && players[activePlayer].powers==GHOST)){
+			if(!(usingPower && players[activePlayer].powers==GHOST) && players[activePlayer].poweredUp){
 				this->addHitBox(0,-25,this->sprite->width,this->sprite->height);
 				hitBoxes[hitBoxes.size()-1]->type=3;
 			}
@@ -402,6 +406,30 @@ void player::process(double delta){
 			//Play dieing sound
 			stopAllSounds();
 			playSound("./resources/adam/sounds/die.wav");
+			activeDead = true;	
+			//Decrement how many lives we have
+			players[activePlayer].lives -= 1;
+			//Make sure current player is not powered up
+			players[activePlayer].poweredUp = false;
+			int curPlayer = activePlayer;
+
+			//Change whose turn it is
+			if(activePlayer+1 < playerNum){
+				activePlayer+=1;
+			}else{
+				activePlayer = 0;
+			}
+			while((players[activePlayer].isPlaying==false || players[activePlayer].lives < 1) && curPlayer!=activePlayer){
+				if(activePlayer+1 < playerNum){
+					activePlayer+=1;
+				}else{
+					activePlayer = 0;
+				}
+			}
+		}
+		//Make sure our floor hitbox has the correct offset
+		if(players[activePlayer].poweredUp==true){
+			this->hitBoxes[1]->offsetY = this->sprite->height;
 		}
 	}else{
 		//Determine whether to go to preview scene or gameover scene
@@ -499,6 +527,12 @@ void ground::create(){
 	setSprite((unsigned int)2);
 	this->addHitBox(0,153,this->sprite->width,25);
 
+}
+
+void ground::process(double delta){
+	if(this->sprite_width>-1){
+		hitBoxes[0]->width = this->sprite_width;
+	}
 }
 
 //staticPipe class
@@ -683,7 +717,7 @@ void gameTrigger::create(){
 
 void gameTrigger::process(double delta){
 	if(Keys::isKeyPressed(Keys::X)){
-		levelFunc = level1;
+		levelFunc = levels[0];
 		for(int i = 0; i < playerNum; i++){
 			players[i].lives = 3;
 		}
@@ -871,7 +905,7 @@ flagpole::flagpole(float x, float y, int collisionLayer, unsigned int collisionF
 void flagpole::create(){
 	setSprite((unsigned int)46);
 	this->debug = false;
-	this->addHitBox(10,-100,this->sprite->width-10,this->sprite->height+120);
+	this->addHitBox(10,-200,this->sprite->width-10,this->sprite->height+220);
 }
 
 void flagpole::process(double delta){
