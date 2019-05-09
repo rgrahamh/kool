@@ -189,14 +189,6 @@ void Object::_processPhysics(float grav, float termVel){
     xV += xA;
     xA = 0;
 
-    //Capping the horizontal velocity at +/- maxSpeed
-    if(xV > termVel){
-        xV = termVel;
-    }
-    else if(xV < (termVel * -1)){
-        xV = termVel * -1;
-    }
-
     //Change x position based on horizontal velocity
     x += xV;
 

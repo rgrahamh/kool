@@ -67,6 +67,13 @@ int main(int argc, char* argv){
     Sprite *top_ground_sprite = new Sprite(GROUND_PATH + "top_ground_tile.png");
     top_ground_sprite->setRepeated(true);
 
+    //SPRITE IDX = 13
+    Sprite *barrels = new Sprite(BGROUND_PATH + "barrels.png");
+    
+    //SPRITE IDX = 14
+    Sprite *clouds = new Sprite(BGROUND_PATH + "clouds.png");
+    clouds->setRepeated(true);
+
     //Adding scenes to the game
     kool.addScene(createMainGame());
 

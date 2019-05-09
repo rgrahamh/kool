@@ -5,8 +5,8 @@
 
 class Background: public Object{
     public:
-		Background(float x, float y, int collisionLayer = -1, unsigned int collisionFlags = 0, bool grav = false);
-        void create();
+		Background(float x, float y, unsigned int spriteIdx, int collisionLayer = -1, unsigned int collisionFlags = 0, bool grav = false);
+        void create(unsigned int idx);
 };
 
 class Player: public Object{
@@ -20,6 +20,9 @@ class Player: public Object{
         bool grounded;
         float speed;
         float maxVelocity;
+        int dir;
+        bool jumpHeld;
+        bool digitalJump;
 };
 
 class Ground: public Object{
