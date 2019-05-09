@@ -119,11 +119,9 @@ std::vector<HitBox *> Object::getHitBoxes(){
 
 //Engine-defined process function
 void Object::_process(double delta, float grav, float termVel){
-    process(delta); 
     _processPhysics(grav, termVel);
+    process(delta); 
     decHitBoxes(delta);
-	this->xPrev = x;
-	this->yPrev = y;
 	_animate(delta);
 
 	//Calculate how long the current image has been shown, increment imageIndex if necessary

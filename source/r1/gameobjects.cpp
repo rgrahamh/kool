@@ -43,10 +43,10 @@ void Player::create(){
     this->collisionLayer = 0;
 
     grounded = false;
-    gravity = false;
 }
 
 void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
+
     //If the player collides with ground:
     if(other->collisionFlags & GROUND){
         int thisX = this->x + this->hitBoxes[myBoxID]->offsetX;
@@ -61,45 +61,48 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
         int oldOtherX = other->xPrev + this->hitBoxes[otherBoxID]->offsetX;
         int oldOtherY = other->yPrev + this->hitBoxes[otherBoxID]->offsetY;
 
+        printf("thisX: %d\nthisY: %d\noldThisX: %d\noldThisY: %d\n\n", thisX, thisY, oldThisX, oldThisY);
+
         //Bottom of this colllides with top of other
-        if(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height < oldOtherY){
+        if(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height <= oldOtherY){
+            printf("Hit the grounded condition!\n");
             this->y = otherY - this->hitBoxes[otherBoxID]->height;
             this->yV = 0;
             grounded = true;
         }
         //Top of this collides with bottom of other
-        else if(thisY <= otherY + other->hitBoxes[myBoxID]->height && oldThisY > oldOtherY + other->hitBoxes[myBoxID]->height){ 
+        else if(thisY <= otherY + other->hitBoxes[myBoxID]->height && oldThisY >= oldOtherY + other->hitBoxes[myBoxID]->height){ 
             this->y = otherY + other->hitBoxes[myBoxID]->height;
             this->yV = 0;
         }
         //Left side of this collides with right side of other
-        else if(thisX + this->hitBoxes[myBoxID]->width >= otherX && oldThisX + this->hitBoxes[myBoxID]->width < oldOtherX){ 
+        else if(thisX + this->hitBoxes[myBoxID]->width >= otherX && oldThisX + this->hitBoxes[myBoxID]->width <= oldOtherX){ 
             this->x = otherX + this->hitBoxes[otherBoxID]->width;
             this->xV = 0;
         }
         //Right side of this collides with left side of other
-        else if(thisX <= otherX + other->hitBoxes[myBoxID]->width && oldThisX > oldOtherX + other->hitBoxes[myBoxID]->width){ 
+        else if(thisX <= otherX + other->hitBoxes[myBoxID]->width && oldThisX >= oldOtherX + other->hitBoxes[myBoxID]->width){ 
             this->x = otherX - this->hitBoxes[myBoxID]->width;
             this->xV = 0;
         }
     }
 }
 
-void Player::process(float delta){
-    grounded = false;
+void Player::process(double delta){
     if(Keys::isKeyPressed(Keys::W) && grounded){
-        yA += 15.0;
+        yA += 10.0 * delta;
     }
     if(Keys::isKeyPressed(Keys::A)){
-        xA += speed;
+        xA -= speed * delta;
     }
     if(Keys::isKeyPressed(Keys::D)){
-        xA -= speed;
+        xA += speed * delta;
     }
     if(Keys::isKeyPressed(Keys::Space)){
         //Shoot
-        yA += 15.0;
+        yA += 10.0 * delta;
     }
+    grounded = false;
 }
 
 Ground::Ground(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
