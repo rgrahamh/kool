@@ -58,7 +58,7 @@ struct drawData Object::_draw(){
 	data.x = this->x;
 	data.y = this->y;
 	if(this->sprite!=NULL){
-		data.imageIndex = this->imageIndex; 	
+		data.imageIndex = this->imageIndex;
 		data.repeated = this->sprite->repeated;
 		if(this->sprite_width==-1){
 			data.width = this->sprite->width;
@@ -120,7 +120,7 @@ std::vector<HitBox *> Object::getHitBoxes(){
 //Engine-defined process function
 void Object::_process(double delta, float grav, float termVel){
     _processPhysics(grav, termVel);
-    process(delta); 
+    process(delta);
     decHitBoxes(delta);
 	_animate(delta);
 
@@ -145,7 +145,7 @@ void Object::_animate(double delta){
 //Developer-defined virtual function
 void Object::process(double delta){
 //	basicMove(&this->xA,&this->yA,7,delta);
-    return; 
+    return;
 }
 
 //Developer-defined virtual function
@@ -174,12 +174,12 @@ void Object::setSprite(unsigned int index){
 Sprite* Object::getSprite(unsigned int index){
     if(index < spriteIndex.size()){
         return spriteIndex[index];
-    } 
+    }
     return NULL;
 }
 
 void Object::_processPhysics(float grav, float termVel){
-	
+
 	//Change x acceleration/velocity based on friction
 	if(xV != 0.0){
 		xV = xV * (1.0-friction);
@@ -195,7 +195,9 @@ void Object::_processPhysics(float grav, float termVel){
     //Adding gravity to vertical acceleration (implies that gravity is always up or down)
     if(this->gravity){
         yA += grav;
-    }
+    } else {
+		yA = 0;
+	}
 
     //Adding vertical acceleration to the vertical velocity
     yV += yA;

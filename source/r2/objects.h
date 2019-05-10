@@ -13,7 +13,7 @@ public:
     std::vector<unsigned int> spriteSet;
     player(float x, float y, int collisionLayer=0, unsigned int collisionFlags=0, bool grav=true);
     void init();
-    void on_collide(Object *other, int myBoxID, int otherBoxID);
+    void onCollide(Object *other, int myBoxID, int otherBoxID);
     void process(double delta);
 };
 
@@ -27,6 +27,12 @@ class background: public Object
 {
 public:
     background(float x, float y, int collisionLayer=0, unsigned int collisionFlags=0, bool grav=false);
+    void init();
+};
+
+class ground: public Object {
+public:
+    ground(float x, float y, int collisionLayer=0, unsigned int collisionFlags=0, bool grav=false);
     void init();
 };
 
