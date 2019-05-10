@@ -3,6 +3,6 @@
 #ifndef SCENES_H
 #define SCENES_H
 
-Scene *level();
+Scene *track();
 
 #endif

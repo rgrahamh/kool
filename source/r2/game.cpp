@@ -6,15 +6,6 @@
 
 std:: string resources = "resources/r2/";
 
-background::background(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav) {
-    create();
-}
-
-void background::create()
-{
-    this->collisionLayer = -1;
-    setSprite((unsigned int) 0x0);
-}
 
 using namespace std;
 
@@ -25,7 +16,7 @@ int main(int argc, char **argv, char **evnp)
     // sprite 0
     Sprite *background_sprite = new Sprite(resources + "background.png");
     background_sprite->setRepeated(true);
-    background_sprite->setSize(1200,600);
+    // background_sprite->setSize(1200,600);
 
     // sprite 1
     Sprite *runner_standing = new Sprite(resources + "runner_standing.png");
@@ -39,7 +30,7 @@ int main(int argc, char **argv, char **evnp)
 
     Sprite *ground = new Sprite(resources + "ground.png");
 
-    engine.addScene(level());
+    engine.addScene(track());
     engine.startGame();
 
     return 0;
