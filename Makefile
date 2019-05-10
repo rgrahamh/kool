@@ -32,4 +32,4 @@ r2: ./source/r2/game.cpp
 	$(CC) $(CFLAGS) -o r2 $(R2GAMEFILES) $(INCLUDE_SFML) $(OPTS)
 
 clean:
-	rm engine testGame testGame2 adam j r1 r2
+	rm -rf engine testGame testGame2 adam j r1 r2
