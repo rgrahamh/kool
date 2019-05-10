@@ -22,7 +22,7 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void player::create(){
 	this->collisionLayer = 0;
-	this->debug = true;
+	this->debug = false;
 	this->usingPower = false;
 	setSprite((unsigned int)0);
 	sprite_index = 0;
