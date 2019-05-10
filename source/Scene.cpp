@@ -54,6 +54,8 @@ void Scene::process(double delta){
     //std::fflush(stdout);
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
 	    	if(this->objectList[i]!=NULL){
+            this->objectList[i]->xPrev = this->objectList[i]->x;
+            this->objectList[i]->yPrev = this->objectList[i]->y;
 			this->objectList[i]->_process(delta, gravity, termVel);
 		}
 	}
@@ -92,9 +94,14 @@ void Scene::process(double delta){
 														//Handle Collision
 														if(obj1!=NULL && obj2!=NULL){
 															obj1->onCollide(obj2, k, l);
+														}else{
+															break;
 														}
+														obj2 = this->objectList[j];
 														if(obj1!=NULL && obj2!=NULL){
 															obj2->onCollide(obj1, l, k);
+														}else{
+															break;
 														}
 									}
 								}else{
@@ -255,6 +262,10 @@ void Scene::destroyObject(Object *obj){
 void Scene::scaleAllObjects(float xScale, float yScale){
     for(unsigned int i = 0; i < this->objectList.size(); i++){
         objectList[i]->setScale(xScale, yScale);
+        for(unsigned int j = 0; j < this->objectList[i]->hitBoxes.size(); j++){
+            objectList[i]->hitBoxes[j]->width *= xScale;
+            objectList[i]->hitBoxes[j]->height *= yScale;
+        }
     }
 }
 

@@ -2,8 +2,8 @@
 
 
 HitBox::HitBox(float offsetX, float offsetY, int width, int height, double ttl){
-	
-    this->offsetX = offsetX;
+	this->type = 0;	
+    	this->offsetX = offsetX;
 	this->offsetY = offsetY;
 	
 	this->width = width;

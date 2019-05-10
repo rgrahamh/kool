@@ -8,7 +8,7 @@ GAMEFILES2= ./source/test2.cpp ./source/GameEngine.cpp ./source/Scene.cpp ./sour
 ADAMGAMEFILES= ./source/adam/main.cpp ./source/adam/gameobjects2.cpp ./source/adam/gameobjects.cpp ./source/GameEngine.cpp ./source/Scene.cpp ./source/View.cpp ./source/Object.cpp ./source/Sprite.cpp ./source/Globals.cpp ./source/HitBox.cpp ./source/adam/scenes.cpp
 JGAMEFILES= ./source/jeremiah/main.cpp ./source/jeremiah/gameobjects.cpp ./source/GameEngine.cpp ./source/Scene.cpp ./source/View.cpp ./source/Object.cpp ./source/Sprite.cpp ./source/Globals.cpp ./source/HitBox.cpp ./source/jeremiah/scenes.cpp
 R1GAMEFILES= ./source/r1/megaman.cpp ./source/r1/gameobjects.cpp ./source/r1/scenes.cpp ./source/GameEngine.cpp ./source/Scene.cpp ./source/View.cpp ./source/Object.cpp ./source/Sprite.cpp ./source/Globals.cpp ./source/HitBox.cpp
-R2GAMEFILES = ./source/r2/game.cpp ./source/GameEngine.cpp ./source/Scene.cpp ./source/View.cpp ./source/Object.cpp ./source/Sprite.cpp ./source/Globals.cpp ./source/HitBox.cpp
+R2GAMEFILES = ./source/r2/game.cpp ./source/r2/scenes.cpp ./source/r2/objects.cpp ./source/GameEngine.cpp ./source/Scene.cpp ./source/View.cpp ./source/Object.cpp ./source/Sprite.cpp ./source/Globals.cpp ./source/HitBox.cpp
 
 kool: ./source/main.cpp
 	$(CC) $(CFLAGS) -o engine $(FILES) $(INCLUDE_SFML) $(OPTS)
@@ -32,4 +32,4 @@ r2: ./source/r2/game.cpp
 	$(CC) $(CFLAGS) -o r2 $(R2GAMEFILES) $(INCLUDE_SFML) $(OPTS)
 
 clean:
-	rm engine testGame testGame2 adam j r1 r2
+	rm -rf engine testGame testGame2 adam j r1 r2

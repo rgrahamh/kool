@@ -31,6 +31,7 @@ class player: public Object {
 		bool finishedLevel;
 		bool finishedFlag;
 		bool crouching;
+		bool usingPower;
 		float acceleration;
 		float maxVelocity;
 		float rightGravBound;
@@ -38,6 +39,8 @@ class player: public Object {
 		double deathTime;
 		double deathMax;
 		double recoverTime;
+		double ghostTime;
+		int alphaChange;
 		//Keeps track of what character we are.
 		std::vector<unsigned int>spriteSet;
 		int setIndex; 
@@ -47,6 +50,17 @@ class player: public Object {
 		void process(double delta);
 		
 
+};
+
+class pulseWave: public Object {
+
+    public:
+
+		//This code has to be present in all child objects of Object
+		pulseWave(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void create();
+		player *parent;
+		void process(double delta);
 };
 
 class Block: public Object {
@@ -74,6 +88,7 @@ class ground: public Object {
 	public:
 		ground(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
+		void process(double delta);
 	
 };
 

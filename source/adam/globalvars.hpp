@@ -8,6 +8,7 @@ extern int p2Lives;
 extern int activePlayer;
 extern int currentLevel;
 extern std::function<Scene *()> levelFunc;
+extern std::vector<std::function<Scene *()>> levels;
 extern bool activeDead;
 //Set organization:
 //Right standing, left standing, right running, left running, right jumping, left jumping, dead
@@ -20,7 +21,7 @@ extern std::vector<unsigned int> p2Big;
 enum superPowers {
 	FIREBOLT = 0x0,
 	SUPERSPEED = 0x1,
-	DASH = 0x2,
+	GHOST = 0x2,
 	TELEKINESIS = 0x4
 };
 
