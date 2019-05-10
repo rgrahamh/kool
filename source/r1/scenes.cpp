@@ -7,10 +7,10 @@ Scene* createMainGame(){
     Background* background = new Background(0, 0, 0);
 
     //Create the barrels
-    Background* barrels = new Background(800, 700, 13);
+    Background* barrels = new Background(800, 700, 17);
     
     //Create the clouds
-    Background* clouds = new Background(0, 0, 14);
+    Background* clouds = new Background(0, 0, 18);
 
     //Create the player
     Player* mman = new Player(50, 600, 0, PLAYER, true);
@@ -20,6 +20,7 @@ Scene* createMainGame(){
 
     //Add objects to the scenes
     scene->addObject(background);
+    scene->addObject(clouds);
     scene->addObject(barrels);
     scene->addObject(ground);
     scene->addObject(mman);

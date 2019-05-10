@@ -20,6 +20,7 @@ class Player: public Object{
         bool grounded;
         float speed;
         float maxVelocity;
+        float shotTimer;
         int dir;
         bool jumpHeld;
         bool digitalJump;

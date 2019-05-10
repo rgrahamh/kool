@@ -5,7 +5,6 @@
 
 using namespace std;
 
-
 Sprite::Sprite(std::string path){
 	
 	this->addImage(path);

@@ -21,7 +21,9 @@ Player::Player(float x, float y, int collisionLayer, unsigned int collisionFlags
 void Player::create(){
     this->collisionLayer = 0;
     this->collisionFlags = PLAYER;
-    this->debug = true;
+    this->debug = false;
+
+    this->animationDelay = 25;
 
     //Adding all of the Mega Man sprites to a list
 
@@ -47,6 +49,10 @@ void Player::create(){
     sprites.push_back(this->getSprite(8)); 
     sprites.push_back(this->getSprite(9)); 
     sprites.push_back(this->getSprite(10));
+    sprites.push_back(this->getSprite(11)); 
+    sprites.push_back(this->getSprite(12));
+    sprites.push_back(this->getSprite(13)); 
+    sprites.push_back(this->getSprite(14));
     this->setSprite(sprites[0]);
 
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
@@ -125,14 +131,18 @@ void Player::process(double delta){
     /** SPRITE INDICIES:
      * 0: Standing left        
      * 1: Standing right       
-     * 2: Running left         
-     * 3: Running right        
-     * 4: Shooting running left
-     * 5: Shooting running right
-     * 6: Jumping left
-     * 7: Jumping right
-     * 8: Hurt left
-     * 9: Hurt right
+     * 2: Standing shooting left        
+     * 3: Standing shooting right       
+     * 4: Running left         
+     * 5: Running right        
+     * 6: Shooting running left
+     * 7: Shooting running right
+     * 8: Jumping left
+     * 9: Jumping right
+     * 10: Jumping shooting left
+     * 11: Jumping shooting right
+     * 12: Hurt left
+     * 13: Hurt right
      */
 
     //Moving left and right
@@ -147,23 +157,27 @@ void Player::process(double delta){
                 xA += speed * delta;
                 this->dir = 1;
             }
-            spriteIdx = 2 + dir;
+            spriteIdx = 5 + dir;
         }
     } else {
-        spriteIdx = 0 + dir;
+        spriteIdx = 1 + dir;
     }
 
     if(!grounded){
-        spriteIdx = 6 + dir;
+        spriteIdx = 9 + dir;
+    }
+
+    if(shotTimer > 0){
+        spriteIdx += 2;
     }
 
     if(Keys::isKeyPressed(Keys::Space)){
         //Shoot
-        yA += 100.0 * delta;
+        shotTimer = 150;
     }
 
     //Update sprite with current state
-    sprite = sprites[spriteIdx+dir];
+    this->setSprite(spriteIdx);
 
     //Making sure that the player doesn't escape the screen's left bound
     if(this->x + this->xV < 0){
@@ -178,6 +192,11 @@ void Player::process(double delta){
         xV = maxVelocity * -1;
     }
 
+    if(shotTimer - delta < shotTimer){
+        shotTimer -= delta;
+    } else {
+        shotTimer = 0;
+    }
     grounded = false;
 }
 
@@ -187,9 +206,9 @@ Ground::Ground(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void Ground::create(){
     this->collisionLayer = 0;
-    this->debug=true;
+    this->debug=false;
     this->collisionFlags = GROUND;
 
-    setSprite((unsigned int)11);
+    setSprite((unsigned int)15);
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 }
