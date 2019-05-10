@@ -54,6 +54,8 @@ void Scene::process(double delta){
     //std::fflush(stdout);
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
 	    	if(this->objectList[i]!=NULL){
+            this->objectList[i]->xPrev = this->objectList[i]->x;
+            this->objectList[i]->yPrev = this->objectList[i]->y;
 			this->objectList[i]->_process(delta, gravity, termVel);
 		}
 	}

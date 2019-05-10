@@ -55,7 +55,7 @@ void player::create(){
 	this->ghostTime = 0.0;
 }
 
-		
+
 void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 //Determine what direction we are hitting the ground at
 	enum collideDirection direction;
@@ -74,7 +74,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 	}else{
 		direction = BELOW;
 	}
-	if(myBoxID==0){	
+	if(myBoxID==0){
 		if(other->collisionFlags==GROUND && dead==false){
 			if(!finishedFlag && finishedLevel){
 				finishedFlag = true;
@@ -120,7 +120,7 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID){
 				gravity = true;
 				this->collisionLayer = -1;
 				dead = true;
-				activeDead = true;	
+				activeDead = true;
 				//Decrement how many lives we have
 				players[activePlayer].lives -= 1;
 				int curPlayer = activePlayer;
@@ -282,7 +282,7 @@ void player::process(double delta){
 		//Using your super power
 		if(Keys::isKeyPressed(Keys::X) && players[activePlayer].poweredUp){
 			if(players[activePlayer].powers==TELEKINESIS && !usingPower){
-				//Create hitbox that throws enemies in the air		
+				//Create hitbox that throws enemies in the air
 				this->addHitBox(-2*sprite->width,-20,sprite->width*5,sprite->height+20);
 				hitBoxes[hitBoxes.size()-1]->type = 1;
 				//Create animation
@@ -304,7 +304,7 @@ void player::process(double delta){
 				alphaChange = 1;
 				usingPower = true;
 			}
-		
+
 		}else{
 			if(players[activePlayer].powers==SUPERSPEED && usingPower){
 				this->maxVelocity = maxVelocity/2;
@@ -354,9 +354,9 @@ void player::process(double delta){
 		if(Keys::isKeyPressed(Keys::S) && players[activePlayer].poweredUp==true && gravity==false && !finishedLevel){
 			this->friction = 0.1;
 			if(setIndex==3 || setIndex==1){
-				setIndex = 9;	
+				setIndex = 9;
 			}else{
-				setIndex = 6; 
+				setIndex = 6;
 			}
 			crouching = true;
 			this->hitBoxes[0]->height = this->sprite->height-10;
@@ -406,7 +406,7 @@ void player::process(double delta){
 			//Play dieing sound
 			stopAllSounds();
 			playSound("./resources/adam/sounds/die.wav");
-			activeDead = true;	
+			activeDead = true;
 			//Decrement how many lives we have
 			players[activePlayer].lives -= 1;
 			//Make sure current player is not powered up
@@ -457,7 +457,7 @@ void player::process(double delta){
 		recoverTime+=delta;
 	}else if(recovering==true){
 		recovering=false;
-		activeDead=false; 
+		activeDead=false;
 		alpha = 255;
 	}
 }
@@ -523,7 +523,7 @@ ground::ground(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void ground::create(){
 	this->collisionLayer = 0;
-	this->debug = false;
+	this->debug = true;
 	setSprite((unsigned int)2);
 	this->addHitBox(0,153,this->sprite->width,25);
 
@@ -644,7 +644,7 @@ void gomba::onCollide(Object *other, int myBoxID, int otherBoxID){
 					gravity = true;
 					setSprite((unsigned int)54);
 					playSound("resources/adam/sounds/kick.wav");
-					
+
 				}
 			}
 		}
@@ -712,7 +712,7 @@ gameTrigger::gameTrigger(float x, float y, int collisionLayer, unsigned int coll
 }
 
 void gameTrigger::create(){
-	return; 
+	return;
 }
 
 void gameTrigger::process(double delta){
@@ -724,7 +724,7 @@ void gameTrigger::process(double delta){
 		resetScene(gameoverScene,3);
 		resetScene(levelFunc,1);
 		resetScene(createPreviewScene,2);
-		setActiveScene(2);	
+		setActiveScene(2);
 	}
 }
 
@@ -803,7 +803,7 @@ void MysteryBox::onCollide(Object *other, int myBoxID, int otherBoxID){
 		}else if(other->yV <= 0.0){
 			playSound("./resources/adam/sounds/bump.wav");
 		}
-	}	
+	}
 }
 
 //mushroom class
@@ -953,7 +953,7 @@ void castle::onCollide(Object *other, int myBoxID, int otherBoxID){
 				}
 			}
 			//Set the level
-			//Start new level timer	
+			//Start new level timer
 			currentLevel++;
 			if(currentLevel < levels.size()){
 				levelFunc = levels[currentLevel];
@@ -973,7 +973,7 @@ aFlag::aFlag(float x, float y, int collisionLayer, unsigned int collisionFlags, 
 }
 
 void aFlag::create(){
-	setSprite((unsigned int)47);	
+	setSprite((unsigned int)47);
 }
 
 void aFlag::process(double delta){

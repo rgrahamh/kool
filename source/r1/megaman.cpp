@@ -20,52 +20,72 @@ int main(int argc, char* argv){
     //Creating Mega Man's sprites
     //SPRITE IDX = 1
     Sprite *mman_stand_l = new Sprite(MMAN_PATH + "mman_stand_l.png");
-    mman_stand_l->addImage(MMAN_PATH + "mman_blink_l.png");
+    //mman_stand_l->addImage(MMAN_PATH + "mman_blink_l.png");
 
     //SPRITE IDX = 2
     Sprite *mman_stand_r = new Sprite(MMAN_PATH + "mman_stand_r.png");
-    mman_stand_r->addImage(MMAN_PATH + "mman_blink_r.png");
-
+    //mman_stand_r->addImage(MMAN_PATH + "mman_blink_r.png");
+    
     //SPRITE IDX = 3
+    Sprite *mman_shoot_l = new Sprite(MMAN_PATH + "mman_shoot_l.png");
+
+    //SPRITE IDX = 4
+    Sprite *mman_shoot_r = new Sprite(MMAN_PATH + "mman_shoot_r.png");
+
+    //SPRITE IDX = 5
     Sprite *mman_run_l = new Sprite(MMAN_PATH + "mman_run_l_1.png");
     mman_run_l->addImage(MMAN_PATH + "mman_run_l_2.png");
     mman_run_l->addImage(MMAN_PATH + "mman_run_l_3.png");
 
-    //SPRITE IDX = 4
+    //SPRITE IDX = 6
     Sprite *mman_run_r = new Sprite(MMAN_PATH + "mman_run_r_1.png");
     mman_run_r->addImage(MMAN_PATH + "mman_run_r_2.png");
     mman_run_r->addImage(MMAN_PATH + "mman_run_r_3.png");
 
-    //SPRITE IDX = 5
+    //SPRITE IDX = 7
     Sprite *mman_shoot_run_l = new Sprite(MMAN_PATH + "mman_shoot_run_l_1.png");
     mman_shoot_run_l->addImage(MMAN_PATH + "mman_shoot_run_l_2.png");
     mman_shoot_run_l->addImage(MMAN_PATH + "mman_shoot_run_l_3.png");
 
-    //SPRITE IDX = 6
+    //SPRITE IDX = 8
     Sprite *mman_shoot_run_r = new Sprite(MMAN_PATH + "mman_shoot_run_r_1.png");
     mman_shoot_run_r->addImage(MMAN_PATH + "mman_shoot_run_r_2.png");
     mman_shoot_run_r->addImage(MMAN_PATH + "mman_shoot_run_r_3.png");
 
-    //SPRITE IDX = 7
+    //SPRITE IDX = 9
     Sprite *mman_jump_l = new Sprite(MMAN_PATH + "mman_jump_l.png");
 
-    //SPRITE IDX = 8
+    //SPRITE IDX = 10
     Sprite *mman_jump_r = new Sprite(MMAN_PATH + "mman_jump_r.png");
+    
+    //SPRITE IDX = 11
+    Sprite *mman_jump_shoot_l = new Sprite(MMAN_PATH + "mman_jump_shoot_l.png");
 
-    //SPRITE IDX = 9
+    //SPRITE IDX = 12
+    Sprite *mman_jump_shoot_r = new Sprite(MMAN_PATH + "mman_jump_shoot_r.png");
+
+    //SPRITE IDX = 13
     Sprite *mman_hurt_l = new Sprite(MMAN_PATH + "mman_hurt_l.png");
 
-    //SPRITE IDX = 10
+    //SPRITE IDX = 14
     Sprite *mman_hurt_r = new Sprite(MMAN_PATH + "mman_hurt_r.png");
 
-    //SPRITE IDX = 11
+    //SPRITE IDX = 15
     Sprite *bottom_ground_sprite = new Sprite(GROUND_PATH + "bottom_ground_tile.png");
     bottom_ground_sprite->setRepeated(true);
     bottom_ground_sprite->setSize(2000, 900);
 
-    //SPRITE IDX = 12
+    //SPRITE IDX = 16
     Sprite *top_ground_sprite = new Sprite(GROUND_PATH + "top_ground_tile.png");
     top_ground_sprite->setRepeated(true);
+
+    //SPRITE IDX = 17
+    Sprite *barrels = new Sprite(BGROUND_PATH + "barrels.png");
+    
+    //SPRITE IDX = 18
+    Sprite *clouds = new Sprite(BGROUND_PATH + "clouds.png");
+    clouds->setRepeated(true);
+    clouds->setSize(20000, 40);
 
     //Adding scenes to the game
     kool.addScene(createMainGame());
