@@ -7,19 +7,24 @@ player::player(float x, float y, int collisionLayer, unsigned int collisionFlags
 }
 
 void player::init() {
-    setSprite((unsigned int) 1);
+    setSprite((unsigned int) 2);
     this->debug = true;
-    this->addHitBox(0, 0, this->sprite->width, this->sprite->height);
+    this->addHitBox(13, 3, 6, this->sprite->height - 3);
 }
 
 void player::onCollide(Object *other, int myBoxID, int otherBoxID) {
-    std::cout << "Ha" << std::endl;
     if(this->x > other->x && other->collisionFlags == GROUND) {
-        this->y = other->y - (this->sprite_height * 2 + 5);
+        this->gravity = false;
+        this->yA = 0.0;
+        this->yV = 0.0;
+        cout << "Mine: " << this->sprite_height << endl << "Theirs: " << other->sprite_height << endl;
+        this->y = 512 - other->sprite_height - this->sprite_height;
+        // this->y = other->y - (this->sprite_height * 2 + 5);
     }
 }
 
 void player::process(double delta) {
+    // He shall only jump >:D
     if(Keys::isKeyPressed(Keys::D)) {
         this->x += 5;
         this->change_sprite();

@@ -10,7 +10,7 @@ Scene *track() {
     bg->sprite_height = 512;
 
     track_scene->addObject(bg);
-    player *runner = new player(5,(512 - 16),0,PLAYER,true);
+    player *runner = new player(5,(512 - 64),0,PLAYER,true);
 
     ground *gr = new ground(0, (512-16), 0, GROUND, false);
 
