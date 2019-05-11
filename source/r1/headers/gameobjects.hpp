@@ -24,12 +24,20 @@ class Player: public Object{
         int dir;
         bool jumpHeld;
         bool digitalJump;
+        bool digitalShoot;
 };
 
 class Ground: public Object{
     public:
         Ground(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
         void create();
+};
+
+class Bullet: public Object{
+    public:
+        Bullet(float x, float y, float xSpeed, float ySpeed, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+		void onCollide(Object *other, int myBoxID, int otherBoxID);
+        void create(float xSpeed, float ySpeed);
 };
 
 #endif

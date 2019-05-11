@@ -25,7 +25,7 @@ Scene* createMainGame(){
     scene->addObject(ground);
     scene->addObject(mman);
 
-    scene->scaleAllObjects(1.5, 1.5);
+    scene->scaleAllObjects(2.0, 2.0);
 
     scene->gravity = 1.0;
 
