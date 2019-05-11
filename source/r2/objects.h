@@ -8,6 +8,7 @@
 class player: public Object {
 private:
     int set_index = 0;
+	bool on_ground = true;
 public:
     void change_sprite();
     std::vector<unsigned int> spriteSet;

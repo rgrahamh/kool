@@ -21,7 +21,6 @@ int main(int argc, char **argv, char **evnp)
     // sprite 2
     Sprite *runner_running = new Sprite(resources + "runner_anims_01.png");
     runner_running->addImage(resources + "runner_anims_02.png");
-    runner_running->setSize(64,64);
     // sprite 3
     Sprite *hurdle = new Sprite(resources + "hurdle.png");
     // sprite 4

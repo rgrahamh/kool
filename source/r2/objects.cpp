@@ -15,38 +15,33 @@ void player::init() {
 void player::onCollide(Object *other, int myBoxID, int otherBoxID) {
     if(this->x > other->x && other->collisionFlags == GROUND) {
         this->gravity = false;
-        this->yA = 0.0;
+		this->on_ground = true;
         this->yV = 0.0;
-        cout << "Mine: " << this->sprite_height << endl << "Theirs: " << other->sprite_height << endl;
-        this->y = 512 - other->sprite_height - this->sprite_height;
-        // this->y = other->y - (this->sprite_height * 2 + 5);
+		this->yA = 0.0;
+		this->y = 512 - (other->sprite->height + this->sprite->height); // put them on the ground
     }
 }
 
 void player::process(double delta) {
-    // He shall only jump >:D
-    if(Keys::isKeyPressed(Keys::D)) {
-        this->x += 5;
-        this->change_sprite();
+    if(this->on_ground && Keys::isKeyPressed(Keys::W)) {
+		this->on_ground = false;
+        this->gravity = true;
+        this->y = 64;
     }
+	// this->x += 5;
+	/*
     if(Keys::isKeyPressed(Keys::A)) {
         this->x -= 5;
-        this->change_sprite();
     }
     if(Keys::isKeyPressed(Keys::S)) {
         this->y += 5;
-        this->change_sprite();
     }
     if(Keys::isKeyPressed(Keys::W)) {
         this->y -= 5;
-        this->change_sprite();
     }
+	*/
 }
 
-void player::change_sprite() {
-    if(!this->set_index) this->set_index = 1;
-    else this->set_index = 0;
-}
 
 hurdle::hurdle(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav) {
     init();
