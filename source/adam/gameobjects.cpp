@@ -523,7 +523,7 @@ ground::ground(float x, float y, int collisionLayer, unsigned int collisionFlags
 
 void ground::create(){
 	this->collisionLayer = 0;
-	this->debug = true;
+	this->debug = false;
 	setSprite((unsigned int)2);
 	this->addHitBox(0,153,this->sprite->width,25);
 
@@ -959,7 +959,10 @@ void castle::onCollide(Object *other, int myBoxID, int otherBoxID){
 				levelFunc = levels[currentLevel];
 			}else{
 				levelFunc = levels[0];
-				currentLevel = 0;
+				for(int i = 0; i < 3; i++){
+					players[i].lives = 3;
+					players[i].poweredUp = false;
+				}
 			}
 			sceneChange = new timeTrigger(0,0);
 			sceneChange->setTimer(1500.0);
