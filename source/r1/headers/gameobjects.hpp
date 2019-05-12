@@ -28,6 +28,7 @@ class Player: public Object{
         bool digitalJump;
         bool justJumped;
         bool digitalShoot;
+        int health;
 };
 
 class Ground: public Object{
@@ -41,6 +42,9 @@ class Bullet: public Object{
         Bullet(float x, float y, float xSpeed, float ySpeed, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
         void create(float xSpeed, float ySpeed);
+        int getDamage();
+    private:
+        int damage;
 };
 
 #endif

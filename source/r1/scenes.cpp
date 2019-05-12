@@ -3,7 +3,7 @@
 Scene* createMainGame(){
     playSound((char*)"./resources/r1/sound/dr-wileys-castle.wav", true);
 
-    Scene *scene  = new Scene(3000, 900);
+    Scene *scene  = new Scene(20000, 900);
 
     //Create the backgound object
     Background* background = new Background(0, 0, 0);
