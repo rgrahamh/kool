@@ -1,6 +1,6 @@
 #include "./headers/gameobjects.hpp"
-#include "../headers/Globals.hpp"
-#include <vector>
+
+#define SCALE 2.0
 
 using namespace std;
 
@@ -91,23 +91,27 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
 
         //Bottom of this colllides with top of other
         if(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height <= oldOtherY){
-            this->y = otherY - this->hitBoxes[otherBoxID]->height;
-            this->yV = 0;
-            grounded = true;
+                this->y = otherY - this->hitBoxes[myBoxID]->height;
+                this->yV = 0;
+                //Necessary to check grounded a frame prior because collision detection happens after the process step
+                if(oldGrounded == false){
+                    playSound("./resources/r1/sound/land.wav");
+                }
+                grounded = true;
         }
         //Top of this collides with bottom of other
-        else if(thisY <= otherY + other->hitBoxes[myBoxID]->height && oldThisY >= oldOtherY + other->hitBoxes[myBoxID]->height){ 
-            this->y = otherY + other->hitBoxes[myBoxID]->height;
+        else if(thisY < otherY + other->hitBoxes[otherBoxID]->height && oldThisY >= oldOtherY + other->hitBoxes[otherBoxID]->height){
+            this->y = otherY + other->hitBoxes[otherBoxID]->height;
             this->yV = 0;
         }
-        //Left side of this collides with right side of other
+        //Right side of this collides with left side of other
         else if(thisX + this->hitBoxes[myBoxID]->width >= otherX && oldThisX + this->hitBoxes[myBoxID]->width <= oldOtherX){ 
-            this->x = otherX + this->hitBoxes[otherBoxID]->width;
+            this->x = otherX - this->hitBoxes[myBoxID]->width;
             this->xV = 0;
         }
-        //Right side of this collides with left side of other
-        else if(thisX <= otherX + other->hitBoxes[myBoxID]->width && oldThisX >= oldOtherX + other->hitBoxes[myBoxID]->width){ 
-            this->x = otherX - this->hitBoxes[myBoxID]->width;
+        //Left side of this collides with right side of other
+        else if(thisX <= otherX + other->hitBoxes[otherBoxID]->width && oldThisX >= oldOtherX + other->hitBoxes[otherBoxID]->width){ 
+            this->x = otherX + other->hitBoxes[otherBoxID]->width;
             this->xV = 0;
         }
     }
@@ -116,9 +120,12 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
 void Player::process(double delta){
     int spriteIdx;
 
+    oldGrounded = grounded;
+
     //Jumping
     if(Keys::isKeyPressed(Keys::W) && grounded && !digitalJump){
-        yA -= 15.0;
+        printf("Jump!\n");
+        yA -= 20.0;
         digitalJump = true;
         jumpHeld = true;
     } else {
@@ -132,7 +139,6 @@ void Player::process(double delta){
             digitalJump = false;
         }
     }
-
 
     //Moving left and right
     if(Keys::isKeyPressed(Keys::A) || Keys::isKeyPressed(Keys::D)){
@@ -169,20 +175,26 @@ void Player::process(double delta){
     sf::Texture currImage = sprite->getImage(this->imageIndex);
     this->sprite->setSize(currImage.getSize().x, currImage.getSize().y);
 
+    //Shooting
     if(Keys::isKeyPressed(Keys::Space) && !digitalShoot){
-        //Shoot
         Bullet* shot = new Bullet(this->x + ((dir)? currImage.getSize().x : 0), this->y + (currImage.getSize().y / 2), 20.0 * ((dir)? 1 : -1), 0.0, 0, PLAYER, false);
-        shot->setScale(2.0, 2.0);
+
+        //Scale the bullet
+        shot->setScale(SCALE, SCALE);
+        shot->hitBoxes[0]->height *= SCALE;
+        shot->hitBoxes[0]->width *= SCALE;
+
+        //Finish creating the bullet in the scene
         createObject(shot);
         shotTimer = 50;
         digitalShoot = true;
+
+        playSound("./resources/r1/sound/shoot.wav");
     }
     else if(!Keys::isKeyPressed(Keys::Space)){
         digitalShoot = false;
     }
     
-
-
     //Making sure that the player doesn't escape the screen's left bound
     if(this->x + this->xV < 0){
         this->x = 0;
@@ -202,19 +214,20 @@ void Player::process(double delta){
     } else {
         shotTimer = 0;
     }
+
     grounded = false;
 }
 
-Ground::Ground(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
-    create();
+Ground::Ground(float x, float y, int spriteIdx, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
+    create(spriteIdx);
 }
 
-void Ground::create(){
+void Ground::create(int spriteIdx){
     this->collisionLayer = 0;
     this->debug=false;
     this->collisionFlags = GROUND;
 
-    setSprite((unsigned int)15);
+    setSprite((unsigned int)spriteIdx);
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 }
 

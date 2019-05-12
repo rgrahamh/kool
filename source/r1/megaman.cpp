@@ -76,11 +76,9 @@ int main(int argc, char* argv){
     //SPRITE IDX = 15
     Sprite *bottom_ground_sprite = new Sprite(GROUND_PATH + "bottom_ground_tile.png");
     bottom_ground_sprite->setRepeated(true);
-    bottom_ground_sprite->setSize(2000, 900);
 
     //SPRITE IDX = 16
     Sprite *top_ground_sprite = new Sprite(GROUND_PATH + "top_ground_tile.png");
-    top_ground_sprite->setRepeated(true);
 
     //SPRITE IDX = 17
     Sprite *barrels = new Sprite(BGROUND_PATH + "barrels.png");
@@ -93,6 +91,11 @@ int main(int argc, char* argv){
     //SPRITE IDX = 19
     Sprite *bullet_sprite = new Sprite(SHARED_PATH + "bullet.png");
     
+    //SPRITE IDX = 20
+    Sprite *ground_sprite = new Sprite(GROUND_PATH + "bottom_ground_tile.png");
+    ground_sprite->setRepeated(true);
+    ground_sprite->setSize(2000, 900);
+
     //Adding scenes to the game
     kool.addScene(createMainGame());
 
