@@ -87,8 +87,6 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
         int oldOtherX = other->xPrev + this->hitBoxes[otherBoxID]->offsetX;
         int oldOtherY = other->yPrev + this->hitBoxes[otherBoxID]->offsetY;
 
-        //printf("thisX: %d\nthisY: %d\noldThisX: %d\noldThisY: %d\n\n", thisX, thisY, oldThisX, oldThisY);
-
         //Bottom of this colllides with top of other
         if(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height <= oldOtherY){
                 this->y = otherY - this->hitBoxes[myBoxID]->height;
@@ -124,7 +122,6 @@ void Player::process(double delta){
 
     //Jumping
     if(Keys::isKeyPressed(Keys::W) && grounded && !digitalJump){
-        printf("Jump!\n");
         yA -= 20.0;
         digitalJump = true;
         jumpHeld = true;
@@ -207,7 +204,6 @@ void Player::process(double delta){
     else if(this->xV < this->maxVelocity * -1){
         xV = maxVelocity * -1;
     }
-
 
     if(shotTimer - delta < shotTimer){
         shotTimer -= delta;

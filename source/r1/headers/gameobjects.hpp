@@ -28,8 +28,6 @@ class Player: public Object{
         bool digitalJump;
         bool justJumped;
         bool digitalShoot;
-        bool vertCollide;
-        bool horizCollide;
 };
 
 class Ground: public Object{
