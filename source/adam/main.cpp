@@ -14,10 +14,12 @@ std::vector<unsigned int> p1Small = {0,4,3,5,6,7,11,42,43};
 std::vector<unsigned int> p2Small = {14,15,16,17,18,19,20,44,45};
 std::vector<unsigned int> p1Big = {21,22,23,24,25,26,27,28,29,30};
 std::vector<unsigned int> p2Big = {32,33,34,35,36,37,38,39,40,41};
+std::vector<unsigned int> p3Small = {59,60,61,62,63,64,11,65,66};
+std::vector<unsigned int> p3Big = {67,68,69,70,71,72,73,74,75,76};
 //Setup Players
 struct playerData gracin = {3,true,"Gracin",sf::Color::Red,TELEKINESIS,p1Small,p1Big,false};
 struct playerData owen = {3,true,"Owen",sf::Color::Green,SUPERSPEED,p2Small,p2Big,false};
-struct playerData madison = {3,true,"Madison",sf::Color::Blue,GHOST,p1Small,p1Big,false};
+struct playerData madison = {3,true,"Madison",sf::Color::Blue,GHOST,p3Small,p3Big,false};
 
 struct playerData players[3] = {gracin,owen,madison};
 int playerNum = 3;
@@ -42,7 +44,7 @@ int main(){
 	//Create Sprites and format them
 
 	//index 0
-	Sprite *mario_standing_right = new Sprite(characters+"mario/small/stand/mStandingSmall.png");
+	Sprite *mario_standing_right = new Sprite(characters+"gracin/small/stand/mStandingSmall.png");
 
 	//index 1
 	Sprite *background_sprite = new Sprite("resources/adam/background.jpg");
@@ -55,23 +57,23 @@ int main(){
 	ground_sprite->setSize(2000,180);
 
 	//index 3
-	Sprite *mario_running_right = new Sprite(characters+"mario/small/run/mSmallRun1.png");
-	mario_running_right->addImage(characters+"mario/small/run/mSmallRun2.png");
-	mario_running_right->addImage(characters+"mario/small/run/mSmallRun3.png");
+	Sprite *mario_running_right = new Sprite(characters+"gracin/small/run/mSmallRun1.png");
+	mario_running_right->addImage(characters+"gracin/small/run/mSmallRun2.png");
+	mario_running_right->addImage(characters+"gracin/small/run/mSmallRun3.png");
 
 	//index 4
-	Sprite *mario_standing_left = new Sprite(characters+"mario/small/stand/mStandingSmallL.png");
+	Sprite *mario_standing_left = new Sprite(characters+"gracin/small/stand/mStandingSmallL.png");
 	
 	//index 5
-	Sprite *mario_running_left = new Sprite(characters+"mario/small/run/mSmallRunL1.png");
-	mario_running_left->addImage(characters+"mario/small/run/mSmallRunL2.png");
-	mario_running_left->addImage(characters+"mario/small/run/mSmallRunL3.png");
+	Sprite *mario_running_left = new Sprite(characters+"gracin/small/run/mSmallRunL1.png");
+	mario_running_left->addImage(characters+"gracin/small/run/mSmallRunL2.png");
+	mario_running_left->addImage(characters+"gracin/small/run/mSmallRunL3.png");
 
 	//index 6
-	Sprite *mario_jumping_right = new Sprite(characters+"mario/small/jump/mSmallJump.png");
+	Sprite *mario_jumping_right = new Sprite(characters+"gracin/small/jump/mSmallJump.png");
 
 	//index 7
-	Sprite *mario_jumping_left = new Sprite(characters+"mario/small/jump/mSmallJumpL.png");
+	Sprite *mario_jumping_left = new Sprite(characters+"gracin/small/jump/mSmallJumpL.png");
 
 	//index 8
 	Sprite *block = new Sprite("resources/adam/block.png");
@@ -84,7 +86,7 @@ int main(){
 	Sprite *gomba_dead = new Sprite("resources/adam/enemies/gomba_dead.png");
 
 	//index 11
-	Sprite *mario_dead = new Sprite(characters+"mario/small/die/mDie.png");
+	Sprite *mario_dead = new Sprite(characters+"gracin/small/die/mDie.png");
 
 	//index 12
 	Sprite *mystery_box = new Sprite("resources/adam/mystery_box/box1.png");
@@ -96,112 +98,112 @@ int main(){
 	Sprite *mystery_box_hit = new Sprite("resources/adam/mystery_box/boxHit.png");
 
 	//index 14
-	Sprite *luigi_standing_right = new Sprite(characters+"luigi/small/stand/LStandingSmall.png");
+	Sprite *luigi_standing_right = new Sprite(characters+"owen/small/stand/LStandingSmall.png");
 
 	//index 15
-	Sprite *luigi_standing_left = new Sprite(characters+"luigi/small/stand/LStandingSmallL.png");
+	Sprite *luigi_standing_left = new Sprite(characters+"owen/small/stand/LStandingSmallL.png");
 
 	//index 16
-	Sprite *luigi_running_right = new Sprite(characters+"luigi/small/run/LSmallRun1.png");
-	luigi_running_right->addImage(characters+"luigi/small/run/LSmallRun2.png");
-	luigi_running_right->addImage(characters+"luigi/small/run/LSmallRun3.png");
+	Sprite *luigi_running_right = new Sprite(characters+"owen/small/run/LSmallRun1.png");
+	luigi_running_right->addImage(characters+"owen/small/run/LSmallRun2.png");
+	luigi_running_right->addImage(characters+"owen/small/run/LSmallRun3.png");
 
 	//index 17
-	Sprite *luigi_running_left = new Sprite(characters+"luigi/small/run/LSmallRunL1.png");
-	luigi_running_left->addImage(characters+"luigi/small/run/LSmallRunL2.png");
-	luigi_running_left->addImage(characters+"luigi/small/run/LSmallRunL3.png");
+	Sprite *luigi_running_left = new Sprite(characters+"owen/small/run/LSmallRunL1.png");
+	luigi_running_left->addImage(characters+"owen/small/run/LSmallRunL2.png");
+	luigi_running_left->addImage(characters+"owen/small/run/LSmallRunL3.png");
 
 	//index 18
-	Sprite *luigi_jumping_right = new Sprite(characters+"luigi/small/jump/LSmallJump.png");
+	Sprite *luigi_jumping_right = new Sprite(characters+"owen/small/jump/LSmallJump.png");
 	
 	//index 19
-	Sprite *luigi_jumping_left = new Sprite(characters+"luigi/small/jump/LSmallJumpL.png");
+	Sprite *luigi_jumping_left = new Sprite(characters+"owen/small/jump/LSmallJumpL.png");
 
 	//index 20
-	Sprite *luigi_dead = new Sprite(characters+"luigi/small/die/LSmallDie.png");
+	Sprite *luigi_dead = new Sprite(characters+"owen/small/die/LSmallDie.png");
 
 	//index 21
-	Sprite *mbig_stand_r = new Sprite(characters+"mario/big/stand/mStandingBig.png");
+	Sprite *mbig_stand_r = new Sprite(characters+"gracin/big/stand/mStandingBig.png");
 	
 	//index 22
-	Sprite *mbig_stand_l = new Sprite(characters+"mario/big/stand/mStandingBigL.png");
+	Sprite *mbig_stand_l = new Sprite(characters+"gracin/big/stand/mStandingBigL.png");
 
 	//index 23
-	Sprite *mbig_run_r = new Sprite(characters+"mario/big/run/mBigRunning1.png");
-	mbig_run_r->addImage(characters+"mario/big/run/mBigRunning2.png");
-	mbig_run_r->addImage(characters+"mario/big/run/mBigRunning3.png");
+	Sprite *mbig_run_r = new Sprite(characters+"gracin/big/run/mBigRunning1.png");
+	mbig_run_r->addImage(characters+"gracin/big/run/mBigRunning2.png");
+	mbig_run_r->addImage(characters+"gracin/big/run/mBigRunning3.png");
 
 	//index 24
-	Sprite *mbig_run_l = new Sprite(characters+"mario/big/run/mBigRunningL1.png");
-	mbig_run_l->addImage(characters+"mario/big/run/mBigRunningL2.png");
-	mbig_run_l->addImage(characters+"mario/big/run/mBigRunningL3.png");
+	Sprite *mbig_run_l = new Sprite(characters+"gracin/big/run/mBigRunningL1.png");
+	mbig_run_l->addImage(characters+"gracin/big/run/mBigRunningL2.png");
+	mbig_run_l->addImage(characters+"gracin/big/run/mBigRunningL3.png");
 
 	//index 25
-	Sprite *mbig_jump_r = new Sprite(characters+"mario/big/jump/mBigJump.png");
+	Sprite *mbig_jump_r = new Sprite(characters+"gracin/big/jump/mBigJump.png");
 
 	//index 26
-	Sprite *mbig_jump_l = new Sprite(characters+"mario/big/jump/mBigJumpL.png");
+	Sprite *mbig_jump_l = new Sprite(characters+"gracin/big/jump/mBigJumpL.png");
 
 	//index 27
-	Sprite *mbig_crouch_r = new Sprite(characters+"mario/big/crouch/mBigCrouch.png");
+	Sprite *mbig_crouch_r = new Sprite(characters+"gracin/big/crouch/mBigCrouch.png");
 
 	//index 28
-	Sprite *mbig_flag_1 = new Sprite(characters+"mario/big/flag/mBigFlag1.png");
+	Sprite *mbig_flag_1 = new Sprite(characters+"gracin/big/flag/mBigFlag1.png");
 
 	//index 29
-	Sprite *mbig_flag_2 = new Sprite(characters+"mario/big/flag/mBigFlag2.png");
+	Sprite *mbig_flag_2 = new Sprite(characters+"gracin/big/flag/mBigFlag2.png");
 
 	//index 30
-	Sprite *mbig_crouch_l = new Sprite(characters+"mario/big/crouch/mBigCrouchL.png");
+	Sprite *mbig_crouch_l = new Sprite(characters+"gracin/big/crouch/mBigCrouchL.png");
 
 	//index 31
 	Sprite *mushroom_spr = new Sprite("resources/adam/mushroom.png");
 
 	//index 32
-	Sprite *lbig_stand_r = new Sprite(characters+"luigi/big/stand/LStandingBig.png");
+	Sprite *lbig_stand_r = new Sprite(characters+"owen/big/stand/LStandingBig.png");
 
 	//index 33
-	Sprite *lbig_stand_l = new Sprite(characters+"luigi/big/stand/LStandingBigL.png");
+	Sprite *lbig_stand_l = new Sprite(characters+"owen/big/stand/LStandingBigL.png");
 
 	//index 34
-	Sprite *lbig_run_r = new Sprite(characters + "luigi/big/run/LBigRunning1.png");
-	lbig_run_r->addImage(characters+"luigi/big/run/LBigRunning2.png");
-	lbig_run_r->addImage(characters+"luigi/big/run/LBigRunning3.png");
+	Sprite *lbig_run_r = new Sprite(characters + "owen/big/run/LBigRunning1.png");
+	lbig_run_r->addImage(characters+"owen/big/run/LBigRunning2.png");
+	lbig_run_r->addImage(characters+"owen/big/run/LBigRunning3.png");
 
 	//index 35
-	Sprite *lbig_run_l = new Sprite(characters+"luigi/big/run/LBigRunningL1.png");
-	lbig_run_l->addImage(characters+"luigi/big/run/LBigRunningL2.png");
-	lbig_run_l->addImage(characters+"luigi/big/run/LBigRunningL3.png");
+	Sprite *lbig_run_l = new Sprite(characters+"owen/big/run/LBigRunningL1.png");
+	lbig_run_l->addImage(characters+"owen/big/run/LBigRunningL2.png");
+	lbig_run_l->addImage(characters+"owen/big/run/LBigRunningL3.png");
 
 	//index 36
-	Sprite *lbig_jump_r = new Sprite(characters+"luigi/big/jump/LBigJump.png");
+	Sprite *lbig_jump_r = new Sprite(characters+"owen/big/jump/LBigJump.png");
 
 	//index 37
-	Sprite *lbig_jump_l = new Sprite(characters+"luigi/big/jump/LBigJumpL.png");
+	Sprite *lbig_jump_l = new Sprite(characters+"owen/big/jump/LBigJumpL.png");
 
 	//index 38
-	Sprite *lbig_crouch_r = new Sprite(characters+"luigi/big/crouch/LBigCrouch.png");
+	Sprite *lbig_crouch_r = new Sprite(characters+"owen/big/crouch/LBigCrouch.png");
 
 	//index 39
-	Sprite *lbig_flag_1 = new Sprite(characters+"luigi/big/flag/LBigFlag1.png");
+	Sprite *lbig_flag_1 = new Sprite(characters+"owen/big/flag/LBigFlag1.png");
 
 	//index 40
-	Sprite *lbig_flag_2 = new Sprite(characters+"luigi/big/flag/LBigFlag2.png");
+	Sprite *lbig_flag_2 = new Sprite(characters+"owen/big/flag/LBigFlag2.png");
 
 	//index 41
-	Sprite *lbig_crouch_l = new Sprite(characters+"luigi/big/crouch/LBigCrouchL.png");
+	Sprite *lbig_crouch_l = new Sprite(characters+"owen/big/crouch/LBigCrouchL.png");
 
 	//index 42
-	Sprite *msmall_flag_1 = new Sprite(characters+"mario/small/flag/mSmallFlag1.png");
+	Sprite *msmall_flag_1 = new Sprite(characters+"gracin/small/flag/mSmallFlag1.png");
 	
 	//index 43
-	Sprite *msmall_flag_2 = new Sprite(characters+"mario/small/flag/mSmallFlag2.png");
+	Sprite *msmall_flag_2 = new Sprite(characters+"gracin/small/flag/mSmallFlag2.png");
 
 	//index 44
-	Sprite *lsmall_flag_1 = new Sprite(characters+"luigi/small/flag/LSmallFlag1.png");
+	Sprite *lsmall_flag_1 = new Sprite(characters+"owen/small/flag/LSmallFlag1.png");
 
 	//index 45
-	Sprite *lsmall_flag_2 = new Sprite(characters+"luigi/small/flag/LSmallFlag2.png");
+	Sprite *lsmall_flag_2 = new Sprite(characters+"owen/small/flag/LSmallFlag2.png");
 
 	//index 46
 	Sprite *flagpolesprite = new Sprite("resources/adam/flagpole.png");
@@ -272,6 +274,68 @@ int main(){
 
 	//index 58
 	Sprite *background2 = new Sprite("resources/adam/plain_bg.jpg");
+	
+	//index 59
+	Sprite *madison_standing_right = new Sprite(characters+"madison/small/stand/mStandingSmall.png");
+
+	//index 60
+	Sprite *madison_standing_left = new Sprite(characters+"madison/small/stand/mStandingSmallL.png");
+	
+	//index 61
+	Sprite *madison_running_right = new Sprite(characters+"madison/small/run/mSmallRun1.png");
+	madison_running_right->addImage(characters+"madison/small/run/mSmallRun2.png");
+	madison_running_right->addImage(characters+"madison/small/run/mSmallRun3.png");
+	
+	//index 62
+	Sprite *madison_running_left = new Sprite(characters+"madison/small/run/mSmallRunL1.png");
+	madison_running_left->addImage(characters+"madison/small/run/mSmallRunL2.png");
+	madison_running_left->addImage(characters+"madison/small/run/mSmallRunL3.png");
+	
+	//index 63
+	Sprite *madison_jumping_right = new Sprite(characters+"madison/small/jump/mSmallJump.png");
+
+	//index 64
+	Sprite *madison_jumping_left = new Sprite(characters+"madison/small/jump/mSmallJumpL.png");
+
+	//index 65
+	Sprite *madisonsmall_flag_1 = new Sprite(characters+"madison/small/flag/mSmallFlag1.png");
+	
+	//index 66
+	Sprite *madisonsmall_flag_2 = new Sprite(characters+"madison/small/flag/mSmallFlag2.png");
+	
+	//index 67
+	Sprite *madisonbig_stand_r = new Sprite(characters+"madison/big/stand/mStandingBig.png");
+	
+	//index 68
+	Sprite *madisonbig_stand_l = new Sprite(characters+"madison/big/stand/mStandingBigL.png");
+
+	//index 69
+	Sprite *madisonbig_run_r = new Sprite(characters+"madison/big/run/mBigRunning1.png");
+	madisonbig_run_r->addImage(characters+"madison/big/run/mBigRunning2.png");
+	madisonbig_run_r->addImage(characters+"madison/big/run/mBigRunning3.png");
+
+	//index 70
+	Sprite *madisonbig_run_l = new Sprite(characters+"madison/big/run/mBigRunningL1.png");
+	madisonbig_run_l->addImage(characters+"madison/big/run/mBigRunningL2.png");
+	madisonbig_run_l->addImage(characters+"madison/big/run/mBigRunningL3.png");
+
+	//index 71
+	Sprite *madisonbig_jump_r = new Sprite(characters+"madison/big/jump/mBigJump.png");
+
+	//index 72
+	Sprite *madisonbig_jump_l = new Sprite(characters+"madison/big/jump/mBigJumpL.png");
+
+	//index 73
+	Sprite *madisonbig_crouch_r = new Sprite(characters+"madison/big/crouch/mBigCrouch.png");
+
+	//index 74
+	Sprite *madisonbig_flag_1 = new Sprite(characters+"madison/big/flag/mBigFlag1.png");
+
+	//index 75
+	Sprite *madisonbig_flag_2 = new Sprite(characters+"madison/big/flag/mBigFlag2.png");
+
+	//index 76
+	Sprite *madisonbig_crouch_l = new Sprite(characters+"madison/big/crouch/mBigCrouchL.png");
 
 	//Add Scenes to the Engine
 	myEngine.addScene(createMenuScene()); //scene ID = 0
