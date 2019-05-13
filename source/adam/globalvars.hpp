@@ -16,6 +16,8 @@ extern std::vector<unsigned int> p1Small;
 extern std::vector<unsigned int> p2Small;
 extern std::vector<unsigned int> p1Big;
 extern std::vector<unsigned int> p2Big;
+extern std::vector<unsigned int> p3Small;
+extern std::vector<unsigned int> p3Big;
 
 //Super power enum
 enum superPowers {

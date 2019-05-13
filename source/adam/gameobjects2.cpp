@@ -274,5 +274,10 @@ void pulseWave::process(double delta){
 	if(parent!=NULL){
 		x = parent->x - 42;
 		y = parent->y - 36;
+		if(!players[activePlayer].poweredUp){
+			parent->usingPower=false;
+			destroyObject(this);
+			return;
+		}
 	}
 }

@@ -38,13 +38,18 @@ Scene *level2(){
 
 	//Ground
 	ground *ground_object2 = new ground(296,342,0,GROUND,false);
-	ground_object2->sprite_width=3000-296;
+	ground_object2->sprite_width=1712-296;
+
+	//Ground
+	ground *ground_object3 = new ground(1962,342,0,GROUND,false);
+	ground_object3->sprite_width = 1038;
 
 	//Add objects to the scenes
 	gameScene->addObject(bg2);
 	gameScene->addObject(bg);
 	gameScene->addObject(ground_object);
 	gameScene->addObject(ground_object2);
+	gameScene->addObject(ground_object3);
 	gameScene->addObject(theFlag);
 	gameScene->addObject(fp);
 	gameScene->addObject(cstl);
@@ -53,8 +58,10 @@ Scene *level2(){
 	//Blocks
 	Block *blockTmp;
 	float blocks[][2] ={{29,376},{45,392},{61,408},{75,424},{91,440},
-			    {898,430},{914,430},{930,430},
-			    {1026,430},{1042,430},{1058,430}
+			    {914,430},{930,430},
+			    {1026,430},{1042,430},{1058,430},
+			    {1288,430},{1304,430},{1352,430},{1368,430},{1384,430},{1400,430},
+			    {1400,446},{1400,430},{1400,414},{1400,398},{1400,382},{1400,366},
 			};
 	for(unsigned int i = 0; i < (sizeof(blocks)/sizeof(blocks[0])); i++){
 		blockTmp = new Block(blocks[i][0],blocks[i][1],0,GROUND,false);
@@ -64,7 +71,13 @@ Scene *level2(){
 	metalBlock *mBlockTmp;
 	float startX;
 	float startY;
-	float mBlocks[][2] = {{1074,430},{1074,446},{1074,462},{1074,478}};
+	float mBlocks[][2] = {{1074,430},{1074,446},{1074,462},{1074,478},{1464,478},
+						  {898,430},{1650,398},{1634,398},{1618,398},{1602,398},
+						  {1698,350},{1714,350},{1730,350},{1746,350},{1762,350},
+						  {1826,494},{1842,494},{1858,494},{1874,494},
+						  {1858,350},{1874,350},{1890,350},{1906,350},{1922,350},
+						  {2000,478}
+						 };
 	for(unsigned int i = 0; i < (sizeof(mBlocks)/sizeof(mBlocks[0])); i++){
 		mBlockTmp = new metalBlock(mBlocks[i][0],mBlocks[i][1],0,GROUND,false);
 		gameScene->addObject(mBlockTmp);
@@ -88,7 +101,23 @@ Scene *level2(){
 		}
 	}
 	//Ascending stairs
+	startX = 1224;
+	for(unsigned int i = 0; i < 4; i++){
+		for(unsigned int j = 0; j < i+1; j++){
+			mBlockTmp = new metalBlock(startX+(16*i),startY-(16*(j+1)),0,GROUND,false);
+			gameScene->addObject(mBlockTmp);
+		}
+	}
+	//Ascending stairs
 	startX = 770;
+	for(unsigned int i = 0; i < 3; i++){
+		for(unsigned int j = 0; j < i+1; j++){
+			mBlockTmp = new metalBlock(startX+(16*i),startY-(16*(j+1)),0,GROUND,false);
+			gameScene->addObject(mBlockTmp);
+		}
+	}
+	//Ascending stairs
+	startX = 1664;
 	for(unsigned int i = 0; i < 3; i++){
 		for(unsigned int j = 0; j < i+1; j++){
 			mBlockTmp = new metalBlock(startX+(16*i),startY-(16*(j+1)),0,GROUND,false);
@@ -125,26 +154,30 @@ Scene *level2(){
 		gameScene->addObject(mysteryTmp);
 	}
 	
-	/*
+	
 	//Pipes
 	staticPipe *staticPipeTmp;
-	float staticPipes[5][2] = {{296,462},{464,462},{614,462},{870,462},{1500,462}};
+	float staticPipes[][2] = {{2300,462}};
 	for(unsigned int i = 0; i < (sizeof(staticPipes)/sizeof(staticPipes[0])); i++){
 		staticPipeTmp = new staticPipe(staticPipes[i][0],staticPipes[i][1],0,GROUND,false);
 		gameScene->addObject(staticPipeTmp);
 	}
-	*/
+	
 	//Gombas
 	
 	gomba *gombaTmp;
-	float gombas[][2] = {{190,305},{400,452},{460,452},{510,452},{560,452}};
+	float gombas[][2] = {{190,305},{400,452},{460,452},{510,452},{560,452},{1288,452},{1336,452},
+	                     {1368,452},{1400,452},{1432,452},{2096,452},{2116,452},{2132,452},
+						 {2148,452},{2164,452},{2196,452},{2216,452},{2232,452},{2248,452},
+						 {2264,452}
+			    };
 	for(unsigned int i = 0; i < (sizeof(gombas)/sizeof(gombas[0]));i++){
 		gombaTmp = new gomba(gombas[i][0],gombas[i][1],0,ENEMY,true);
 		gameScene->addObject(gombaTmp);
 	}
 	//koopas
 	koopa *koopaTmp;
-	float koopas[][2] = {{50,305},{125,305},{930,398},{1042,398}};
+	float koopas[][2] = {{50,305},{125,305},{930,398},{1042,398},{1714,334},{1842,474},{1890,334},{1634,378}};
 	for(unsigned int i = 0; i < (sizeof(koopas)/sizeof(koopas[0]));i++){
 		koopaTmp = new koopa(koopas[i][0],koopas[i][1],0,ENEMY,true);
 		gameScene->addObject(koopaTmp);
@@ -288,41 +321,62 @@ Scene *createMenuScene(){
 	menuScene->addObject(promptText);
 	menuScene->addObject(trigger);
 
+	//Reset global variables
+	currentLevel = 0;
+	
 	return menuScene;
 
 }
 
 Scene *createPreviewScene(){
 	Scene *previewScene = new Scene(600,520);
+	
+	if(currentLevel < levels.size()){
+		//Create Objects
+		genericText *turnText = new genericText(0,0,-1,0,false);
+		std::string turnString;
 
-	//Create Objects
-	genericText *turnText = new genericText(0,0,-1,0,false);
-	std::string turnString;
+		genericText *lifeText = new genericText(0,0,-1,0,false);
+		std::string lifeString;
+		turnString = players[activePlayer].name; 
+		turnString += "s Turn";
+		lifeString = players[activePlayer].name;
+		lifeString += " has " + std::to_string(players[activePlayer].lives) + " lives left";
+		turnText->setText(150,50,18,false,"resources/arial.ttf",turnString);
+		lifeText->setText(100,150,18,false,"resources/arial.ttf",lifeString);
 
-	genericText *lifeText = new genericText(0,0,-1,0,false);
-	std::string lifeString;
-	turnString = players[activePlayer].name; 
-	turnString += "s Turn";
-	lifeString = players[activePlayer].name;
-	lifeString += " has " + std::to_string(players[activePlayer].lives) + " lives left";
-	turnText->setText(150,50,18,false,"resources/arial.ttf",turnString);
-	lifeText->setText(100,150,18,false,"resources/arial.ttf",lifeString);
+		//timeTrigger
+		timeTrigger *switchTrigger = new timeTrigger(0,0,-1,0,false);
+		switchTrigger->setTimer(500.0);
+		switchTrigger->setSceneFunc(levelFunc);
+		switchTrigger->setSceneID(1);
 
-	//timeTrigger
-	timeTrigger *switchTrigger = new timeTrigger(0,0,-1,0,false);
-	switchTrigger->setTimer(500.0);
-	switchTrigger->setSceneFunc(levelFunc);
-	switchTrigger->setSceneID(1);
+		//Add objects to the scenes
+		previewScene->addObject(lifeText);
+		previewScene->addObject(turnText);
+		previewScene->addObject(switchTrigger);
+	}else{
+		//Create Objects
+		genericText *winString = new genericText(0,0,-1,0,false);
+		winString->setText(150,50,18,false,"resources/arial.ttf","The Zelski Bros Win");
 
-	//Add objects to the scenes
-	previewScene->addObject(lifeText);
-	previewScene->addObject(turnText);
-	previewScene->addObject(switchTrigger);
+		//timeTrigger
+		timeTrigger *switchTrigger = new timeTrigger(0,0,-1,0,false);
+		switchTrigger->setTimer(1000.0);
+		switchTrigger->setSceneFunc(createMenuScene);
+		switchTrigger->setSceneID(0);
+
+		//Add ojbects to the scene
+		previewScene->addObject(winString);
+		previewScene->addObject(switchTrigger);
+	}
 
 
 	return previewScene;
 
 }
+
+
 
 Scene *gameoverScene(){
 	Scene *gameoverScene = new Scene(600,520);
