@@ -5,6 +5,7 @@
 std::string MMAN_PATH = "./resources/r1/megaman/";
 std::string GROUND_PATH = "./resources/r1/ground/";
 std::string BGROUND_PATH = "./resources/r1/background/";
+std::string SHARED_PATH = "./resources/r1/shared/";
 
 int main(int argc, char* argv){
     //Creating the game engine
@@ -34,13 +35,15 @@ int main(int argc, char* argv){
 
     //SPRITE IDX = 5
     Sprite *mman_run_l = new Sprite(MMAN_PATH + "mman_run_l_1.png");
-    mman_run_l->addImage(MMAN_PATH + "mman_run_l_2.png");
-    mman_run_l->addImage(MMAN_PATH + "mman_run_l_3.png");
+    mman_run_l->addImage(MMAN_PATH + "mman_run_l_2_24.png");
+    mman_run_l->addImage(MMAN_PATH + "mman_run_l_3_24.png");
+    mman_run_l->setRepeated(false);
 
     //SPRITE IDX = 6
     Sprite *mman_run_r = new Sprite(MMAN_PATH + "mman_run_r_1.png");
-    mman_run_r->addImage(MMAN_PATH + "mman_run_r_2.png");
-    mman_run_r->addImage(MMAN_PATH + "mman_run_r_3.png");
+    mman_run_r->addImage(MMAN_PATH + "mman_run_r_2_24.png");
+    mman_run_r->addImage(MMAN_PATH + "mman_run_r_3_24.png");
+    mman_run_r->setRepeated(false);
 
     //SPRITE IDX = 7
     Sprite *mman_shoot_run_l = new Sprite(MMAN_PATH + "mman_shoot_run_l_1.png");
@@ -73,11 +76,9 @@ int main(int argc, char* argv){
     //SPRITE IDX = 15
     Sprite *bottom_ground_sprite = new Sprite(GROUND_PATH + "bottom_ground_tile.png");
     bottom_ground_sprite->setRepeated(true);
-    bottom_ground_sprite->setSize(2000, 900);
 
     //SPRITE IDX = 16
     Sprite *top_ground_sprite = new Sprite(GROUND_PATH + "top_ground_tile.png");
-    top_ground_sprite->setRepeated(true);
 
     //SPRITE IDX = 17
     Sprite *barrels = new Sprite(BGROUND_PATH + "barrels.png");
@@ -86,6 +87,14 @@ int main(int argc, char* argv){
     Sprite *clouds = new Sprite(BGROUND_PATH + "clouds.png");
     clouds->setRepeated(true);
     clouds->setSize(20000, 40);
+
+    //SPRITE IDX = 19
+    Sprite *bullet_sprite = new Sprite(SHARED_PATH + "bullet.png");
+    
+    //SPRITE IDX = 20
+    Sprite *ground_sprite = new Sprite(GROUND_PATH + "bottom_ground_tile.png");
+    ground_sprite->setRepeated(true);
+    ground_sprite->setSize(2000, 900);
 
     //Adding scenes to the game
     kool.addScene(createMainGame());

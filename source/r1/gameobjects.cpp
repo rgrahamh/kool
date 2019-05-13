@@ -1,5 +1,6 @@
 #include "./headers/gameobjects.hpp"
-#include <vector>
+
+#define SCALE 2.0
 
 using namespace std;
 
@@ -30,14 +31,18 @@ void Player::create(){
     /** SPRITE INDICIES:
      * 0: Standing left        
      * 1: Standing right       
-     * 2: Running left         
-     * 3: Running right        
-     * 4: Shooting running left
-     * 5: Shooting running right
-     * 6: Jumping left
-     * 7: Jumping right
-     * 8: Hurt left
-     * 9: Hurt right
+     * 2: Standing shooting left        
+     * 3: Standing shooting right       
+     * 4: Running left         
+     * 5: Running right        
+     * 6: Shooting running left
+     * 7: Shooting running right
+     * 8: Jumping left
+     * 9: Jumping right
+     * 10: Jumping shooting left
+     * 11: Jumping shooting right
+     * 12: Hurt left
+     * 13: Hurt right
      */
     sprites.push_back(this->getSprite(1)); 
     sprites.push_back(this->getSprite(2)); 
@@ -82,27 +87,29 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
         int oldOtherX = other->xPrev + this->hitBoxes[otherBoxID]->offsetX;
         int oldOtherY = other->yPrev + this->hitBoxes[otherBoxID]->offsetY;
 
-        //printf("thisX: %d\nthisY: %d\noldThisX: %d\noldThisY: %d\n\n", thisX, thisY, oldThisX, oldThisY);
-
         //Bottom of this colllides with top of other
-        if(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height <= oldOtherY){
-            this->y = otherY - this->hitBoxes[otherBoxID]->height;
-            this->yV = 0;
-            grounded = true;
+        if(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height <= oldOtherY && !(oldThisX + this->hitBoxes[myBoxID]->width <= oldOtherX || thisX <= otherX + other->hitBoxes[otherBoxID]->width && oldThisX >= oldOtherX + other->hitBoxes[otherBoxID]->width)){
+                this->y = otherY - this->hitBoxes[myBoxID]->height;
+                this->yV = 0;
+                //Necessary to check grounded a frame prior because collision detection happens after the process step
+                if(oldGrounded == false){
+                    playSound("./resources/r1/sound/land.wav");
+                }
+                grounded = true;
         }
         //Top of this collides with bottom of other
-        else if(thisY <= otherY + other->hitBoxes[myBoxID]->height && oldThisY >= oldOtherY + other->hitBoxes[myBoxID]->height){ 
-            this->y = otherY + other->hitBoxes[myBoxID]->height;
+        else if(thisY < otherY + other->hitBoxes[otherBoxID]->height && oldThisY >= oldOtherY + other->hitBoxes[otherBoxID]->height){
+            this->y = otherY + other->hitBoxes[otherBoxID]->height;
             this->yV = 0;
         }
-        //Left side of this collides with right side of other
-        else if(thisX + this->hitBoxes[myBoxID]->width >= otherX && oldThisX + this->hitBoxes[myBoxID]->width <= oldOtherX){ 
-            this->x = otherX + this->hitBoxes[otherBoxID]->width;
+        //Right side of this collides with left side of other
+        else if(thisX + this->hitBoxes[myBoxID]->width >= otherX && oldThisX + this->hitBoxes[myBoxID]->width <= oldOtherX && !(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height <= oldOtherY)){ 
+            this->x = otherX - this->hitBoxes[myBoxID]->width;
             this->xV = 0;
         }
-        //Right side of this collides with left side of other
-        else if(thisX <= otherX + other->hitBoxes[myBoxID]->width && oldThisX >= oldOtherX + other->hitBoxes[myBoxID]->width){ 
-            this->x = otherX - this->hitBoxes[myBoxID]->width;
+        //Left side of this collides with right side of other
+        else if(thisX <= otherX + other->hitBoxes[otherBoxID]->width && oldThisX >= oldOtherX + other->hitBoxes[otherBoxID]->width && !(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height <= oldOtherY)){ 
+            this->x = otherX + other->hitBoxes[otherBoxID]->width;
             this->xV = 0;
         }
     }
@@ -111,9 +118,11 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
 void Player::process(double delta){
     int spriteIdx;
 
+    oldGrounded = grounded;
+
     //Jumping
     if(Keys::isKeyPressed(Keys::W) && grounded && !digitalJump){
-        yA -= 15.0;
+        yA -= 20.0;
         digitalJump = true;
         jumpHeld = true;
     } else {
@@ -127,23 +136,6 @@ void Player::process(double delta){
             digitalJump = false;
         }
     }
-
-    /** SPRITE INDICIES:
-     * 0: Standing left        
-     * 1: Standing right       
-     * 2: Standing shooting left        
-     * 3: Standing shooting right       
-     * 4: Running left         
-     * 5: Running right        
-     * 6: Shooting running left
-     * 7: Shooting running right
-     * 8: Jumping left
-     * 9: Jumping right
-     * 10: Jumping shooting left
-     * 11: Jumping shooting right
-     * 12: Hurt left
-     * 13: Hurt right
-     */
 
     //Moving left and right
     if(Keys::isKeyPressed(Keys::A) || Keys::isKeyPressed(Keys::D)){
@@ -159,6 +151,9 @@ void Player::process(double delta){
             }
             spriteIdx = 5 + dir;
         }
+        else{
+            spriteIdx = 1 + dir;
+        }
     } else {
         spriteIdx = 1 + dir;
     }
@@ -170,15 +165,33 @@ void Player::process(double delta){
     if(shotTimer > 0){
         spriteIdx += 2;
     }
-
-    if(Keys::isKeyPressed(Keys::Space)){
-        //Shoot
-        shotTimer = 150;
-    }
-
+    
     //Update sprite with current state
     this->setSprite(spriteIdx);
 
+    sf::Texture currImage = sprite->getImage(this->imageIndex);
+    this->sprite->setSize(currImage.getSize().x, currImage.getSize().y);
+
+    //Shooting
+    if(Keys::isKeyPressed(Keys::Space) && !digitalShoot){
+        Bullet* shot = new Bullet(this->x + ((dir)? currImage.getSize().x : 0), this->y + (currImage.getSize().y / 2), 20.0 * ((dir)? 1 : -1), 0.0, 0, PLAYER, false);
+
+        //Scale the bullet
+        shot->setScale(SCALE, SCALE);
+        shot->hitBoxes[0]->height *= SCALE;
+        shot->hitBoxes[0]->width *= SCALE;
+
+        //Finish creating the bullet in the scene
+        createObject(shot);
+        shotTimer = 50;
+        digitalShoot = true;
+
+        playSound("./resources/r1/sound/shoot.wav");
+    }
+    else if(!Keys::isKeyPressed(Keys::Space)){
+        digitalShoot = false;
+    }
+    
     //Making sure that the player doesn't escape the screen's left bound
     if(this->x + this->xV < 0){
         this->x = 0;
@@ -197,18 +210,44 @@ void Player::process(double delta){
     } else {
         shotTimer = 0;
     }
+
     grounded = false;
 }
 
-Ground::Ground(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
-    create();
+Ground::Ground(float x, float y, int spriteIdx, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
+    create(spriteIdx);
 }
 
-void Ground::create(){
+void Ground::create(int spriteIdx){
     this->collisionLayer = 0;
     this->debug=false;
     this->collisionFlags = GROUND;
 
-    setSprite((unsigned int)15);
+    setSprite((unsigned int)spriteIdx);
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+}
+
+Bullet::Bullet(float x, float y, float xSpeed, float ySpeed, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
+    create(xSpeed, ySpeed);
+}
+
+void Bullet::onCollide(Object *other, int myBoxID, int otherBoxID){
+    if(other->collisionFlags & GROUND){
+        destroyObject(this);
+    }
+}
+
+void Bullet::create(float xSpeed, float ySpeed){
+    this->debug = false;
+    this->collisionFlags |= PROJECTILE;
+    this->friction = 0;
+    this->xV = xSpeed;
+    this->yV = ySpeed;
+    
+    setSprite((unsigned int)19);
+	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+}
+
+int Bullet::getDamage(){
+    return this->damage;
 }
