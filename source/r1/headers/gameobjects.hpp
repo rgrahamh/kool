@@ -10,25 +10,52 @@ class Background: public Object{
         void create(unsigned int idx);
 };
 
-class Player: public Object{
+class Character: public Object{
     public:
-		Player(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+        Character(float x, float y, int maxHealth, unsigned char dir = 0, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+        ~Character();
+        void create(int maxHealth, unsigned char dir);
+        virtual void process(double delta);
+        virtual void onCollide(Object* other, int myBoxID, int theirBoxID);
+        virtual void create();
+    protected:
+        std::vector<Sprite*> sprites;
+        float speed;
+        float maxVelocity;
+        unsigned char dir;
+        int health;
+};
+
+class Player: public Character{
+    public:
+		Player(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = true);
+        ~Player();
         void create();
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
 		void process(double delta);
     private:
-        std::vector<Sprite*> sprites;
         bool grounded;
         bool oldGrounded;
-        float speed;
-        float maxVelocity;
         float shotTimer;
-        int dir;
         bool jumpHeld;
         bool digitalJump;
         bool justJumped;
         bool digitalShoot;
-        int health;
+};
+
+class Joe: public Character{
+    public:
+		Joe(float x, float y, Character* following, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = true);
+        ~Joe();
+        void create(Character* following);
+		void onCollide(Object *other, int myBoxID, int otherBoxID);
+		void process(double delta);
+    private:
+        bool shielding;
+        float stateTimer;
+        float shotTimer;
+        int shotsFired;
+        Character* following;
 };
 
 class Ground: public Object{
@@ -39,9 +66,9 @@ class Ground: public Object{
 
 class Bullet: public Object{
     public:
-        Bullet(float x, float y, float xSpeed, float ySpeed, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+        Bullet(float x, float y, float xSpeed, float ySpeed, int damage, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
-        void create(float xSpeed, float ySpeed);
+        void create(float xSpeed, float ySpeed, int damage);
         int getDamage();
     private:
         int damage;

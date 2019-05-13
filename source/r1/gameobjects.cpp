@@ -14,8 +14,33 @@ void Background::create(unsigned int idx){
     setSprite((unsigned int) idx);
 }
 
+//Character object
+Character::Character(float x, float y, int maxHealth, unsigned char dir, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
+    create(maxHealth, dir);
+}
+
+void Character::create(int maxHealth, unsigned char dir){
+    this->health = maxHealth;
+    this->dir = dir;
+}
+
+//These three stub functions are to prevent undefined references in the vtable
+void Character::process(double delta){
+    return;
+}
+
+void Character::onCollide(Object *other, int myBoxID, int otherBoxID){
+	return;
+}
+
+void Character::create(){
+	return;
+}
+
+Character::~Character(){}
+
 //Player object
-Player::Player(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
+Player::Player(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Character(x, y, 20, 1, collisionLayer, collisionFlags, grav){
     create();
 }
 
@@ -62,7 +87,7 @@ void Player::create(){
 
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 	this->friction = 0.35;
-	this->speed = 1.2;
+    this->speed = 1.5;
 	this->maxVelocity = 5.0;
     this->collisionLayer = 0;
 
@@ -72,7 +97,6 @@ void Player::create(){
 }
 
 void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
-
     //If the player collides with ground:
     if(other->collisionFlags & GROUND){
         int thisX = this->x + this->hitBoxes[myBoxID]->offsetX;
@@ -174,7 +198,7 @@ void Player::process(double delta){
 
     //Shooting
     if(Keys::isKeyPressed(Keys::Space) && !digitalShoot){
-        Bullet* shot = new Bullet(this->x + ((dir)? currImage.getSize().x : 0), this->y + (currImage.getSize().y / 2), 20.0 * ((dir)? 1 : -1), 0.0, 0, PLAYER, false);
+        Bullet* shot = new Bullet(this->x + ((dir)? currImage.getSize().x : 0), this->y + (currImage.getSize().y / 2), 20.0 * ((dir)? 1 : -1), 0.0, 1, 0, PLAYER, false);
 
         //Scale the bullet
         shot->setScale(SCALE, SCALE);
@@ -186,7 +210,7 @@ void Player::process(double delta){
         shotTimer = 50;
         digitalShoot = true;
 
-        playSound("./resources/r1/sound/shoot.wav");
+        playSound((char*)"./resources/r1/sound/shoot.wav");
     }
     else if(!Keys::isKeyPressed(Keys::Space)){
         digitalShoot = false;
@@ -214,6 +238,51 @@ void Player::process(double delta){
     grounded = false;
 }
 
+Player::~Player(){}
+
+Joe::Joe(float x, float y, Character* following, int collisionLayer, unsigned int collisionFlags, bool grav):Character(x, y, 20, 0, collisionLayer, collisionFlags, grav){
+    create(following);
+}
+
+void Joe::create(Character* following){
+    this->following = following;
+    this->shielding = false;
+
+    setSprite((unsigned int)21);
+	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+}
+
+void Joe::process(double delta){
+    if(following->x < this->x){
+        dir = 0;
+    } else {
+        dir = 1;
+    }
+
+    /*if(stateTimer < 0){
+        state = !state;
+    }*/
+    int spriteIdx = 21;
+
+    if(!shielding){
+        spriteIdx += 2;
+    }
+
+    //Update sprite with current state
+    this->setSprite(spriteIdx + dir);
+}
+
+void Joe::onCollide(Object *other, int myBoxID, int otherBoxID){
+    if((other->collisionFlags & PLAYER) && (other->collisionFlags & PROJECTILE)){
+        if(!shielding){
+            health -= ((Bullet*)other)->getDamage();
+        }
+        destroyObject(other);
+    }
+}
+
+Joe::~Joe(){}
+
 Ground::Ground(float x, float y, int spriteIdx, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
     create(spriteIdx);
 }
@@ -227,8 +296,8 @@ void Ground::create(int spriteIdx){
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 }
 
-Bullet::Bullet(float x, float y, float xSpeed, float ySpeed, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
-    create(xSpeed, ySpeed);
+Bullet::Bullet(float x, float y, float xSpeed, float ySpeed, int damage, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags | PROJECTILE, grav){
+    create(xSpeed, ySpeed, damage);
 }
 
 void Bullet::onCollide(Object *other, int myBoxID, int otherBoxID){
@@ -237,12 +306,12 @@ void Bullet::onCollide(Object *other, int myBoxID, int otherBoxID){
     }
 }
 
-void Bullet::create(float xSpeed, float ySpeed){
+void Bullet::create(float xSpeed, float ySpeed, int damage){
     this->debug = false;
-    this->collisionFlags |= PROJECTILE;
     this->friction = 0;
     this->xV = xSpeed;
     this->yV = ySpeed;
+    this->damage = damage;
     
     setSprite((unsigned int)19);
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);

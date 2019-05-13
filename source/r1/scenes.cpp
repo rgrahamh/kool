@@ -19,12 +19,15 @@ Scene* createMainGame(){
 
     //Create the ground
     Ground* ground = new Ground(0, 800, 20, 0, GROUND, false);
+
+    Joe* joe1 = new Joe(980, 752, mman, 0, ENEMY, false);
     
     //Add objects to the scenes
     scene->addObject(background);
     scene->addObject(clouds);
     scene->addObject(barrels);
     scene->addObject(ground);
+    scene->addObject(joe1);
     scene->addObject(mman);
     
     //Create additional ground tiles

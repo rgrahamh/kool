@@ -6,6 +6,7 @@ std::string MMAN_PATH = "./resources/r1/megaman/";
 std::string GROUND_PATH = "./resources/r1/ground/";
 std::string BGROUND_PATH = "./resources/r1/background/";
 std::string SHARED_PATH = "./resources/r1/shared/";
+std::string ENEMY_PATH = "./resources/r1/enemies/";
 
 int main(int argc, char* argv){
     //Creating the game engine
@@ -95,6 +96,18 @@ int main(int argc, char* argv){
     Sprite *ground_sprite = new Sprite(GROUND_PATH + "bottom_ground_tile.png");
     ground_sprite->setRepeated(true);
     ground_sprite->setSize(2000, 900);
+
+    //SPRITE IDX = 21
+    Sprite *joe_shield_l = new Sprite(ENEMY_PATH + "joe_shield_l.png");
+
+    //SPRITE IDX = 22
+    Sprite *joe_shield_r = new Sprite(ENEMY_PATH + "joe_shield_r.png");
+
+    //SPRITE IDX = 23
+    Sprite *joe_shoot_l = new Sprite(ENEMY_PATH + "joe_shoot_l.png");
+
+    //SPRITE IDX = 24
+    Sprite *joe_shoot_r = new Sprite(ENEMY_PATH + "joe_shoot_r.png");
 
     //Adding scenes to the game
     kool.addScene(createMainGame());
