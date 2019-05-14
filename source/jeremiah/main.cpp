@@ -27,7 +27,7 @@ int main(){
     Sprite *planet2 = new Sprite("resources/planet2.png");
 
 //index 4
-    Sprite *asteroid = new Sprite("resources/asteroid.jpg");
+    Sprite *asteroid = new Sprite("resources/asteroid.png");
 
     //Add Scenes to the Engine
     myEngine.addScene(level1()); //gameScene has sceneID=1

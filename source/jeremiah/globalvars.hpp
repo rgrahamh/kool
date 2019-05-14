@@ -8,6 +8,6 @@ extern int p2Lives;
 extern int activePlayer;
 extern int currentLevel;
 extern std::function<Scene *()> levelFunc;
-extern bool activeDead;
+//extern bool activeDead;
 
 

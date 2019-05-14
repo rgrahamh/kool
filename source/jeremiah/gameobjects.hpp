@@ -36,7 +36,6 @@ class asteroid: public Object {
 
     public:
 		//This code has to be present in all child objects of Object
-		asteroid(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		bool dead;
 		double deadTime;
 		double deadMax;
@@ -44,8 +43,6 @@ class asteroid: public Object {
 		float leftGravBound;
 		asteroid(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void create();
-		void onCollide(Object *other, int myBoxID, int otherBoxID);
-        void process(double delta);
 };
 
 class player: public Object {

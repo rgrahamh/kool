@@ -16,16 +16,16 @@ Scene *level1(){
 
 	planet *planet1 = new planet(200,200,0,ENEMY,false);
 
-	planet *planet2 = new planet(600,400,0,ENEMY,false);
+	planet *planet2 = new planet(1000,400,0,ENEMY,false);
 	planet2->setSprite(3);
 
-	asteroid *asteroid1 = new asteroid(1000,300,0,ENEMY,false);
+	asteroid *asteroid1 = new asteroid(1500,600,0,ENEMY,false);
 
     gameScene->addObject(bg);
 	gameScene->addObject(planet2);
-	gameScene->addObject(asteroid1);
     gameScene->addObject(p1);
 	gameScene->addObject(planet1);
+	gameScene->addObject(asteroid1);
 
 
 	//Edit views
