@@ -134,3 +134,6 @@ int resetScene(std::function<Scene *()> buildFunction,int sceneID){
 	}
 	return -1;
 }
+bool inView(Object* obj, int sceneID, int viewID){
+    return activeEngine->getScene(sceneID)->getView(viewID)->inView(obj);
+}

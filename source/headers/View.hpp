@@ -36,7 +36,7 @@ class View{
 		void setFollowMiddle(int winX, int winY);
 		void setSceneID(int id);
 		void follow(); //Adjust position based on the object we are following.
-
+        bool inView(Object *object);
 
 };
 #endif

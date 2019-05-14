@@ -2,7 +2,15 @@
 #define GAME_OBJ_H
 #include "../../headers/Object.hpp"
 #include "../../headers/Globals.hpp"
+#include "./scenes.hpp"
 #include <vector>
+
+class Title: public Object{
+    public:
+		Title(float x, float y, int collisionLayer = -1, unsigned int collisionFlags = 0, bool grav = false);
+        void create();
+        void process(double delta);
+};
 
 class Background: public Object{
     public:
@@ -37,10 +45,12 @@ class Player: public Character{
         bool grounded;
         bool oldGrounded;
         float shotTimer;
+        float invinsTimer;
         bool jumpHeld;
         bool digitalJump;
         bool justJumped;
         bool digitalShoot;
+        bool hurt;
 };
 
 class Joe: public Character{
@@ -69,7 +79,9 @@ class Bullet: public Object{
         Bullet(float x, float y, float xSpeed, float ySpeed, int damage, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
         void create(float xSpeed, float ySpeed, int damage);
+        void process(double delta);
         int getDamage();
+        void changeDirection(float xSpeed, float ySpeed);
     private:
         int damage;
 };

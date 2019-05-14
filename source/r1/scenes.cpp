@@ -1,6 +1,18 @@
 #include "./headers/scenes.hpp"
 
+Scene* createTitleScreen(){
+    Scene *scene = new Scene(1600, 900);
+
+    Title* title = new Title(344, 310);
+
+    scene->addObject(title);
+
+    return scene;
+}
+
 Scene* createMainGame(){
+    stopAllSounds();
+
     playSound((char*)"./resources/r1/sound/dr-wileys-castle.wav", true);
 
     Scene *scene  = new Scene(20000, 900);

@@ -35,13 +35,13 @@ int main(int argc, char* argv){
     Sprite *mman_shoot_r = new Sprite(MMAN_PATH + "mman_shoot_r.png");
 
     //SPRITE IDX = 5
-    Sprite *mman_run_l = new Sprite(MMAN_PATH + "mman_run_l_1.png");
+    Sprite *mman_run_l = new Sprite(MMAN_PATH + "mman_run_l_1_24.png");
     mman_run_l->addImage(MMAN_PATH + "mman_run_l_2_24.png");
     mman_run_l->addImage(MMAN_PATH + "mman_run_l_3_24.png");
     mman_run_l->setRepeated(false);
 
     //SPRITE IDX = 6
-    Sprite *mman_run_r = new Sprite(MMAN_PATH + "mman_run_r_1.png");
+    Sprite *mman_run_r = new Sprite(MMAN_PATH + "mman_run_r_1_24.png");
     mman_run_r->addImage(MMAN_PATH + "mman_run_r_2_24.png");
     mman_run_r->addImage(MMAN_PATH + "mman_run_r_3_24.png");
     mman_run_r->setRepeated(false);
@@ -70,7 +70,7 @@ int main(int argc, char* argv){
 
     //SPRITE IDX = 13
     Sprite *mman_hurt_l = new Sprite(MMAN_PATH + "mman_hurt_l.png");
-
+    
     //SPRITE IDX = 14
     Sprite *mman_hurt_r = new Sprite(MMAN_PATH + "mman_hurt_r.png");
 
@@ -109,7 +109,14 @@ int main(int argc, char* argv){
     //SPRITE IDX = 24
     Sprite *joe_shoot_r = new Sprite(ENEMY_PATH + "joe_shoot_r.png");
 
+    //SPRITE IDX = 25
+    Sprite *transparent = new Sprite(SHARED_PATH + "transparent.png");
+
+    //SPRITE IDX = 26
+    Sprite *title = new Sprite(SHARED_PATH + "title_screen.png");
+
     //Adding scenes to the game
+    kool.addScene(createTitleScreen());
     kool.addScene(createMainGame());
 
     //Starting the engine

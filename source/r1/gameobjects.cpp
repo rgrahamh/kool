@@ -4,6 +4,20 @@
 
 using namespace std;
 
+//Title object
+Title::Title(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
+    create();
+}
+
+void Title::create(){
+    setSprite((unsigned int)26);
+}
+
+void Title::process(double delta){
+    if(Keys::isKeyPressed(Keys::Space)){
+        setActiveScene(1);
+    }
+}
 
 //Background object
 Background::Background(float x, float y, unsigned int spriteIdx, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
@@ -48,6 +62,7 @@ void Player::create(){
     this->collisionLayer = 0;
     this->collisionFlags = PLAYER;
     this->debug = false;
+    this->invinsTimer = 0;
 
     this->animationDelay = 25;
 
@@ -83,11 +98,12 @@ void Player::create(){
     sprites.push_back(this->getSprite(12));
     sprites.push_back(this->getSprite(13)); 
     sprites.push_back(this->getSprite(14));
+    sprites.push_back(this->getSprite(25));
     this->setSprite(sprites[0]);
 
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 	this->friction = 0.35;
-    this->speed = 1.5;
+    this->speed = 2.5;
 	this->maxVelocity = 5.0;
     this->collisionLayer = 0;
 
@@ -117,7 +133,7 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
                 this->yV = 0;
                 //Necessary to check grounded a frame prior because collision detection happens after the process step
                 if(oldGrounded == false){
-                    playSound("./resources/r1/sound/land.wav");
+                    playSound((char*)"./resources/r1/sound/land.wav");
                 }
                 grounded = true;
         }
@@ -137,6 +153,19 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
             this->xV = 0;
         }
     }
+
+    if((other->collisionFlags & ENEMY) && invinsTimer < 0){
+        invinsTimer = 500;
+        xV += 40.0 * ((dir)? -1 : 1);
+        playSound((char*)"./resources/r1/sound/hurt.wav");
+        if(other->collisionFlags & PROJECTILE){
+            this->health -= ((Bullet*)other)->getDamage();
+            destroyObject(other);
+        }
+        else{
+            this->health -= 1;
+        }
+    }
 }
 
 void Player::process(double delta){
@@ -145,7 +174,7 @@ void Player::process(double delta){
     oldGrounded = grounded;
 
     //Jumping
-    if(Keys::isKeyPressed(Keys::W) && grounded && !digitalJump){
+    if(Keys::isKeyPressed(Keys::W) && grounded && !digitalJump && invinsTimer < 400){
         yA -= 20.0;
         digitalJump = true;
         jumpHeld = true;
@@ -162,15 +191,15 @@ void Player::process(double delta){
     }
 
     //Moving left and right
-    if(Keys::isKeyPressed(Keys::A) || Keys::isKeyPressed(Keys::D)){
+    if((Keys::isKeyPressed(Keys::A) || Keys::isKeyPressed(Keys::D)) && invinsTimer < 400){
         spriteIdx = 0;
         if(!(Keys::isKeyPressed(Keys::A) && Keys::isKeyPressed(Keys::D))){ //If both are pressed, do nothing.
             if(Keys::isKeyPressed(Keys::A)){
-                xA -= speed * delta;
+                xA -= speed;
                 this->dir = 0;
             }
             if(Keys::isKeyPressed(Keys::D)){
-                xA += speed * delta;
+                xA += speed;
                 this->dir = 1;
             }
             spriteIdx = 5 + dir;
@@ -185,9 +214,17 @@ void Player::process(double delta){
     if(!grounded){
         spriteIdx = 9 + dir;
     }
-
     if(shotTimer > 0){
         spriteIdx += 2;
+    }
+
+    if(invinsTimer > 400){
+        spriteIdx = 13 + dir;
+    }
+
+    //Flickering on invinsibility
+    if(invinsTimer >= 0 && ((int)invinsTimer) % 100 > 50){
+        spriteIdx = 25;
     }
     
     //Update sprite with current state
@@ -197,7 +234,7 @@ void Player::process(double delta){
     this->sprite->setSize(currImage.getSize().x, currImage.getSize().y);
 
     //Shooting
-    if(Keys::isKeyPressed(Keys::Space) && !digitalShoot){
+    if(Keys::isKeyPressed(Keys::Space) && !digitalShoot && invinsTimer < 400){
         Bullet* shot = new Bullet(this->x + ((dir)? currImage.getSize().x : 0), this->y + (currImage.getSize().y / 2), 20.0 * ((dir)? 1 : -1), 0.0, 1, 0, PLAYER, false);
 
         //Scale the bullet
@@ -229,13 +266,21 @@ void Player::process(double delta){
         xV = maxVelocity * -1;
     }
 
-    if(shotTimer - delta < shotTimer){
+    if(shotTimer >= 0){
         shotTimer -= delta;
-    } else {
-        shotTimer = 0;
+    }
+
+    if(invinsTimer >= 0){
+        invinsTimer -= delta;
     }
 
     grounded = false;
+    
+    //Checking for death
+    if(!inView(this, activeEngine->getActiveScene()->id, 0) || health <= 0){
+        resetScene(createMainGame(), activeEngine->getActiveScene()->id)
+    }
+    
 }
 
 Player::~Player(){}
@@ -247,37 +292,77 @@ Joe::Joe(float x, float y, Character* following, int collisionLayer, unsigned in
 void Joe::create(Character* following){
     this->following = following;
     this->shielding = false;
+    this->stateTimer = 750;
 
     setSprite((unsigned int)21);
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 }
 
 void Joe::process(double delta){
-    if(following->x < this->x){
-        dir = 0;
-    } else {
-        dir = 1;
+    if(inView(this, activeEngine->getActiveScene()->id, 0)){
+        if(health <= 0){
+            destroyObject(this);
+            playSound((char*)"./resources/r1/sound/destroy.wav");
+            return;
+        }
+
+        if(following->x < this->x){
+            dir = 0;
+        } else {
+            dir = 1;
+        }
+
+        if(stateTimer <= 0){
+            if(shielding){
+                shielding = false;
+                stateTimer = 1250;
+                shotTimer = 200;
+            } else {
+                shielding = true;
+                stateTimer = 1000;
+            }
+        }
+
+        if(!shielding && shotTimer <= 0){
+            playSound((char*)"./resources/r1/sound/enemy-shoot.wav");
+            sf::Texture currImage = this->sprite->getImage(this->imageIndex);
+            Bullet* shot = new Bullet(this->x + ((dir)? currImage.getSize().x : 0), this->y + (currImage.getSize().y / 2), 15.0 * ((dir)? 1 : -1), 0.0, 1, 0, ENEMY, false);
+
+            //Scale the bullet
+            shot->setScale(SCALE, SCALE);
+            shot->hitBoxes[0]->height *= SCALE;
+            shot->hitBoxes[0]->width *= SCALE;
+
+            //Finish creating the bullet in the scene
+            createObject(shot);
+            shotTimer = 200;
+        }
+        int spriteIdx = 21;
+
+        if(!shielding){
+            spriteIdx += 2;
+        }
+
+        //Update sprite with current state
+        this->setSprite(spriteIdx + dir);
+
+        stateTimer -= delta;
+        shotTimer -= delta;
     }
-
-    /*if(stateTimer < 0){
-        state = !state;
-    }*/
-    int spriteIdx = 21;
-
-    if(!shielding){
-        spriteIdx += 2;
-    }
-
-    //Update sprite with current state
-    this->setSprite(spriteIdx + dir);
 }
 
 void Joe::onCollide(Object *other, int myBoxID, int otherBoxID){
-    if((other->collisionFlags & PLAYER) && (other->collisionFlags & PROJECTILE)){
-        if(!shielding){
-            health -= ((Bullet*)other)->getDamage();
+    if(inView(this, activeEngine->getActiveScene()->id, 0)){
+        if((other->collisionFlags & PLAYER) && (other->collisionFlags & PROJECTILE)){
+            if(!shielding){
+                playSound((char*)"./resources/r1/sound/enemy-hurt.wav");
+                health -= ((Bullet*)other)->getDamage();
+                destroyObject(other);
+            } else {
+                playSound((char*)"./resources/r1/sound/dink.wav");
+                ((Bullet*)other)->changeDirection(other->xV * -1.0, other->xV * ((other->xV > 0)? -1 : 1));
+            }
         }
-        destroyObject(other);
     }
 }
 
@@ -317,6 +402,17 @@ void Bullet::create(float xSpeed, float ySpeed, int damage){
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 }
 
+void Bullet::process(double delta){
+    if(!inView(this, activeEngine->getActiveScene()->id, 0)){
+        destroyObject(this);
+    }
+}
+
 int Bullet::getDamage(){
     return this->damage;
+}
+
+void Bullet::changeDirection(float xSpeed, float ySpeed){
+    this->xV = xSpeed;
+    this->yV = ySpeed;
 }

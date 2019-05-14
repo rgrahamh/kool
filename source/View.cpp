@@ -107,3 +107,25 @@ void View::follow(){ //FIXME
 		return; 
 	}
 }
+
+bool View::inView(Object* obj){
+    //Always render things without hitboxes
+    if(obj->hitBoxes.size() == 0){
+        int x = obj->x + obj->sprite->xOffset;
+        int y = obj->y + obj->sprite->yOffset;
+
+        if((x + obj->sprite->width < this->sceneX || x > this->sceneX + this->width || y + obj->sprite->height < this->sceneY || y > this->sceneY + this->height)){
+            return false;
+        }
+    }else{
+        for(unsigned int i = 0; i < obj->hitBoxes.size(); i++){
+            int x = obj->x + obj->hitBoxes[i]->offsetX;
+            int y = obj->y + obj->hitBoxes[i]->offsetY;
+
+            if(x + obj->hitBoxes[i]->width < this->sceneX || x > this->sceneX + this->width || y + obj->hitBoxes[i]->height < this->sceneY || y > this->sceneY + this->height){
+                return false;
+            }
+        }
+    }
+    return true;
+}

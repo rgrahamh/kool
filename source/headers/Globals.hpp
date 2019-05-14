@@ -40,6 +40,8 @@ extern int getWindowHeight();
 
 extern int resetScene(std::function<Scene *()>,int sceneID);
 
+extern bool inView(Object *obj, int sceneID, int viewID);
+
 extern double averageDelta;
 
 #endif
