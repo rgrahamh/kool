@@ -21,37 +21,19 @@ void Title::process(double delta){
 
 //Background object
 Background::Background(float x, float y, unsigned int spriteIdx, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
-    create(spriteIdx);
+    this->spriteIdx = spriteIdx;
+    create();
 }
 
-void Background::create(unsigned int idx){
-    setSprite((unsigned int) idx);
+void Background::create(){
+    setSprite((unsigned int)spriteIdx);
 }
 
 //Character object
 Character::Character(float x, float y, int maxHealth, unsigned char dir, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
-    create(maxHealth, dir);
-}
-
-void Character::create(int maxHealth, unsigned char dir){
     this->health = maxHealth;
     this->dir = dir;
 }
-
-//These three stub functions are to prevent undefined references in the vtable
-void Character::process(double delta){
-    return;
-}
-
-void Character::onCollide(Object *other, int myBoxID, int otherBoxID){
-	return;
-}
-
-void Character::create(){
-	return;
-}
-
-Character::~Character(){}
 
 //Player object
 Player::Player(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Character(x, y, 20, 1, collisionLayer, collisionFlags, grav){
@@ -66,40 +48,7 @@ void Player::create(){
 
     this->animationDelay = 25;
 
-    //Adding all of the Mega Man sprites to a list
-
-    /** SPRITE INDICIES:
-     * 0: Standing left        
-     * 1: Standing right       
-     * 2: Standing shooting left        
-     * 3: Standing shooting right       
-     * 4: Running left         
-     * 5: Running right        
-     * 6: Shooting running left
-     * 7: Shooting running right
-     * 8: Jumping left
-     * 9: Jumping right
-     * 10: Jumping shooting left
-     * 11: Jumping shooting right
-     * 12: Hurt left
-     * 13: Hurt right
-     */
-    sprites.push_back(this->getSprite(1)); 
-    sprites.push_back(this->getSprite(2)); 
-    sprites.push_back(this->getSprite(3)); 
-    sprites.push_back(this->getSprite(4)); 
-    sprites.push_back(this->getSprite(5)); 
-    sprites.push_back(this->getSprite(6)); 
-    sprites.push_back(this->getSprite(7)); 
-    sprites.push_back(this->getSprite(8)); 
-    sprites.push_back(this->getSprite(9)); 
-    sprites.push_back(this->getSprite(10));
-    sprites.push_back(this->getSprite(11)); 
-    sprites.push_back(this->getSprite(12));
-    sprites.push_back(this->getSprite(13)); 
-    sprites.push_back(this->getSprite(14));
-    sprites.push_back(this->getSprite(25));
-    this->setSprite(sprites[0]);
+    this->setSprite((unsigned int)1);
 
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 	this->friction = 0.35;
@@ -223,7 +172,7 @@ void Player::process(double delta){
     }
 
     //Flickering on invinsibility
-    if(invinsTimer >= 0 && ((int)invinsTimer) % 100 > 50){
+    if(invinsTimer >= 0 && ((int)invinsTimer) % 50 > 25){
         spriteIdx = 25;
     }
     
@@ -278,19 +227,17 @@ void Player::process(double delta){
     
     //Checking for death
     if(!inView(this, activeEngine->getActiveScene()->id, 0) || health <= 0){
-        resetScene(createMainGame(), activeEngine->getActiveScene()->id)
+        setActiveScene(0);
+        resetScene(createMainGame, 1);
     }
-    
 }
-
-Player::~Player(){}
 
 Joe::Joe(float x, float y, Character* following, int collisionLayer, unsigned int collisionFlags, bool grav):Character(x, y, 20, 0, collisionLayer, collisionFlags, grav){
-    create(following);
+    this->following = following;
+    create();
 }
 
-void Joe::create(Character* following){
-    this->following = following;
+void Joe::create(){
     this->shielding = false;
     this->stateTimer = 750;
 
@@ -366,13 +313,12 @@ void Joe::onCollide(Object *other, int myBoxID, int otherBoxID){
     }
 }
 
-Joe::~Joe(){}
-
 Ground::Ground(float x, float y, int spriteIdx, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
-    create(spriteIdx);
+    this->spriteIdx = spriteIdx;
+    create();
 }
 
-void Ground::create(int spriteIdx){
+void Ground::create(){
     this->collisionLayer = 0;
     this->debug=false;
     this->collisionFlags = GROUND;
@@ -382,7 +328,10 @@ void Ground::create(int spriteIdx){
 }
 
 Bullet::Bullet(float x, float y, float xSpeed, float ySpeed, int damage, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags | PROJECTILE, grav){
-    create(xSpeed, ySpeed, damage);
+    this->xV = xSpeed;
+    this->yV = ySpeed;
+    this->damage = damage;
+    create();
 }
 
 void Bullet::onCollide(Object *other, int myBoxID, int otherBoxID){
@@ -391,12 +340,9 @@ void Bullet::onCollide(Object *other, int myBoxID, int otherBoxID){
     }
 }
 
-void Bullet::create(float xSpeed, float ySpeed, int damage){
+void Bullet::create(){
     this->debug = false;
     this->friction = 0;
-    this->xV = xSpeed;
-    this->yV = ySpeed;
-    this->damage = damage;
     
     setSprite((unsigned int)19);
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);

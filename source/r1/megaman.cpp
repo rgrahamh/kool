@@ -8,7 +8,7 @@ std::string BGROUND_PATH = "./resources/r1/background/";
 std::string SHARED_PATH = "./resources/r1/shared/";
 std::string ENEMY_PATH = "./resources/r1/enemies/";
 
-int main(int argc, char* argv){
+int main(int argc, char** argv){
     //Creating the game engine
 	GameEngine kool = *(new GameEngine(1600,900,"Kool Mega Man!"));
 

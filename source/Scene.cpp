@@ -17,6 +17,7 @@ Scene::Scene(int width, int height){
     //this->gravity = 9.8;
 	this->gravity = 0.5;
     this->termVel = 195;
+    this->viewList = std::vector<View *>();
 	View *tmp = new View(0,0,0,0,getWindowWidth(),getWindowHeight());
 	this->addView(tmp);
 }
@@ -42,9 +43,9 @@ View *Scene::getView(unsigned int index){
 
 void Scene::setID(int id){
 	this->id = id;
-	for(unsigned int i = 0; i < viewList.size(); i++){
-		viewList[i]->setSceneID(this->id);
-	}
+    for(unsigned int i = 0; i < viewList.size(); i++){
+        viewList[i]->setSceneID(this->id);
+    }
 	return;
 }
 
@@ -52,13 +53,19 @@ void Scene::setID(int id){
 void Scene::process(double delta){
     //printf("%f\r", delta);
     //std::fflush(stdout);
-	for(unsigned int i = 0; i < this->objectList.size(); i++){
-	    	if(this->objectList[i]!=NULL){
+	for(unsigned int i = 0; i < this->objectList.size() && this->destroyed == false; i++){
+        if(this->objectList[i]!=NULL){
             this->objectList[i]->xPrev = this->objectList[i]->x;
             this->objectList[i]->yPrev = this->objectList[i]->y;
 			this->objectList[i]->_process(delta, gravity, termVel);
 		}
 	}
+    //Process if this scene has been destroyed
+    if(destroyed==true){
+		delete this;
+        return;
+    }
+
 	//Object collision processing
 
     //The objects being checked (for readability and limiting memory access in-code)
@@ -273,6 +280,11 @@ Scene::~Scene(){
 	for(unsigned int i = 0; i < this->objectList.size(); i++){
 		if(this->objectList[i]!=NULL){
 			delete objectList[i];
+		}
+	}
+	for(unsigned int i = 0; i < this->viewList.size(); i++){
+		if(this->viewList[i]!=NULL){
+			delete viewList[i];
 		}
 	}
 }

@@ -100,7 +100,7 @@ bool GameEngine::delScene(int sceneID){
 bool GameEngine::setActiveScene(int sceneID){
     if((long unsigned int) sceneID < this->sceneList.size() && sceneID > -1){
         this->activeScene = this->sceneList[sceneID];
-	this->activeScene->setID(sceneID);
+        this->activeScene->setID(sceneID);
         return true;
    }
     else{
@@ -137,7 +137,6 @@ void GameEngine::addObject(Object *obj){
 }
 
 int GameEngine::resetScene(std::function<Scene *()> buildFunction,int sceneID){
-	delete getScene(sceneID);
 	bool setActive = false;
 	getScene(sceneID)->destroyed = true;
 	if(getScene(sceneID)==this->activeScene){
