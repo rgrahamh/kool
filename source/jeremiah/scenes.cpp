@@ -23,9 +23,9 @@ Scene *level1(){
 
     gameScene->addObject(bg);
 	gameScene->addObject(planet2);
-	gameScene->addObject(asteroid1);
     gameScene->addObject(p1);
 	gameScene->addObject(planet1);
+	gameScene->addObject(asteroid1);
 
 
 	//Edit views
