@@ -43,7 +43,7 @@ Scene *track() {
     for(int i = 1; i < 511; i++) {
         int x_pos = prev + (rand() % 512);
         prev = x_pos + 68;
-        track_scene->addObject(new hurdle(x_pos, 128, 1, ENEMY, false));
+        track_scene->addObject(new hurdle((i * 512), 128, 1, ENEMY, false));
     }
     track_scene->addObject(runner);
 
