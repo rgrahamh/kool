@@ -36,7 +36,7 @@ Character::Character(float x, float y, int maxHealth, unsigned char dir, int col
 }
 
 //Player object
-Player::Player(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Character(x, y, 20, 1, collisionLayer, collisionFlags, grav){
+Player::Player(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Character(x, y, 5, 1, collisionLayer, collisionFlags, grav){
     create();
 }
 
@@ -45,6 +45,8 @@ void Player::create(){
     this->collisionFlags = PLAYER;
     this->debug = false;
     this->invinsTimer = 0;
+    this->dead = false;
+    this->deathTimer = 0;
 
     this->animationDelay = 25;
 
@@ -76,6 +78,7 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
         int oldOtherX = other->xPrev + this->hitBoxes[otherBoxID]->offsetX;
         int oldOtherY = other->yPrev + this->hitBoxes[otherBoxID]->offsetY;
 
+
         //Bottom of this colllides with top of other
         if(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height <= oldOtherY && !(oldThisX + this->hitBoxes[myBoxID]->width <= oldOtherX || thisX <= otherX + other->hitBoxes[otherBoxID]->width && oldThisX >= oldOtherX + other->hitBoxes[otherBoxID]->width)){
                 this->y = otherY - this->hitBoxes[myBoxID]->height;
@@ -101,6 +104,10 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
             this->x = otherX + other->hitBoxes[otherBoxID]->width;
             this->xV = 0;
         }
+        //Otherwise, send them back from whence they came.
+        else if((oldThisX > oldOtherX && oldThisX > oldOtherX + other->hitBoxes[otherBoxID]->width && oldThisY > oldOtherY && oldThisY > oldOtherY + other->hitBoxes[otherBoxID]->height) || (oldOtherX > oldThisX && oldOtherX > oldThisX + this->hitBoxes[myBoxID]->width && oldOtherY > oldThisY && oldOtherY > oldThisY + this->hitBoxes[myBoxID]->width)){
+            this->x = this->xPrev;
+        }
     }
 
     if((other->collisionFlags & ENEMY) && invinsTimer < 0){
@@ -123,7 +130,7 @@ void Player::process(double delta){
     oldGrounded = grounded;
 
     //Jumping
-    if(Keys::isKeyPressed(Keys::W) && grounded && !digitalJump && invinsTimer < 400){
+    if(Keys::isKeyPressed(Keys::W) && grounded && !digitalJump && invinsTimer < 400 && !dead){
         yA -= 20.0;
         digitalJump = true;
         jumpHeld = true;
@@ -140,7 +147,7 @@ void Player::process(double delta){
     }
 
     //Moving left and right
-    if((Keys::isKeyPressed(Keys::A) || Keys::isKeyPressed(Keys::D)) && invinsTimer < 400){
+    if((Keys::isKeyPressed(Keys::A) || Keys::isKeyPressed(Keys::D)) && invinsTimer < 400 && !dead){
         spriteIdx = 0;
         if(!(Keys::isKeyPressed(Keys::A) && Keys::isKeyPressed(Keys::D))){ //If both are pressed, do nothing.
             if(Keys::isKeyPressed(Keys::A)){
@@ -171,8 +178,8 @@ void Player::process(double delta){
         spriteIdx = 13 + dir;
     }
 
-    //Flickering on invinsibility
-    if(invinsTimer >= 0 && ((int)invinsTimer) % 50 > 25){
+    //Flickering on invinsibility (or invisible on death)
+    if((invinsTimer >= 0 && ((int)invinsTimer) % 50 > 25) || dead){
         spriteIdx = 25;
     }
     
@@ -183,7 +190,7 @@ void Player::process(double delta){
     this->sprite->setSize(currImage.getSize().x, currImage.getSize().y);
 
     //Shooting
-    if(Keys::isKeyPressed(Keys::Space) && !digitalShoot && invinsTimer < 400){
+    if(Keys::isKeyPressed(Keys::Space) && !digitalShoot && invinsTimer < 400 && !dead){
         Bullet* shot = new Bullet(this->x + ((dir)? currImage.getSize().x : 0), this->y + (currImage.getSize().y / 2), 20.0 * ((dir)? 1 : -1), 0.0, 1, 0, PLAYER, false);
 
         //Scale the bullet
@@ -223,10 +230,20 @@ void Player::process(double delta){
         invinsTimer -= delta;
     }
 
+    if(deathTimer > 0){
+        deathTimer -= delta;
+    }
+
     grounded = false;
     
     //Checking for death
-    if(!inView(this, activeEngine->getActiveScene()->id, 0) || health <= 0){
+    if((!inView(this, activeEngine->getActiveScene()->id, 0) || health <= 0) && !dead){
+        playSound((char*)"./resources/r1/sound/death.wav");
+        deathTimer = 500;
+        dead = true;
+    }
+
+    if(dead && deathTimer <= 0){
         setActiveScene(0);
         resetScene(createMainGame, 1);
     }
@@ -310,6 +327,40 @@ void Joe::onCollide(Object *other, int myBoxID, int otherBoxID){
                 ((Bullet*)other)->changeDirection(other->xV * -1.0, other->xV * ((other->xV > 0)? -1 : 1));
             }
         }
+    }
+}
+
+Chicken::Chicken(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Character(x, y, 25, 0, collisionLayer, collisionFlags, grav){
+    create();
+}
+
+void Chicken::create(){
+    this->dir = 1;
+    this->xV = 15.0;
+    this->animationTime = 20;
+
+    setSprite(28);
+	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+}
+
+void Chicken::process(double delta){
+    if(health <= 0){
+        destroyObject(this);
+        playSound((char*)"./resources/r1/sound/destroy.wav");
+        return;
+    }
+    setSprite(28 + dir);
+}
+
+void Chicken::onCollide(Object *other, int myBoxID, int otherBoxID){
+    if(other->collisionFlags & GROUND){
+        dir = !dir;
+        xV *= -1.0;
+    }
+    if((other->collisionFlags & PLAYER) && (other->collisionFlags & PROJECTILE)){
+        playSound((char*)"./resources/r1/sound/enemy-hurt.wav");
+        health -= ((Bullet*)other)->getDamage();
+        destroyObject(other);
     }
 }
 

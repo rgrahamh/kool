@@ -95,7 +95,7 @@ int main(int argc, char** argv){
     //SPRITE IDX = 20
     Sprite *ground_sprite = new Sprite(GROUND_PATH + "bottom_ground_tile.png");
     ground_sprite->setRepeated(true);
-    ground_sprite->setSize(2000, 900);
+    ground_sprite->setSize(1600, 200);
 
     //SPRITE IDX = 21
     Sprite *joe_shield_l = new Sprite(ENEMY_PATH + "joe_shield_l.png");
@@ -114,6 +114,21 @@ int main(int argc, char** argv){
 
     //SPRITE IDX = 26
     Sprite *title = new Sprite(SHARED_PATH + "title_screen.png");
+
+    //SPRITE IDX = 27
+    Sprite *column_sprite = new Sprite(GROUND_PATH + "bottom_ground_tile.png");
+    column_sprite->setRepeated(true);
+    column_sprite->setSize(64, 400);
+
+    //SPRITE IDX = 28
+    Sprite *chicken_l = new Sprite(ENEMY_PATH + "chicken_l_1.png");
+    chicken_l->addImage(ENEMY_PATH + "chicken_l_2_39.png");
+    chicken_l->addImage(ENEMY_PATH + "chicken_l_3_39.png");
+
+    //SPRITE IDX = 29
+    Sprite *chicken_r = new Sprite(ENEMY_PATH + "chicken_r_1.png");
+    chicken_r->addImage(ENEMY_PATH + "chicken_r_2_39.png");
+    chicken_r->addImage(ENEMY_PATH + "chicken_r_3_39.png");
 
     //Adding scenes to the game
     kool.addScene(createTitleScreen());

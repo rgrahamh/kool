@@ -42,6 +42,7 @@ class Player: public Character{
         float shotTimer;
         float invinsTimer;
         float deathTimer;
+        bool dead;
         bool jumpHeld;
         bool digitalJump;
         bool justJumped;
@@ -51,7 +52,7 @@ class Player: public Character{
 
 class Joe: public Character{
     public:
-		Joe(float x, float y, Character* following, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = true);
+		Joe(float x, float y, Character* following, int collisionLayer = 0, unsigned int collisionFlags = ENEMY, bool grav = false);
         void create();
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
 		void process(double delta);
@@ -61,6 +62,16 @@ class Joe: public Character{
         float stateTimer;
         float shotTimer;
         int shotsFired;
+};
+
+class Chicken: public Character{
+    public:
+        Chicken(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = ENEMY, bool grav = false);
+        void create();
+		void onCollide(Object *other, int myBoxID, int otherBoxID);
+        void process(double delta);
+    private:
+        float speed;
 };
 
 class Ground: public Object{
