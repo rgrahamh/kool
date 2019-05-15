@@ -130,6 +130,22 @@ int main(int argc, char** argv){
     chicken_r->addImage(ENEMY_PATH + "chicken_r_2_39.png");
     chicken_r->addImage(ENEMY_PATH + "chicken_r_3_39.png");
 
+    //SPRITE IDX = 30
+    Sprite *beam = new Sprite(MMAN_PATH + "mman_warp.png");
+
+    //SPRITE IDX = 31
+    Sprite *assemble = new Sprite(MMAN_PATH+ "mman_assemble_1.png");
+    assemble->addImage(MMAN_PATH + "mman_assemble_2.png");
+    assemble->addImage(MMAN_PATH + "mman_assemble_3.png");
+
+    //SPRITE IDX = 32
+    Sprite *disassemble = new Sprite(MMAN_PATH + "mman_assemble_1.png");
+    assemble->addImage(MMAN_PATH + "mman_assemble_2.png");
+    assemble->addImage(MMAN_PATH + "mman_assemble_3.png");
+    
+    //SPRITE IDX = 33
+    Sprite *pickup_sprite = new Sprite(SHARED_PATH + "pickup.png");
+
     //Adding scenes to the game
     kool.addScene(createTitleScreen());
     kool.addScene(createMainGame());

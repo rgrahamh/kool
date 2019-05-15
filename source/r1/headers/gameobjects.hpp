@@ -32,7 +32,7 @@ class Character: public Object{
 
 class Player: public Character{
     public:
-		Player(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = true);
+		Player(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = PLAYER, bool grav = true);
         void create();
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
 		void process(double delta);
@@ -48,6 +48,8 @@ class Player: public Character{
         bool justJumped;
         bool digitalShoot;
         bool hurt;
+        bool warp;
+        bool won;
 };
 
 class Joe: public Character{
@@ -76,7 +78,7 @@ class Chicken: public Character{
 
 class Ground: public Object{
     public:
-        Ground(float x, float y, int spriteIdx, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+        Ground(float x, float y, int spriteIdx, int collisionLayer = 0, unsigned int collisionFlags = GROUND, bool grav = false);
         void create();
     private:
         int spriteIdx;
@@ -84,7 +86,7 @@ class Ground: public Object{
 
 class Bullet: public Object{
     public:
-        Bullet(float x, float y, float xSpeed, float ySpeed, int damage, int collisionLayer = 0, unsigned int collisionFlags = 0, bool grav = false);
+        Bullet(float x, float y, float xSpeed, float ySpeed, int damage, int collisionLayer = 0, unsigned int collisionFlags = PROJECTILE, bool grav = false);
 		void onCollide(Object *other, int myBoxID, int otherBoxID);
         void create();
         void process(double delta);
@@ -92,6 +94,13 @@ class Bullet: public Object{
         void changeDirection(float xSpeed, float ySpeed);
     private:
         int damage;
+};
+
+class Pickup: public Object{
+    public:
+        Pickup(float x, float y, int collisionLayer = 0, unsigned int collisionFlags = PICKUP, bool grav = true);
+		void onCollide(Object *other, int myBoxID, int otherBoxID);
+		void create();
 };
 
 #endif

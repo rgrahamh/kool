@@ -27,7 +27,7 @@ Scene* createMainGame(){
     Background* clouds = new Background(0, 0, 18);
 
     //Create the player
-    Player* mman = new Player(50, 500, 0, PLAYER, true);
+    Player* mman = new Player(50, 0, 0, PLAYER, true);
 
     //Create the ground
     Ground* start_ground = new Ground(0, 800, 20, 0, GROUND);

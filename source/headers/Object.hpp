@@ -45,6 +45,7 @@ enum collisionFlags {
     POWERUP = 0x20,
     DANGER_ALL = 0x40,
     GOAL = 0x80,
+    PICKUP = 0x100
 };
 
 class Object{

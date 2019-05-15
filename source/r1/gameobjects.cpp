@@ -58,6 +58,9 @@ void Player::create(){
 	this->maxVelocity = 5.0;
     this->collisionLayer = 0;
 
+    this->warp = true;
+    this->won = false;
+
     this->dir = 1;
 
     grounded = false;
@@ -87,6 +90,10 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
                 if(oldGrounded == false){
                     playSound((char*)"./resources/r1/sound/land.wav");
                 }
+                if(!won){
+                    this->warp = false;
+                    this->gravity = true;
+                }
                 grounded = true;
         }
         //Top of this collides with bottom of other
@@ -110,7 +117,14 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
         }
     }
 
-    if((other->collisionFlags & ENEMY) && invinsTimer < 0){
+    if(other->collisionFlags & PICKUP){
+        won = true;
+        warp = true;
+        destroyObject(other);
+        return;
+    }
+
+    if((other->collisionFlags & ENEMY) && invinsTimer <= 0){
         invinsTimer = 500;
         xV += 40.0 * ((dir)? -1 : 1);
         playSound((char*)"./resources/r1/sound/hurt.wav");
@@ -125,127 +139,139 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
 }
 
 void Player::process(double delta){
-    int spriteIdx;
+    if(warp){
+        gravity = false;
+        yV = 0;
+        y += 20.0 * ((won)? -1 : 1);
+        setSprite(30);
 
-    oldGrounded = grounded;
+        if(!inView(this, activeEngine->getActiveScene()->id, 0)  && won){
+            setActiveScene(0);
+            resetScene(createMainGame, 1);
+        }
+    }else{
+        int spriteIdx;
 
-    //Jumping
-    if(Keys::isKeyPressed(Keys::W) && grounded && !digitalJump && invinsTimer < 400 && !dead){
-        yA -= 20.0;
-        digitalJump = true;
-        jumpHeld = true;
-    } else {
-        if(!Keys::isKeyPressed(Keys::W) && jumpHeld){
-            jumpHeld = false;
-            if(yV < 0){
-                yV = 0;
+        oldGrounded = grounded;
+
+        //Jumping
+        if(Keys::isKeyPressed(Keys::W) && grounded && !digitalJump && invinsTimer < 400 && !dead){
+            yA -= 20.0;
+            digitalJump = true;
+            jumpHeld = true;
+        } else {
+            if(!Keys::isKeyPressed(Keys::W) && jumpHeld){
+                jumpHeld = false;
+                if(yV < 0){
+                    yV = 0;
+                }
+            }
+            if(!Keys::isKeyPressed(Keys::W) && grounded){
+                digitalJump = false;
             }
         }
-        if(!Keys::isKeyPressed(Keys::W) && grounded){
-            digitalJump = false;
-        }
-    }
 
-    //Moving left and right
-    if((Keys::isKeyPressed(Keys::A) || Keys::isKeyPressed(Keys::D)) && invinsTimer < 400 && !dead){
-        spriteIdx = 0;
-        if(!(Keys::isKeyPressed(Keys::A) && Keys::isKeyPressed(Keys::D))){ //If both are pressed, do nothing.
-            if(Keys::isKeyPressed(Keys::A)){
-                xA -= speed;
-                this->dir = 0;
+        //Moving left and right
+        if((Keys::isKeyPressed(Keys::A) || Keys::isKeyPressed(Keys::D)) && invinsTimer < 400 && !dead){
+            spriteIdx = 0;
+            if(!(Keys::isKeyPressed(Keys::A) && Keys::isKeyPressed(Keys::D))){ //If both are pressed, do nothing.
+                if(Keys::isKeyPressed(Keys::A)){
+                    xA -= speed;
+                    this->dir = 0;
+                }
+                if(Keys::isKeyPressed(Keys::D)){
+                    xA += speed;
+                    this->dir = 1;
+                }
+                spriteIdx = 5 + dir;
             }
-            if(Keys::isKeyPressed(Keys::D)){
-                xA += speed;
-                this->dir = 1;
+            else{
+                spriteIdx = 1 + dir;
             }
-            spriteIdx = 5 + dir;
-        }
-        else{
+        } else {
             spriteIdx = 1 + dir;
         }
-    } else {
-        spriteIdx = 1 + dir;
-    }
 
-    if(!grounded){
-        spriteIdx = 9 + dir;
-    }
-    if(shotTimer > 0){
-        spriteIdx += 2;
-    }
+        if(!grounded){
+            spriteIdx = 9 + dir;
+        }
+        if(shotTimer > 0){
+            spriteIdx += 2;
+        }
 
-    if(invinsTimer > 400){
-        spriteIdx = 13 + dir;
-    }
+        if(invinsTimer > 400){
+            spriteIdx = 13 + dir;
+        }
 
-    //Flickering on invinsibility (or invisible on death)
-    if((invinsTimer >= 0 && ((int)invinsTimer) % 50 > 25) || dead){
-        spriteIdx = 25;
-    }
-    
-    //Update sprite with current state
-    this->setSprite(spriteIdx);
+        //Flickering on invinsibility (or invisible on death)
+        if((invinsTimer >= 0 && ((int)invinsTimer) % 50 > 25) || dead){
+            spriteIdx = 25;
+        }
+        
+        //Update sprite with current state
+        this->setSprite(spriteIdx);
 
-    sf::Texture currImage = sprite->getImage(this->imageIndex);
-    this->sprite->setSize(currImage.getSize().x, currImage.getSize().y);
+        sf::Texture currImage = sprite->getImage(this->imageIndex);
+        this->sprite->setSize(currImage.getSize().x, currImage.getSize().y);
 
-    //Shooting
-    if(Keys::isKeyPressed(Keys::Space) && !digitalShoot && invinsTimer < 400 && !dead){
-        Bullet* shot = new Bullet(this->x + ((dir)? currImage.getSize().x : 0), this->y + (currImage.getSize().y / 2), 20.0 * ((dir)? 1 : -1), 0.0, 1, 0, PLAYER, false);
+        //Shooting
+        if(Keys::isKeyPressed(Keys::Space) && !digitalShoot && invinsTimer < 400 && !dead){
+            Bullet* shot = new Bullet(this->x + ((dir)? currImage.getSize().x : 0), this->y + (currImage.getSize().y / 2), 20.0 * ((dir)? 1 : -1), 0.0, 1, 0, PLAYER, false);
 
-        //Scale the bullet
-        shot->setScale(SCALE, SCALE);
-        shot->hitBoxes[0]->height *= SCALE;
-        shot->hitBoxes[0]->width *= SCALE;
+            //Scale the bullet
+            shot->setScale(SCALE, SCALE);
+            shot->hitBoxes[0]->height *= SCALE;
+            shot->hitBoxes[0]->width *= SCALE;
 
-        //Finish creating the bullet in the scene
-        createObject(shot);
-        shotTimer = 50;
-        digitalShoot = true;
+            //Finish creating the bullet in the scene
+            createObject(shot);
+            shotTimer = 50;
+            digitalShoot = true;
 
-        playSound((char*)"./resources/r1/sound/shoot.wav");
-    }
-    else if(!Keys::isKeyPressed(Keys::Space)){
-        digitalShoot = false;
-    }
-    
-    //Making sure that the player doesn't escape the screen's left bound
-    if(this->x + this->xV < 0){
-        this->x = 0;
-        this->xV = 0;
-    }
+            playSound((char*)"./resources/r1/sound/shoot.wav");
+        }
+        else if(!Keys::isKeyPressed(Keys::Space)){
+            digitalShoot = false;
+        }
+        
+        //Making sure that the player doesn't escape the screen's left bound
+        if(this->x + this->xV < 0){
+            this->x = 0;
+            this->xV = 0;
+        }
 
-    if(this->xV > this->maxVelocity){
-        xV = maxVelocity;
-    }
-    else if(this->xV < this->maxVelocity * -1){
-        xV = maxVelocity * -1;
-    }
+        if(this->xV > this->maxVelocity){
+            xV = maxVelocity;
+        }
+        else if(this->xV < this->maxVelocity * -1){
+            xV = maxVelocity * -1;
+        }
 
-    if(shotTimer >= 0){
-        shotTimer -= delta;
-    }
+        if(shotTimer >= 0){
+            shotTimer -= delta;
+        }
 
-    if(invinsTimer >= 0){
-        invinsTimer -= delta;
-    }
+        if(invinsTimer >= 0){
+            invinsTimer -= delta;
+        }
 
-    if(deathTimer > 0){
-        deathTimer -= delta;
-    }
+        if(deathTimer > 0){
+            deathTimer -= delta;
+        }
 
-    grounded = false;
-    
-    //Checking for death
-    if((!inView(this, activeEngine->getActiveScene()->id, 0) || health <= 0) && !dead){
-        playSound((char*)"./resources/r1/sound/death.wav");
-        deathTimer = 500;
-        dead = true;
-    }
+        grounded = false;
+        
+        //Checking for death
+        if((!inView(this, activeEngine->getActiveScene()->id, 0) || health <= 0) && !dead && !won){
+            playSound((char*)"./resources/r1/sound/death.wav");
+            deathTimer = 500;
+            dead = true;
+        }
 
-    if(dead && deathTimer <= 0){
-        setActiveScene(0);
-        resetScene(createMainGame, 1);
+        if(dead && deathTimer <= 0){
+            setActiveScene(0);
+            resetScene(createMainGame, 1);
+        }
     }
 }
 
@@ -344,12 +370,21 @@ void Chicken::create(){
 }
 
 void Chicken::process(double delta){
+    setSprite(28 + dir);
+
     if(health <= 0){
+        Pickup* pickup = new Pickup(this->x + (this->sprite->width / 2), this->y);
+
+        pickup->setScale(SCALE, SCALE);
+        pickup->hitBoxes[0]->height *= SCALE;
+        pickup->hitBoxes[0]->width *= SCALE;
+
+        createObject(pickup);
+
         destroyObject(this);
         playSound((char*)"./resources/r1/sound/destroy.wav");
         return;
     }
-    setSprite(28 + dir);
 }
 
 void Chicken::onCollide(Object *other, int myBoxID, int otherBoxID){
@@ -412,4 +447,25 @@ int Bullet::getDamage(){
 void Bullet::changeDirection(float xSpeed, float ySpeed){
     this->xV = xSpeed;
     this->yV = ySpeed;
+}
+
+Pickup::Pickup(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags | PICKUP, grav){
+    create();
+}
+
+void Pickup::create(){
+    setSprite((unsigned int)33);
+	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
+}
+
+void Pickup::onCollide(Object* other, int myBoxID, int otherBoxID){
+    int thisY = this->y + this->hitBoxes[myBoxID]->offsetY;
+    int oldThisY = this->yPrev + this->hitBoxes[myBoxID]->offsetY;
+    int otherY = other->y + other->hitBoxes[otherBoxID]->offsetY;
+    int oldOtherY = other->yPrev + this->hitBoxes[otherBoxID]->offsetY;
+
+    if(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height <= oldOtherY){
+        this->y = otherY - this->hitBoxes[myBoxID]->height;
+        this->yV = 0;
+    }
 }
