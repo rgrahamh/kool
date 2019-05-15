@@ -76,7 +76,6 @@ void Player::create(){
     this->speed = 2.5;
 	this->maxVelocity = 5.0;
     this->collisionLayer = 0;
-
     this->warp = true;
     this->won = false;
 
@@ -87,20 +86,19 @@ void Player::create(){
 
 void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
     //If the player collides with ground:
+    int thisX = this->x + this->hitBoxes[myBoxID]->offsetX;
+    int thisY = this->y + this->hitBoxes[myBoxID]->offsetY;
+
+    int oldThisX = this->xPrev + this->hitBoxes[myBoxID]->offsetX;
+    int oldThisY = this->yPrev + this->hitBoxes[myBoxID]->offsetY;
+
+    int otherX = other->x + other->hitBoxes[otherBoxID]->offsetX;
+    int otherY = other->y + other->hitBoxes[otherBoxID]->offsetY;
+
+    int oldOtherX = other->xPrev + this->hitBoxes[otherBoxID]->offsetX;
+    int oldOtherY = other->yPrev + this->hitBoxes[otherBoxID]->offsetY;
+
     if(other->collisionFlags & GROUND){
-        int thisX = this->x + this->hitBoxes[myBoxID]->offsetX;
-        int thisY = this->y + this->hitBoxes[myBoxID]->offsetY;
-
-        int oldThisX = this->xPrev + this->hitBoxes[myBoxID]->offsetX;
-        int oldThisY = this->yPrev + this->hitBoxes[myBoxID]->offsetY;
-
-        int otherX = other->x + other->hitBoxes[otherBoxID]->offsetX;
-        int otherY = other->y + other->hitBoxes[otherBoxID]->offsetY;
-
-        int oldOtherX = other->xPrev + this->hitBoxes[otherBoxID]->offsetX;
-        int oldOtherY = other->yPrev + this->hitBoxes[otherBoxID]->offsetY;
-
-
         //Bottom of this colllides with top of other
         if(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height <= oldOtherY && !((thisX + this->hitBoxes[myBoxID]->width >= otherX && oldThisX + this->hitBoxes[myBoxID]->width <= oldOtherX) || (thisX <= otherX + other->hitBoxes[otherBoxID]->width && oldThisX >= oldOtherX + other->hitBoxes[otherBoxID]->width))){
                 this->y = otherY - this->hitBoxes[myBoxID]->height;
@@ -149,7 +147,7 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
 
     if((other->collisionFlags & ENEMY) && invinsTimer <= 0){
         invinsTimer = 500;
-        xV += 40.0 * ((dir)? -1 : 1);
+        xV += 40.0 * ((thisX + (this->hitBoxes[myBoxID]->width / 2) > otherX + (other->hitBoxes[otherBoxID]->width / 2))? 1 : -1);
         playSound((char*)"./resources/r1/sound/hurt.wav");
         if(other->collisionFlags & PROJECTILE){
             this->health -= ((Bullet*)other)->getDamage();
@@ -291,6 +289,70 @@ void Player::process(double delta){
             playSound((char*)"./resources/r1/sound/death.wav");
             deathTimer = 500;
             dead = true;
+
+            Bullet* poof;
+            float xVel;
+            float yVel;
+            for(int i = 0; i < 12; i++){
+                switch(i){
+                    case 0: //Fast right poof
+                        xVel = 20.0;
+                        yVel = 0.0;
+                        break;
+                    case 1: //Fast left poof
+                        xVel = -20.0;
+                        yVel = 0.0;
+                        break;
+                    case 2: //Fast down poof
+                        xVel = 0.0;
+                        yVel = 20.0;
+                        break;
+                    case 3: //Fast up poof
+                        xVel = 0.0;
+                        yVel = -20.0;
+                        break;
+                    case 4: //Slow right poof
+                        xVel = 10.0;
+                        yVel = 0.0;
+                        break;
+                    case 5: //Slow left poof
+                        xVel = -10.0;
+                        yVel = 0.0;
+                        break;
+                    case 6: //Slow down poof
+                        xVel = 0.0;
+                        yVel = 10.0;
+                        break;
+                    case 7: //Slow up poof
+                        xVel = 0.0;
+                        yVel = -10.0;
+                        break;
+                    case 8: //Down right poof
+                        xVel = 15.0;
+                        yVel = 15.0;
+                        break;
+                    case 9: //Down left poof
+                        xVel = -15.0;
+                        yVel = 15.0;
+                        break;
+                    case 10: //Up right poof
+                        xVel = 15.0;
+                        yVel = -15.0;
+                        break;
+                    case 11: //Up left poof
+                        xVel = -15.0;
+                        yVel = -15.0;
+                        break;
+                }
+                poof = new Bullet(this->x, this->y, xVel, yVel, 1, -1, 0, false);
+
+                //Scale the bullet
+                poof->setScale(SCALE, SCALE);
+                poof->setSprite((unsigned int)34);
+
+                //Finish creating the bullet in the scene
+                createObject(poof);
+            }
         }
 
         if(dead && deathTimer <= 0){

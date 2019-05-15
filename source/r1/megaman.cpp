@@ -140,11 +140,18 @@ int main(int argc, char** argv){
 
     //SPRITE IDX = 32
     Sprite *disassemble = new Sprite(MMAN_PATH + "mman_assemble_1.png");
-    assemble->addImage(MMAN_PATH + "mman_assemble_2.png");
-    assemble->addImage(MMAN_PATH + "mman_assemble_3.png");
+    disassemble->addImage(MMAN_PATH + "mman_assemble_2.png");
+    disassemble->addImage(MMAN_PATH + "mman_assemble_3.png");
     
     //SPRITE IDX = 33
     Sprite *pickup_sprite = new Sprite(SHARED_PATH + "pickup.png");
+
+    //SPRITE IDX = 34
+    Sprite *death_sprite = new Sprite(MMAN_PATH + "die_1.png");
+    death_sprite->addImage(MMAN_PATH + "die_2.png");
+    death_sprite->addImage(MMAN_PATH + "die_3.png");
+    death_sprite->addImage(MMAN_PATH + "die_4.png");
+    death_sprite->addImage(MMAN_PATH + "die_5.png");
 
     //Adding scenes to the game
     kool.addScene(createTitleScreen());
