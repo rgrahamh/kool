@@ -12,6 +12,17 @@ class Title: public Object{
         void process(double delta);
 };
 
+class SceneProgressor : public Object{
+    public:
+        SceneProgressor(int nextScene, Keys::Key key, char* soundFile = NULL, bool looping = false);
+        void process(double delta);
+    private:
+        Keys::Key key;
+        int nextScene;
+        char* soundFile;
+        bool looping;
+};
+
 class Background: public Object{
     public:
 		Background(float x, float y, unsigned int spriteIdx, int collisionLayer = -1, unsigned int collisionFlags = 0, bool grav = false);

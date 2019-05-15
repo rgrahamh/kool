@@ -149,6 +149,10 @@ int main(int argc, char** argv){
     //Adding scenes to the game
     kool.addScene(createTitleScreen());
     kool.addScene(createMainGame());
+    kool.addScene(createGameOver());
+    kool.addScene(createVictoryScreen());
+
+    playSound((char*)"./resources/r1/sound/title-screen.wav", true);
 
     //Starting the engine
     kool.startGame();

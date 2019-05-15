@@ -4,6 +4,6 @@
 #include "./gameobjects.hpp"
 Scene* createTitleScreen();
 Scene* createMainGame();
-//Scene* createGameOver();
-//Scene* createVictoryScreen();
+Scene* createGameOver();
+Scene* createVictoryScreen();
 #endif

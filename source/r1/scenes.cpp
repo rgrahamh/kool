@@ -3,18 +3,18 @@
 Scene* createTitleScreen(){
     Scene *scene = new Scene(1600, 900);
 
-    Title* title = new Title(344, 310);
+    Title* title = new Title(344, 200);
+    Object* text = new Object(0.0, 0.0, -1);
+
+    text->setText(475, 650, 36, false, "./resources/arial.ttf", "Press SPACE to start");
 
     scene->addObject(title);
+    scene->addObject(text);
 
     return scene;
 }
 
 Scene* createMainGame(){
-    stopAllSounds();
-
-    playSound((char*)"./resources/r1/sound/dr-wileys-castle.wav", true);
-
     Scene *scene  = new Scene(6000, 900);
 
     //Create the backgound object
@@ -78,6 +78,40 @@ Scene* createMainGame(){
     scene->gravity = 1.0;
 
     scene->getView(0)->setFollowing(mman, 300, 600);
+
+    return scene;
+}
+
+Scene* createGameOver(){
+    Scene *scene = new Scene(1600, 900);
+
+    SceneProgressor *sp = new SceneProgressor(0, Keys::Return, "./resources/r1/sound/title-screen.wav", true);
+    
+    Object* text = new Object(0.0, 0.0, -1);
+    text->setText(650, 300, 36, false, "./resources/arial.ttf", "GAME OVER");
+    Object* text2 = new Object(0.0, 0.0, -1);
+    text2->setText(300, 600, 36, false, "./resources/arial.ttf", "Press Enter to return to the title");
+
+    scene->addObject(text);
+    scene->addObject(text2);
+    scene->addObject(sp);
+
+    return scene;
+}
+
+Scene* createVictoryScreen(){
+    Scene *scene = new Scene(1600, 900);
+    
+    SceneProgressor *sp = new SceneProgressor(0, Keys::Return, "./resources/r1/sound/title-screen.wav", true);
+
+    Object* text = new Object(0.0, 0.0, -1);
+    text->setText(700, 300, 36, false, "./resources/arial.ttf", "You win");
+    Object* text2 = new Object(0.0, 0.0, -1);
+    text2->setText(300, 600, 36, false, "./resources/arial.ttf", "Press Enter to return to the title");
+
+    scene->addObject(text);
+    scene->addObject(text2);
+    scene->addObject(sp);
 
     return scene;
 }

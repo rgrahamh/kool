@@ -16,6 +16,25 @@ void Title::create(){
 void Title::process(double delta){
     if(Keys::isKeyPressed(Keys::Space)){
         setActiveScene(1);
+        stopAllSounds();
+        playSound((char*)"./resources/r1/sound/dr-wileys-castle.wav", true);
+    }
+}
+
+SceneProgressor::SceneProgressor(int nextScene, Keys::Key key, char* soundFile, bool looping) : Object(0,0,-1,0,false){
+    this->nextScene = nextScene;
+    this->key = key;
+    this->looping = looping;
+    this->soundFile = soundFile;
+}
+
+void SceneProgressor::process(double delta){
+    if(Keys::isKeyPressed(key)){
+        setActiveScene(nextScene);
+        if(soundFile != NULL){
+            stopAllSounds();
+            playSound((char*)soundFile, looping);
+        }
     }
 }
 
@@ -150,8 +169,10 @@ void Player::process(double delta){
         setSprite(30);
 
         if(!inView(this, activeEngine->getActiveScene()->id, 0)  && won){
-            setActiveScene(0);
+            setActiveScene(3);
             resetScene(createMainGame, 1);
+            stopAllSounds();
+            playSound((char*)"./resources/r1/sound/win-screen.wav");
         }
     }else{
         int spriteIdx;
@@ -273,12 +294,15 @@ void Player::process(double delta){
         }
 
         if(dead && deathTimer <= 0){
-            setActiveScene(0);
+            setActiveScene(2);
             resetScene(createMainGame, 1);
+            stopAllSounds();
+            playSound((char*)"./resources/r1/sound/game-over.wav");
         }
     }
 }
 
+//Sniper Joe
 Joe::Joe(float x, float y, Character* following, int collisionLayer, unsigned int collisionFlags, bool grav):Character(x, y, 20, 0, collisionLayer, collisionFlags, grav){
     this->following = following;
     create();
@@ -364,6 +388,7 @@ Chicken::Chicken(float x, float y, int collisionLayer, unsigned int collisionFla
     create();
 }
 
+//The Chicken
 void Chicken::create(){
     this->dir = 1;
     this->xV = 15.0;
@@ -403,6 +428,7 @@ void Chicken::onCollide(Object *other, int myBoxID, int otherBoxID){
     }
 }
 
+//Ground object
 Ground::Ground(float x, float y, int spriteIdx, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags, grav){
     this->spriteIdx = spriteIdx;
     create();
@@ -417,6 +443,7 @@ void Ground::create(){
 	this->addHitBox(0,0,this->sprite->width,this->sprite->height);
 }
 
+//Bullet object
 Bullet::Bullet(float x, float y, float xSpeed, float ySpeed, int damage, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags | PROJECTILE, grav){
     this->xV = xSpeed;
     this->yV = ySpeed;
@@ -453,6 +480,7 @@ void Bullet::changeDirection(float xSpeed, float ySpeed){
     this->yV = ySpeed;
 }
 
+//Pickup object
 Pickup::Pickup(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x, y, collisionLayer, collisionFlags | PICKUP, grav){
     create();
 }
