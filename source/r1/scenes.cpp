@@ -53,13 +53,13 @@ Scene* createMainGame(){
     //Create additional ground tiles
     Ground* tempGround;
     float groundTiles[][2] = {{256, 736}, {320, 736}, {384, 736}, {384, 672}, {384, 608}, {448, 736}, {448, 672}, {448, 608}};
-    for(int i = 0; i < (sizeof groundTiles / sizeof groundTiles[0]); i++){
+    for(unsigned int i = 0; i < (sizeof groundTiles / sizeof groundTiles[0]); i++){
         tempGround = new Ground(groundTiles[i][0], groundTiles[i][1], 15, i, GROUND, false);
         scene->addObject(tempGround);
     }
 
     float columns[][2] = {{3328, 746}, {3656, 682}, /*{4256, 672}, {4384, 608},*/{4000, 608}, {4128, 608}, {4256, 480}, {4384, 352}, {5744, 352}, {5872, 480}};
-    for(int i = 0; i < (sizeof columns / sizeof columns[0]); i++){
+    for(unsigned int i = 0; i < (sizeof columns / sizeof columns[0]); i++){
         tempGround = new Ground(columns[i][0], columns[i][1], 27, i, GROUND, false);
         scene->addObject(tempGround);
     }
@@ -68,7 +68,7 @@ Scene* createMainGame(){
                             {3392, 736}, {3656, 672}, {3720, 672},
                             {4256, 480}, {4320, 480}, {4384, 352}, {4448, 352},
                             {5744, 352}, {5808, 352}, {5872, 480}, {5936, 480}};
-    for(int i = 0; i < (sizeof topGround / sizeof topGround[0]); i++){
+    for(unsigned int i = 0; i < (sizeof topGround / sizeof topGround[0]); i++){
         tempGround = new Ground(topGround[i][0], topGround[i][1], 16, i, GROUND, false);
         scene->addObject(tempGround);
     }

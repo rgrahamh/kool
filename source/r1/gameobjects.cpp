@@ -83,7 +83,7 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
 
 
         //Bottom of this colllides with top of other
-        if(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height <= oldOtherY && !(oldThisX + this->hitBoxes[myBoxID]->width <= oldOtherX || thisX <= otherX + other->hitBoxes[otherBoxID]->width && oldThisX >= oldOtherX + other->hitBoxes[otherBoxID]->width)){
+        if(thisY + this->hitBoxes[myBoxID]->height >= otherY && oldThisY + this->hitBoxes[myBoxID]->height <= oldOtherY && !((thisX + this->hitBoxes[myBoxID]->width >= otherX && oldThisX + this->hitBoxes[myBoxID]->width <= oldOtherX) || (thisX <= otherX + other->hitBoxes[otherBoxID]->width && oldThisX >= oldOtherX + other->hitBoxes[otherBoxID]->width))){
                 this->y = otherY - this->hitBoxes[myBoxID]->height;
                 this->yV = 0;
                 //Necessary to check grounded a frame prior because collision detection happens after the process step
@@ -91,8 +91,11 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
                     playSound((char*)"./resources/r1/sound/land.wav");
                 }
                 if(!won){
-                    this->warp = false;
-                    this->gravity = true;
+                    if(warp){
+                        playSound((char*)"./resources/r1/sound/beam-down.wav");
+                        this->warp = false;
+                        this->gravity = true;
+                    }
                 }
                 grounded = true;
         }
@@ -120,6 +123,7 @@ void Player::onCollide(Object *other, int myBoxID, int otherBoxID){
     if(other->collisionFlags & PICKUP){
         won = true;
         warp = true;
+        playSound((char*)"./resources/r1/sound/beam-up.wav");
         destroyObject(other);
         return;
     }
