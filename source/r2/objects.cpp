@@ -29,7 +29,6 @@ void player::onCollide(Object *other, int myBoxID, int otherBoxID) {
 }
 
 void player::process(double delta) {
-    std::cout << this->x << std::endl;
     if(!this->is_dead) {
         if(!this->gravity && Keys::isKeyPressed(Keys::W)) {
             this->yV = -26;
