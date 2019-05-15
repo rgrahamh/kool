@@ -1,6 +1,5 @@
 #include "objects.h"
 #include <iostream>
-using namespace std;
 
 player::player(float x, float y, int collisionLayer, unsigned int collisionFlags, bool grav):Object(x,y,collisionLayer,collisionFlags,grav) {
     init();
@@ -19,29 +18,31 @@ void player::is_standing() {
 void player::onCollide(Object *other, int myBoxID, int otherBoxID) {
     if(other->collisionFlags == ENEMY && !this->is_dead) {
         this->is_dead = true;
-        cout << "Dead" << endl;
+        std::cout << "Dead" << std::endl;
         setSprite((unsigned int) 5);
 
     }
-    if(this->x > other->x && other->collisionFlags == GROUND) {
+    if(this->x >= other->x + 5 && other->collisionFlags == GROUND) {
         this->gravity = false;
 		this->y = 256 - (other->sprite->height + this->sprite->height); // put them on the ground
     }
 }
 
 void player::process(double delta) {
+    std::cout << this->x << std::endl;
     if(!this->is_dead) {
-        if(Keys::isKeyPressed(Keys::W) && !this->gravity) {
-            this->yV = -20;
+        if(!this->gravity && Keys::isKeyPressed(Keys::W)) {
+            this->yV = -26;
             this->gravity = true;
         }
-        if(!Keys::isKeyPressed(Keys::W) && this->gravity) {
+        if(this->gravity) {
             if(yV < 0.0) {
                 yV = 3 * (yV/4);
             }
         }
         if(this->sprite->getImageNum() != (unsigned int) 1) this->x += 8; //gotta go fast!
     }
+    if (this->y <= 0) this->y = 0;
 }
 
 

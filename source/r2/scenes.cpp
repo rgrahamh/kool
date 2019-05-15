@@ -4,6 +4,7 @@
 #include "../headers/Globals.hpp"
 #include <string>
 #include <vector>
+#include <iostream>
 
 
 Scene *start() {
@@ -38,8 +39,12 @@ Scene *track() {
     track_scene->getView(0)->setFollowing(runner,-256,512);
     track_scene->addObject(bg);
     track_scene->addObject(gr);
+    int prev = 128;
     for(int i = 1; i < 511; i++) {
-        track_scene->addObject(new hurdle((i * 512) - 64, 128, 1, ENEMY, false));
+        int x_pos = prev + (rand() % 512);
+        std::cout << x_pos % 512 << std::endl;
+        prev = x_pos + 48;
+        track_scene->addObject(new hurdle(x_pos, 128, 1, ENEMY, false));
     }
     track_scene->addObject(runner);
 
