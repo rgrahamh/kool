@@ -8,11 +8,7 @@
 
 Game Engine Code for COS 370's final project
 
-## MVP Goals:
+## Building:
+Please have the sfml development libraries installed before building.
 
-- Draw to screen
-- Process user input
-- Collision Detection
-- Animation subsystem
-- Audio
-
+Uses irrKlang for audio purposes; everything included in the irrKlang directory in source is not ours (see the readme.txt in the irrKlang directory for more details).
